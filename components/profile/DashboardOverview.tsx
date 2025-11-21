@@ -6,7 +6,7 @@ const stats = [
     value: "24",
     icon: <Package className="w-6 h-6" strokeWidth={1.5} />,
     change: "+3 this month"
-  },
+  }, 
   {
     label: "Active Bids",
     value: "12",
