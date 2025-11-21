@@ -2,7 +2,6 @@
 
 @layer base {
   :root {
-    /* Luxury earthy color palette */
     --sand: #f5f1ea;
     --beige: #e8dfd0;
     --warm-gray: #d4cec4;
@@ -11,7 +10,7 @@
     --charcoal: #3a3735;
     --muted-gold: #c8a882;
     --deep-brown: #5a524b;
-    
+
     --background: var(--ivory);
     --foreground: var(--charcoal);
     --card: var(--sand);
@@ -36,11 +35,14 @@
 }
 
 @layer base {
-
-
   /* Elegant serif typography */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', Georgia, serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Playfair Display", Georgia, serif;
     font-weight: 500;
     letter-spacing: -0.02em;
     line-height: 1.2;
@@ -77,7 +79,8 @@
   }
 
   /* Smooth transitions for premium feel */
-  a, button {
+  a,
+  button {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
