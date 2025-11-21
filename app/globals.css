@@ -1,26 +1,101 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Luxury earthy color palette */
+    --sand: #f5f1ea;
+    --beige: #e8dfd0;
+    --warm-gray: #d4cec4;
+    --ivory: #faf8f4;
+    --soft-taupe: #c9bfae;
+    --charcoal: #3a3735;
+    --muted-gold: #c8a882;
+    --deep-brown: #5a524b;
+    
+    --background: var(--ivory);
+    --foreground: var(--charcoal);
+    --card: var(--sand);
+    --card-foreground: var(--charcoal);
+    --popover: var(--ivory);
+    --popover-foreground: var(--charcoal);
+    --primary: var(--charcoal);
+    --primary-foreground: var(--ivory);
+    --secondary: var(--muted-gold);
+    --secondary-foreground: var(--charcoal);
+    --muted: var(--beige);
+    --muted-foreground: var(--deep-brown);
+    --accent: var(--muted-gold);
+    --accent-foreground: var(--charcoal);
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: var(--warm-gray);
+    --input: var(--warm-gray);
+    --ring: var(--muted-gold);
+    --radius: 0.5rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+
+
+  /* Elegant serif typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    letter-spacing: -0.03em;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+  }
+
+  h3 {
+    font-size: 1.875rem;
+  }
+
+  h4 {
+    font-size: 1.5rem;
+  }
+
+  h5 {
+    font-size: 1.25rem;
+  }
+
+  h6 {
+    font-size: 1.125rem;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* Smooth transitions for premium feel */
+  a, button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Premium scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sand);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--soft-taupe);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-gold);
 }
