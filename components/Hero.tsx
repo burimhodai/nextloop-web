@@ -170,8 +170,8 @@ export function Hero() {
               >
                 <div className="relative aspect-square overflow-hidden bg-[#e8dfd0]">
                   <Image
-                    width={window.innerWidth}
-                    height={window.innerHeight}
+                    width={300}
+                    height={300}
                     src={listing.image}
                     alt={listing.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
