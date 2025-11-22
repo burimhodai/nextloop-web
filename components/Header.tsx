@@ -54,7 +54,7 @@ export function Header({ onMenuClick }: HeaderProps) {
               <div className="w-8 h-8 bg-[#3a3735] flex items-center justify-center">
                 <span className="text-[#c8a882]" style={{ fontFamily: 'Playfair Display, serif' }}>N</span>
               </div>
-              <span style={{ fontFamily: 'Playfair Display, serif' }} className="text-[#3a3735] tracking-tight">
+              <span  style={{ fontFamily: 'Playfair Display, serif' }} className="text-[#3a3735] tracking-tight">
                 NextLoop
               </span>
             </div>
