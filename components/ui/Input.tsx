@@ -31,7 +31,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               border border-[var(--warm-gray)]
               text-[var(--charcoal)]
               placeholder:text-[var(--soft-taupe)]
-              rounded-lg
               transition-all duration-300
               focus:outline-none 
               focus:border-[var(--muted-gold)]

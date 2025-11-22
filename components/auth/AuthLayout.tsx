@@ -26,7 +26,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
         </div>
 
         {/* Auth Card */}
-        <div className="bg-[var(--sand)] rounded-2xl shadow-xl p-8 border border-[var(--warm-gray)]">
+        <div className="bg-[var(--sand)] shadow-xl p-8 border border-[var(--warm-gray)]">
           {/* Header */}
           <div className="mb-8">
             <h2 className="text-2xl font-semibold text-[var(--charcoal)] mb-2">
@@ -43,7 +43,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
 
         {/* Footer */}
         <p className="text-center text-sm text-[var(--deep-brown)] mt-6">
-          © 2024 NextLoop. Luxury redefined.
+          © 2025 NextLoop. Luxury redefined.
         </p>
       </div>
     </div>

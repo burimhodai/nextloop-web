@@ -21,7 +21,8 @@ export interface User {
   stripe_customer_id?: string;
   rating: number;
   totalRatings: number;
-  isVerified: boolean;
+  emailVerified: boolean;
+  idVerified: boolean;
   isSeller: boolean;
   balance: number;
   preferredLanguage: PreferredLanguage;
@@ -30,6 +31,11 @@ export interface User {
   role: UserRole;
   createdAt: string;
   updatedAt: string;
+  idVerification: {
+    documentNumber: string;
+    expiryDate: string;
+    success: boolean;
+  };
 }
 
 export interface LoginRequest {
