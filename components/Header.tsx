@@ -109,14 +109,14 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <div className="absolute right-0 mt-3 w-48 bg-[#faf8f4] border border-[#e8dfd0] shadow-lg animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="py-2">
                     <Link 
-                      href="/login"
+                      href="/auth/login"
                       className="block px-4 py-2.5 text-sm text-[#3a3735] hover:bg-[#f5f1ea] transition-colors"
                       onClick={() => setShowUserMenu(false)}
                     >
                       Login
                     </Link>
                     <Link 
-                      href="/signup"
+                      href="/auth/signup"
                       className="block px-4 py-2.5 text-sm text-[#3a3735] hover:bg-[#f5f1ea] transition-colors"
                       onClick={() => setShowUserMenu(false)}
                     >
