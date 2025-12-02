@@ -4,7 +4,6 @@
 import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { createWorker, PSM } from "tesseract.js";
 import type {
   ExtractedIDData,
   VerificationSubmission,
@@ -97,35 +96,73 @@ export const IDVerification: React.FC<IDVerificationProps> = ({ onSubmit }) => {
   };
 
   const processImage = async (imageFile: File): Promise<ExtractedIDData> => {
-    const worker = await createWorker("eng");
-
     try {
-      // Configure Tesseract for better accuracy with Swiss IDs
-      await worker.setParameters({
-        tessedit_pageseg_mode: PSM.AUTO_OSD, // Automatic page segmentation with OSD
-        tessedit_char_whitelist:
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÄÖÜäöüß0123456789.-/ ",
+      // Convert file to base64
+      const base64Image = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          // Remove data:image/...;base64, prefix
+          const base64 = result.split(",")[1];
+          resolve(base64);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(imageFile);
       });
 
-      const imageUrl = URL.createObjectURL(imageFile);
-      const {
-        data: { text },
-      } = await worker.recognize(imageUrl);
+      // Use Google Cloud Vision API
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_VISION_API_KEY;
 
-      // Clean up
-      URL.revokeObjectURL(imageUrl);
+      if (!apiKey) {
+        throw new Error("Google Vision API key not configured");
+      }
 
-      console.log("OCR Raw Text:", text);
+      const response = await fetch(
+        `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            requests: [
+              {
+                image: {
+                  content: base64Image,
+                },
+                features: [
+                  {
+                    type: "DOCUMENT_TEXT_DETECTION",
+                    maxResults: 1,
+                  },
+                ],
+                imageContext: {
+                  languageHints: ["en", "de", "fr", "it"],
+                },
+              },
+            ],
+          }),
+        }
+      );
 
-      // Extract structured data from OCR text
-      const extracted = extractIDInformation(text);
+      const data = await response.json();
 
-      return {
-        ...extracted,
-        rawText: text.trim(),
-      };
-    } finally {
-      await worker.terminate();
+      if (data.responses?.[0]?.fullTextAnnotation?.text) {
+        const text = data.responses[0].fullTextAnnotation.text;
+        console.log("Google Vision OCR Text:", text);
+
+        const extracted = extractIDInformation(text);
+
+        return {
+          ...extracted,
+          rawText: text.trim(),
+        };
+      } else {
+        throw new Error("No text detected in image");
+      }
+    } catch (error) {
+      console.error("OCR Error:", error);
+      throw error;
     }
   };
 
