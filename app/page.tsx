@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
-import { PromotedListings } from '@/components/PromotedListings';
+import ListingsComponent from '@/components/Listings';
 import { Categories } from '@/components/Categories';
 import { FeaturedAuctions } from '@/components/FeaturedAuctions';
 import { LiveAuctions } from '@/components/LiveAuctions';
@@ -20,7 +20,7 @@ export default function Home() {
       <Header onMenuClick={() => setSidebarOpen(true)} />
       <main>
         <Hero />
-        <PromotedListings />
+       <ListingsComponent/>
         <Categories />
         <FeaturedAuctions />
         <LiveAuctions />
