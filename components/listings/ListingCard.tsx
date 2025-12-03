@@ -1,34 +1,18 @@
-// components/listings/ListingCard.tsx
 "use client";
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-
-export interface Listing {
-  _id: string;
-  title: string;
-  description: string;
-  price: number;
-  images: Array<{ url: string; type: string }>;
-  condition: string;
-  status: string;
-  type: "DIRECT_BUY" | "AUCTION";
-  createdAt: string;
-  views?: number;
-  category?: {
-    _id: string;
-    name: string;
-  };
-  boost?: {
-    type: string;
-    endTime: string;
-    status: string;
-  };
-}
+import { Eye, Gavel, Rocket } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import {
+  IListing,
+  ListingStatus,
+  ListingTypes,
+  ImageTypes,
+} from "@/lib/types/listing.types"; // Adjust this import path to where you saved the types above
 
 interface ListingCardProps {
-  listing: Listing;
+  listing: IListing;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
   onBoost?: (id: string) => void;
@@ -46,208 +30,215 @@ export const ListingCard: React.FC<ListingCardProps> = ({
 }) => {
   const router = useRouter();
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "ACTIVE":
-        return "bg-green-100 text-green-800";
-      case "SOLD":
-        return "bg-gray-100 text-gray-800";
-      case "DRAFT":
-        return "bg-yellow-100 text-yellow-800";
-      case "CANCELLED":
-        return "bg-red-100 text-red-800";
+  // 1. Safe Data Access Helpers
+  // Handle price display logic based on listing type
+  const getDisplayPrice = () => {
+    if (listing.type === ListingTypes.AUCTION) {
+      return listing.currentPrice || listing.startingPrice || 0;
+    }
+    return listing.buyNowPrice || 0;
+  };
+
+  const displayPrice = getDisplayPrice();
+
+  // Get Main Image
+  const mainImage =
+    listing.images?.find((img) => img.type === ImageTypes.MAIN) ||
+    listing.images?.[0];
+
+  // Safely get Category Name (handling populated vs string ID)
+  const categoryName =
+    typeof listing.category === "object" && listing.category !== null
+      ? listing.category.name
+      : "Uncategorized";
+
+  // 2. Helper for Status UI
+  const getStatusBadge = () => {
+    const baseClass =
+      "absolute top-3 left-3 px-3 py-1 text-[10px] uppercase tracking-widest font-medium backdrop-blur-md z-10";
+
+    switch (listing.status) {
+      case ListingStatus.ACTIVE:
+        return listing.type === ListingTypes.AUCTION ? (
+          <span className={`${baseClass} bg-[#3a3735] text-white`}>
+            Active Auction
+          </span>
+        ) : (
+          <span className={`${baseClass} bg-white/90 text-[#3a3735]`}>
+            Buy Now
+          </span>
+        );
+      case ListingStatus.SOLD:
+        return (
+          <span className={`${baseClass} bg-[#3a3735] text-[#c8a882]`}>
+            Sold
+          </span>
+        );
+      case ListingStatus.DRAFT:
+        return (
+          <span className={`${baseClass} bg-gray-200 text-gray-600`}>
+            Draft
+          </span>
+        );
+      case ListingStatus.PENDING:
+        return (
+          <span className={`${baseClass} bg-amber-100 text-amber-800`}>
+            Pending
+          </span>
+        );
       default:
-        return "bg-gray-100 text-gray-800";
+        return null;
     }
   };
 
-  const getConditionLabel = (condition: string) => {
-    return condition.replace(/_/g, " ");
-  };
-
-  const mainImage =
-    listing.images?.find((img) => img.type === "MAIN") || listing.images?.[0];
-
+  // --- Variant 1: Compact (List View) ---
   if (variant === "compact") {
     return (
-      <div className="flex items-center gap-4 p-4 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-all">
-        <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
-          {mainImage ? (
+      <div
+        onClick={() => router.push(`/listings/${listing._id}`)}
+        className="flex items-center gap-4 p-4 bg-white border-b border-[#d4cec4] hover:bg-[#faf8f4] transition-colors cursor-pointer group"
+      >
+        <div className="relative w-16 h-16 bg-[#f5f1ea] overflow-hidden shrink-0">
+          {mainImage && (
             <img
               src={mainImage.url}
-              alt={listing.title}
+              alt={listing.name || "Listing image"}
               className="w-full h-full object-cover"
             />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400">
-              <svg
-                className="w-8 h-8"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            </div>
           )}
         </div>
-
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-gray-900 truncate">
-            {listing.title}
+          <h3 className="font-serif text-[#3a3735] font-medium truncate group-hover:text-[#c8a882] transition-colors">
+            {listing.name}
           </h3>
-          <p className="text-sm text-gray-500 mt-1">
-            CHF {listing.price.toFixed(2)}
+          <p className="text-sm text-[#5a524b]">
+            CHF {displayPrice.toLocaleString()}
           </p>
         </div>
-
-        <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-            listing.status
-          )}`}
-        >
+        <div className="text-xs uppercase tracking-widest text-[#5a524b]">
           {listing.status}
-        </span>
+        </div>
       </div>
     );
   }
 
+  // --- Variant 2: Default (Gallery Card) ---
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all">
-      {/* Image */}
+    <div className="group bg-white border border-[#d4cec4] hover:border-[#c8a882] transition-all duration-300 flex flex-col h-full shadow-sm hover:shadow-md">
+      {/* Image Container */}
       <div
-        className="relative h-48 bg-gray-100 cursor-pointer group"
-        onClick={() => router.push(`/listing/${listing._id}`)}
+        className="relative aspect-[4/5] bg-[#f5f1ea] overflow-hidden cursor-pointer"
+        onClick={() => router.push(`/dashboard/listings/${listing._id}`)}
       >
         {mainImage ? (
           <img
             src={mainImage.url}
-            alt={listing.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            alt={listing.name || "Listing"}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400">
-            <svg
-              className="w-16 h-16"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
+          <div className="w-full h-full flex items-center justify-center text-[#d4cec4]">
+            <span className="font-serif italic text-lg">No Image</span>
           </div>
         )}
 
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-2">
+        {getStatusBadge()}
+
+        {/* Check if boosted (simplified check) */}
+        {listing.boost && listing.boost.length > 0 && (
           <span
-            className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
-              listing.status
-            )}`}
+            className="absolute top-3 right-3 w-6 h-6 bg-[#c8a882] text-[#3a3735] flex items-center justify-center rounded-full shadow-lg z-10"
+            title="Boosted"
           >
-            {listing.status}
+            <Rocket className="w-3 h-3" />
           </span>
+        )}
 
-          {listing.boost?.status === "ACTIVE" && (
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-              🚀 Boosted
-            </span>
-          )}
-
-          {listing.type === "AUCTION" && (
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-              🔨 Auction
-            </span>
-          )}
+        {/* Quick View Overlay */}
+        <div className="absolute inset-0 bg-[#3a3735]/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+          <div className="bg-white px-6 py-2 text-xs uppercase tracking-widest font-medium text-[#3a3735] shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+            View Details
+          </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-4">
-        <div className="flex items-start justify-between mb-2">
-          <h3
-            className="font-semibold text-gray-900 line-clamp-2 cursor-pointer hover:text-gray-700"
-            onClick={() => router.push(`/listing/${listing._id}`)}
-          >
-            {listing.title}
-          </h3>
-        </div>
-
-        <p className="text-sm text-gray-600 line-clamp-2 mb-3">
-          {listing.description}
-        </p>
-
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <p className="text-2xl font-bold text-gray-900">
-              CHF {listing.price.toFixed(2)}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">
-              Condition: {getConditionLabel(listing.condition)}
-            </p>
-          </div>
-
-          {listing.views !== undefined && (
-            <div className="text-right">
-              <p className="text-sm text-gray-600">{listing.views} views</p>
-            </div>
-          )}
-        </div>
-
-        {listing.category && (
-          <div className="mb-3">
-            <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-              {listing.category.name}
+      <div className="p-5 flex flex-col flex-grow">
+        <div className="mb-auto">
+          <div className="flex justify-between items-start mb-2">
+            <span className="text-[10px] uppercase tracking-widest text-[#c8a882] font-medium truncate max-w-[70%]">
+              {categoryName}
             </span>
+            {listing.type === ListingTypes.AUCTION && (
+              <Gavel className="w-3 h-3 text-[#5a524b]" />
+            )}
           </div>
-        )}
 
-        {/* Actions */}
+          <h3
+            className="text-lg text-[#3a3735] leading-snug mb-2 cursor-pointer hover:text-[#c8a882] transition-colors line-clamp-2"
+            style={{ fontFamily: "Playfair Display, serif" }}
+            onClick={() => router.push(`/listings/${listing._id}`)}
+          >
+            {listing.name}
+          </h3>
+
+          <div className="flex items-baseline gap-2 mb-4">
+            <span className="text-lg font-medium text-[#3a3735]">
+              CHF {displayPrice.toLocaleString()}
+            </span>
+            {listing.type === ListingTypes.AUCTION && (
+              <span className="text-xs text-[#5a524b]">Current Bid</span>
+            )}
+          </div>
+        </div>
+
+        {/* Footer: Condition & Views */}
+        <div className="pt-4 border-t border-[#d4cec4]/40 flex items-center justify-between text-xs text-[#5a524b]">
+          <span className="capitalize">
+            {listing.condition?.replace(/_/g, " ").toLowerCase() || "Unknown"}
+          </span>
+          <div className="flex items-center gap-3">
+            {listing.views !== undefined && (
+              <div className="flex items-center gap-1">
+                <Eye className="w-3 h-3" /> {listing.views}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Actions (Dashboard/Owner Mode) */}
         {showActions && (
-          <div className="flex gap-2 pt-3 border-t border-gray-100">
-            <button
-              onClick={() => router.push(`/listing/${listing._id}`)}
-              className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-            >
-              View
-            </button>
-
+          <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-[#d4cec4]">
             {onEdit && (
-              <button
+              <Button
                 onClick={() => onEdit(listing._id)}
-                className="flex-1 px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                variant="outline"
+                className="h-8 text-xs border-[#d4cec4]"
               >
                 Edit
-              </button>
+              </Button>
             )}
-
-            {onBoost && listing.status === "ACTIVE" && !listing.boost && (
-              <button
-                onClick={() => onBoost(listing._id)}
-                className="flex-1 px-3 py-2 text-sm font-medium text-purple-700 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
-              >
-                🚀 Boost
-              </button>
-            )}
-
             {onDelete && (
-              <button
+              <Button
                 onClick={() => onDelete(listing._id)}
-                className="px-3 py-2 text-sm font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                variant="ghost"
+                className="h-8 text-xs text-red-700 hover:bg-red-50 hover:text-red-800"
               >
                 Delete
-              </button>
+              </Button>
             )}
+            {onBoost &&
+              listing.status === ListingStatus.ACTIVE &&
+              (!listing.boost || listing.boost.length === 0) && (
+                <Button
+                  onClick={() => onBoost(listing._id)}
+                  variant="secondary"
+                  className="col-span-2 h-8 text-xs"
+                >
+                  Boost Listing
+                </Button>
+              )}
           </div>
         )}
       </div>

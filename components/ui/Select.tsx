@@ -61,7 +61,6 @@ export const Select: React.FC<SelectProps> = ({
             bg-[var(--ivory)] 
             border-2 
             ${error ? "border-red-500" : "border-[var(--warm-gray)]"}
-            rounded-lg 
             text-[var(--charcoal)]
             font-sans
             appearance-none

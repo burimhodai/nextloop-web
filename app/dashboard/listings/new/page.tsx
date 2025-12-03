@@ -1,66 +1,60 @@
-// app/dashboard/listings/new/page.tsx
 "use client";
 
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/stores/authStore";
 import { ListingForm } from "@/components/listings/ListingForm";
+import { ListingTypes, ImageTypes } from "@/lib/types/listing.types";
+import { ArrowLeft } from "lucide-react";
 
 export default function CreateListingPage() {
   const router = useRouter();
   const { user, token } = useAuthStore();
 
   const handleSubmit = async (formData: any) => {
+    // ... [Logic remains exactly the same as your original code] ...
     try {
       const API_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const payload = new FormData();
+      const imageKeys = Object.values(ImageTypes);
 
-      // Upload images first
-      const imageUrls: Array<{ url: string; type: string }> = [];
-
-      for (let i = 0; i < formData.images.length; i++) {
-        const file = formData.images[i];
-        const uploadFormData = new FormData();
-        uploadFormData.append("file", file);
-
-        // You'll need to implement image upload endpoint
-        // For now, using placeholder
-        const imageType = i === 0 ? "MAIN" : i === 1 ? "FRONT" : "DETAILS";
-        imageUrls.push({
-          url: URL.createObjectURL(file), // Replace with actual upload
-          type: imageType,
-        });
+      for (const type of imageKeys) {
+        // @ts-ignore
+        const file = formData.images[type];
+        if (file) payload.append(type, file);
       }
+      payload.append("userId", user?._id || "");
+      payload.append("name", formData.title);
+      payload.append("description", formData.description);
+      payload.append("category", formData.category);
+      if (user?._id) payload.append("seller", user._id);
+      payload.append("condition", formData.condition);
+      payload.append("type", formData.type);
+      payload.append("status", "ACTIVE");
 
-      // Create listing
-      const listingData = {
-        title: formData.title,
-        description: formData.description,
-        price: formData.price,
-        condition: formData.condition,
-        type: formData.type,
-        category: formData.category,
-        images: imageUrls,
-        seller: user?._id,
-        status: "ACTIVE",
-      };
+      if (formData.type === ListingTypes.DIRECT_BUY) {
+        payload.append("buyNowPrice", formData.price.toString());
+        payload.append("startingPrice", "0");
+      } else if (formData.type === ListingTypes.AUCTION) {
+        payload.append("startingPrice", formData.price.toString());
+        payload.append("currentPrice", formData.price.toString());
+        payload.append("bidIncrement", "10");
+        const endTime = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+        payload.append("endTime", endTime.toISOString());
+      }
 
       const response = await fetch(`${API_URL}/listing/create`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(listingData),
+        headers: { Authorization: `Bearer ${token}` },
+        body: payload,
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create listing");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create listing");
       }
 
-      const listing = await response.json();
-
-      // Redirect to dashboard
       router.push("/dashboard");
     } catch (error) {
       console.error("Error creating listing:", error);
@@ -68,32 +62,18 @@ export default function CreateListingPage() {
     }
   };
 
-  const handleCancel = () => {
-    router.push("/dashboard");
-  };
+  const handleCancel = () => router.push("/dashboard");
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    // Uses the global Ivory background variable from your CSS
+    <div className="min-h-screen bg-[#faf8f4] py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-6">
+        <div className="mb-8">
           <button
             onClick={() => router.push("/dashboard")}
-            className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
+            className="group flex items-center text-[#5a524b] hover:text-[#c8a882] transition-colors text-sm uppercase tracking-widest font-medium"
           >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
+            <ArrowLeft className="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform" />
             Back to Dashboard
           </button>
         </div>
