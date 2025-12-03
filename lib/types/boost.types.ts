@@ -14,6 +14,13 @@ export enum BoostStatus {
   CANCELLED = "CANCELLED",
 }
 
+export enum BoostCosts {
+  "FEATURED" = 10,
+  "CATEGORY_TOP" = 15,
+  "HOMEPAGE" = 25,
+  "SEARCH_PRIORITY" = 20,
+}
+
 export interface IBoost {
   _id: string;
   name?: string;
