@@ -30,8 +30,6 @@ export const ListingCard: React.FC<ListingCardProps> = ({
 }) => {
   const router = useRouter();
 
-  // 1. Safe Data Access Helpers
-  // Handle price display logic based on listing type
   const getDisplayPrice = () => {
     if (listing.type === ListingTypes.AUCTION) {
       return listing.currentPrice || listing.startingPrice || 0;
@@ -127,7 +125,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
     <div className="group bg-white border border-[#d4cec4] hover:border-[#c8a882] transition-all duration-300 flex flex-col h-full shadow-sm hover:shadow-md">
       {/* Image Container */}
       <div
-        className="relative aspect-[4/5] bg-[#f5f1ea] overflow-hidden cursor-pointer"
+        className="relative bg-[#f5f1ea] overflow-hidden cursor-pointer"
         onClick={() => router.push(`/dashboard/listings/${listing._id}`)}
       >
         {mainImage ? (
@@ -193,21 +191,6 @@ export const ListingCard: React.FC<ListingCardProps> = ({
           </div>
         </div>
 
-        {/* Footer: Condition & Views */}
-        <div className="pt-4 border-t border-[#d4cec4]/40 flex items-center justify-between text-xs text-[#5a524b]">
-          <span className="capitalize">
-            {listing.condition?.replace(/_/g, " ").toLowerCase() || "Unknown"}
-          </span>
-          <div className="flex items-center gap-3">
-            {listing.views !== undefined && (
-              <div className="flex items-center gap-1">
-                <Eye className="w-3 h-3" /> {listing.views}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Actions (Dashboard/Owner Mode) */}
         {showActions && (
           <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-[#d4cec4]">
             {onEdit && (

@@ -119,11 +119,11 @@ export default function ListingDetailPage() {
       {/* Navigation and Edit Button */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
         <button
-          onClick={() => router.push("/dashboard/listings")}
+          onClick={() => router.push("/dashboard")}
           className="flex items-center text-xs uppercase tracking-widest text-[#5a524b] hover:text-[#c8a882] transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Listings Dashboard
+          Back
         </button>
 
         {isOwner && (
