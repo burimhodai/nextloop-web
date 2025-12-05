@@ -52,6 +52,7 @@ export default function BoostSuccessPage() {
         }
 
         setData(result.data);
+        
         setStatus("success");
       } catch (error) {
         console.error("Verification Error:", error);
@@ -126,13 +127,13 @@ export default function BoostSuccessPage() {
           <div className="flex justify-between items-center mb-3">
             <span className="text-sm text-[#5a524b]">Amount Paid:</span>
             <span className="font-bold text-[#3a3735]">
-              CHF {(data?.amount / 100).toFixed(2)}
+              CHF {(data?.cost).toFixed(2)}
             </span>
           </div>
           <div className="flex justify-between items-center mb-3">
             <span className="text-sm text-[#5a524b]">Boost Type:</span>
-            <span className="font-bold text-[#3a3735] uppercase">
-              {data?.boostType?.replace("-", " ")}
+            <span className="font-bold text-[#3a3735] capitalize">
+              {data?.type?.replace("_", " ")}
             </span>
           </div>
           <div className="flex justify-between items-center">

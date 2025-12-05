@@ -13,12 +13,12 @@ import {
   Loader2,
   Calendar,
 } from "lucide-react";
-import { Button } from "@/components/ui/Button"; // Assuming you have a UI Button component
-import { IListing } from "@/lib/types/listing.types"; // Adjust import path
-import { BoostTypes } from "@/lib/types/boost.types"; // Adjust import path
+import { Button } from "@/components/ui/Button";
+import { IListing } from "@/lib/types/listing.types";
+import { BoostTypes } from "@/lib/types/boost.types";
 
 // --- 1. Constants ---
-const BASE_BOOST_DURATION_DAYS = 7; // Used as initial selected duration
+const BASE_BOOST_DURATION_DAYS = 7;
 const MIN_DAYS = 3;
 const MAX_DAYS = 30;
 
@@ -26,7 +26,7 @@ const MAX_DAYS = 30;
 interface BoostPlan {
   id: BoostTypes;
   title: string;
-  dailyRate: number; // Price per day
+  dailyRate: number;
   description: string;
   features: string[];
   recommended?: boolean;
@@ -44,7 +44,6 @@ export default function BoostListingPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // State for fetched costs
   const [fetchedBoostCosts, setFetchedBoostCosts] = useState<
     { [key in BoostTypes]?: number } | null
   >(null);
@@ -56,26 +55,24 @@ export default function BoostListingPage() {
     BASE_BOOST_DURATION_DAYS
   );
 
-  // --- Dynamic Boost Plans Generation (Including FEATURED) ---
+  // --- Dynamic Boost Plans Generation ---
   const BOOST_PLANS: BoostPlan[] = useMemo(() => {
     if (!fetchedBoostCosts) return [];
 
-    // Helper to calculate daily rate safely: Use fetched cost directly as it is the 1-day price.
     const getDailyRate = (type: BoostTypes) => fetchedBoostCosts[type] || 0;
-    // getBasePrice now reflects the 1-day price
     const getBasePrice = (type: BoostTypes) =>
       (fetchedBoostCosts[type] || 0).toFixed(2);
 
     return [
       {
-        id: BoostTypes.FEATURED, // ADDED FEATURED PLAN
+        id: BoostTypes.FEATURED,
         title: "Featured Listing",
         dailyRate: getDailyRate(BoostTypes.FEATURED),
         description: "A cost-effective way to get slightly more exposure.",
         icon: ShieldCheck,
         features: [
           "Standard Visibility",
-          `Daily Rate: CHF ${getBasePrice(BoostTypes.FEATURED)}`, // Updated text
+          `Daily Rate: CHF ${getBasePrice(BoostTypes.FEATURED)}`,
           "Basic Support",
           "One-time Listing Refresh",
         ],
@@ -89,7 +86,7 @@ export default function BoostListingPage() {
         icon: TrendingUp,
         features: [
           "Top of Category Search",
-          `Daily Rate: CHF ${getBasePrice(BoostTypes.CATEGORY_TOP)}`, // Updated text
+          `Daily Rate: CHF ${getBasePrice(BoostTypes.CATEGORY_TOP)}`,
           "Standard Support",
           "Basic Analytics",
         ],
@@ -103,7 +100,7 @@ export default function BoostListingPage() {
         icon: Zap,
         features: [
           "Priority Search Ranking",
-          `Daily Rate: CHF ${getBasePrice(BoostTypes.SEARCH_PRIORITY)}`, // Updated text
+          `Daily Rate: CHF ${getBasePrice(BoostTypes.SEARCH_PRIORITY)}`,
           "Highlighted Badge",
           "2x View Potential",
           "Detailed Analytics",
@@ -119,7 +116,7 @@ export default function BoostListingPage() {
         features: [
           "Homepage Feature",
           "Top of Search Results",
-          `Daily Rate: CHF ${getBasePrice(BoostTypes.HOMEPAGE)}`, // Updated text
+          `Daily Rate: CHF ${getBasePrice(BoostTypes.HOMEPAGE)}`,
           "Gold Border Styling",
           "Premium Support",
         ],
@@ -136,9 +133,7 @@ export default function BoostListingPage() {
   const calculateTotalPrice = useCallback(
     (duration: number): string => {
       if (!selectedPlan) return "0.00";
-      // Calculate total price: daily rate (which is the fetched cost) * duration
       const total = selectedPlan.dailyRate * duration;
-      // Round to 2 decimal places for display
       return total.toFixed(2);
     },
     [selectedPlan]
@@ -146,8 +141,13 @@ export default function BoostListingPage() {
 
   const currentTotalPrice = calculateTotalPrice(selectedDurationDays);
 
-  // --- 1. Fetching Logic (Combined) ---
+  // --- Fetching Logic ---
   useEffect(() => {
+    // Don't fetch if user is not loaded yet
+    if (!user || !token || !listingId) {
+      return;
+    }
+
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
     const fetchPricing = async (retries = 3, delay = 1000) => {
@@ -170,7 +170,7 @@ export default function BoostListingPage() {
           }
         } catch (e) {
           if (i === retries - 1) {
-            throw e; // Last retry failed
+            throw e;
           }
           await new Promise((resolve) =>
             setTimeout(resolve, delay * Math.pow(2, i))
@@ -191,7 +191,9 @@ export default function BoostListingPage() {
       // Owner Check
       const sellerId =
         typeof data.seller === "object" ? data.seller?._id : data.seller;
-      if (sellerId !== user?._id) {
+      const userId = user._id;
+
+      if (String(sellerId) !== String(userId)) {
         throw new Error("You do not have permission to boost this listing.");
       }
 
@@ -212,13 +214,11 @@ export default function BoostListingPage() {
       }
     };
 
-    if (listingId) fetchAllData();
-  }, [listingId, token, user, router]);
+    fetchAllData();
+  }, [listingId, token, user]);
 
-  // --- 2. Stripe Checkout Logic (Unchanged) ---
-  // --- 2. Stripe Checkout Logic (Fixed) ---
+  // --- Stripe Checkout Logic ---
   const handleCheckout = async () => {
-    // 1. Basic validation
     if (!listing || !selectedPlan || !user) {
       setError("User or listing information is missing.");
       return;
@@ -231,17 +231,13 @@ export default function BoostListingPage() {
       const API_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
-      // 2. Prepare the payload strictly matching backend:
-      // { listingId, boostType, duration, userId }
       const payload = {
-        listingId: listingId, // Matches req.body.listingId
-        boostType: selectedPlan.id, // Matches req.body.boostType
-        duration: selectedDurationDays, // Matches req.body.duration
-        userId: user._id, // Matches req.body.userId
+        listingId: listingId,
+        boostType: selectedPlan.id,
+        duration: selectedDurationDays,
+        userId: user._id,
       };
 
-      // 3. Send Request
-      // Note: Ensure your route in the backend points to the 'createBoostCheckout' controller
       const response = await fetch(
         `${API_URL}/payment/create-boost-checkout-session`,
         {
@@ -260,8 +256,6 @@ export default function BoostListingPage() {
         throw new Error(result.message || "Payment initiation failed");
       }
 
-      // 4. Redirect to Stripe
-      // Backend returns: { success: true, data: { sessionId, url } }
       if (result.data && result.data.url) {
         window.location.href = result.data.url;
       } else {
@@ -276,8 +270,8 @@ export default function BoostListingPage() {
       setIsProcessing(false);
     }
   };
-  // --- Render: Loading and Error States ---
-  // Ensure we wait for both listing and costs to be loaded
+
+  // --- Loading State ---
   if (isLoading || !fetchedBoostCosts) {
     return (
       <div className="min-h-screen bg-[#faf8f4] flex flex-col items-center justify-center">
@@ -287,6 +281,7 @@ export default function BoostListingPage() {
     );
   }
 
+  // --- Error State ---
   if (error || !listing) {
     return (
       <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center p-4">
@@ -308,10 +303,10 @@ export default function BoostListingPage() {
     );
   }
 
-  // --- Render: Main Page ---
+  // --- Main Page ---
   return (
     <div className="min-h-screen bg-[#faf8f4] pb-20">
-      {/* Header (Unchanged) */}
+      {/* Header */}
       <header className="bg-white border-b border-[#d4cec4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <button
@@ -396,7 +391,7 @@ export default function BoostListingPage() {
           </div>
         </div>
 
-        {/* Plans Grid: Changed to 4 columns on large screens */}
+        {/* Plans Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
           {BOOST_PLANS.map((plan) => {
             const isSelected = selectedPlanId === plan.id;
@@ -413,7 +408,6 @@ export default function BoostListingPage() {
                       : "border-transparent hover:border-[#d4cec4]"
                   }`}
               >
-                {/* Recommended Badge */}
                 {plan.recommended && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#3a3735] text-white text-[10px] uppercase tracking-widest px-3 py-1 rounded-full font-medium shadow-md">
                     Most Popular
