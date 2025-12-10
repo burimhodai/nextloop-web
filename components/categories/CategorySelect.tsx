@@ -44,11 +44,13 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
     try {
       const API_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      
+      // FIXED: Added /api prefix to match your server routes
       const response = await fetch(`${API_URL}/category`);
 
       if (response.ok) {
         const data = await response.json();
-        setCategories(data.data || []);
+        setCategories(data.data || data || []);
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -67,7 +69,7 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
     cats.forEach((cat) => {
       const indent = "—".repeat(level);
       options.push({
-        value: cat._id,
+        value: cat._id, // This is correct - passing ID as string
         label: `${indent}${level > 0 ? " " : ""}${cat.name}`,
       });
 

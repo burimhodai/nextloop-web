@@ -12,7 +12,6 @@ export default function CreateListingPage() {
   const { user, token } = useAuthStore();
 
   const handleSubmit = async (formData: any) => {
-    // ... [Logic remains exactly the same as your original code] ...
     try {
       const API_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
@@ -24,10 +23,17 @@ export default function CreateListingPage() {
         const file = formData.images[type];
         if (file) payload.append(type, file);
       }
+      
       payload.append("userId", user?._id || "");
       payload.append("name", formData.title);
       payload.append("description", formData.description);
-      payload.append("category", formData.category);
+      
+      // FIX: Extract category ID if it's an object
+      const categoryId = typeof formData.category === 'object' 
+        ? formData.category._id || formData.category.id || formData.category
+        : formData.category;
+      payload.append("category", categoryId);
+      
       if (user?._id) payload.append("seller", user._id);
       payload.append("condition", formData.condition);
       payload.append("type", formData.type);
@@ -65,7 +71,6 @@ export default function CreateListingPage() {
   const handleCancel = () => router.push("/dashboard");
 
   return (
-    // Uses the global Ivory background variable from your CSS
     <div className="min-h-screen bg-[#faf8f4] py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
