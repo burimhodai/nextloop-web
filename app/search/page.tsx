@@ -2,24 +2,26 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   Search,
-  SlidersHorizontal,
   X,
   ChevronDown,
-  Grid,
-  List,
   Heart,
   Clock,
   TrendingUp,
   Eye,
   Loader2,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import _ from "lodash";
 import { getListingUrl } from "@/services/listings";
 
 // Types
+interface Category {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
 interface Listing {
   _id: string;
   name: string;
@@ -35,7 +37,7 @@ interface Listing {
   type: string;
   isBoosted: boolean;
   endTime?: string;
-  category: { _id: string; name: string; slug: string };
+  category: Category;
   seller: { _id: string; username: string };
 }
 
@@ -68,26 +70,14 @@ const sortOptions = [
   { value: "most_viewed", label: "Most Viewed" },
 ];
 
-const categories = [
-  "Watches & Timepieces",
-  "Fine Art",
-  "Electronics",
-  "Jewelry & Gems",
-  "Furniture & Design",
-  "Wine & Spirits",
-  "Collectibles",
-  "Musical Instruments",
-];
-
 export default function SearchPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   // State
   const [listings, setListings] = useState<Listing[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [showFilters, setShowFilters] = useState(false);
   const [pagination, setPagination] = useState({
     total: 0,
     page: 1,
@@ -97,7 +87,7 @@ export default function SearchPage() {
 
   // Filter states
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
-  const [selectedCategory, setSelectedCategory] = useState(
+  const [selectedCategoryId, setSelectedCategoryId] = useState(
     searchParams.get("category") || ""
   );
   const [selectedConditions, setSelectedConditions] = useState<string[]>(
@@ -111,6 +101,24 @@ export default function SearchPage() {
   const [listingType, setListingType] = useState(
     searchParams.get("type") || ""
   );
+
+  // Fetch categories on mount
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/category`
+      );
+      const data = await response.json();
+      console.log({ data });
+      setCategories(data.data || []);
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+    }
+  };
 
   // Fetch listings function
   const fetchListings = useCallback(async (params: URLSearchParams) => {
@@ -137,7 +145,7 @@ export default function SearchPage() {
     const params = new URLSearchParams();
 
     if (searchQuery.trim()) params.set("q", searchQuery.trim());
-    if (selectedCategory) params.set("category", selectedCategory);
+    if (selectedCategoryId) params.set("category", selectedCategoryId);
     if (selectedConditions.length > 0)
       params.set("condition", selectedConditions.join(","));
     if (minPrice) params.set("minPrice", minPrice);
@@ -150,7 +158,7 @@ export default function SearchPage() {
     return params;
   }, [
     searchQuery,
-    selectedCategory,
+    selectedCategoryId,
     selectedConditions,
     minPrice,
     maxPrice,
@@ -160,12 +168,12 @@ export default function SearchPage() {
     pagination.limit,
   ]);
 
-  // Debounced fetch with lodash
+  // Debounced fetch
   const debouncedFetch = useMemo(
     () =>
       _.debounce((params: URLSearchParams) => {
         fetchListings(params);
-      }, 500),
+      }, 300),
     [fetchListings]
   );
 
@@ -180,7 +188,7 @@ export default function SearchPage() {
     };
   }, [
     searchQuery,
-    selectedCategory,
+    selectedCategoryId,
     selectedConditions,
     minPrice,
     maxPrice,
@@ -195,7 +203,7 @@ export default function SearchPage() {
   // Reset filters
   const resetFilters = () => {
     setSearchQuery("");
-    setSelectedCategory("");
+    setSelectedCategoryId("");
     setSelectedConditions([]);
     setMinPrice("");
     setMaxPrice("");
@@ -231,7 +239,7 @@ export default function SearchPage() {
   };
 
   const activeFiltersCount =
-    (selectedCategory ? 1 : 0) +
+    (selectedCategoryId ? 1 : 0) +
     selectedConditions.length +
     (minPrice ? 1 : 0) +
     (maxPrice ? 1 : 0) +
@@ -240,9 +248,9 @@ export default function SearchPage() {
   return (
     <div className="min-h-screen bg-[#faf8f4]">
       {/* Search Header */}
-      <div className="bg-white border-b border-[#d4cec4] sticky top-0 z-40">
+      <div className="bg-white border-b border-[#d4cec4] sticky top-16 z-40">
         <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex gap-4">
             {/* Search Input */}
             <div className="flex-1 relative">
               <Search
@@ -262,7 +270,7 @@ export default function SearchPage() {
             </div>
 
             {/* Sort Dropdown */}
-            <div className="relative w-full md:w-64">
+            <div className="relative w-64">
               <select
                 value={sortBy}
                 onChange={(e) => {
@@ -282,59 +290,26 @@ export default function SearchPage() {
                 strokeWidth={1.5}
               />
             </div>
-
-            {/* Filter Toggle */}
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-6 py-3 bg-[#3a3735] hover:bg-[#c8a882] text-white hover:text-[#3a3735] transition-all"
-            >
-              <SlidersHorizontal className="w-4 h-4" strokeWidth={1.5} />
-              <span>Filters</span>
-              {activeFiltersCount > 0 && (
-                <span className="bg-[#c8a882] text-[#3a3735] px-2 py-0.5 rounded-full text-xs">
-                  {activeFiltersCount}
-                </span>
-              )}
-            </button>
-
-            {/* View Toggle */}
-            <div className="flex gap-1 bg-[#f5f1ea] p-1">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`p-2 ${
-                  viewMode === "grid" ? "bg-white shadow-sm" : ""
-                }`}
-              >
-                <Grid className="w-4 h-4" strokeWidth={1.5} />
-              </button>
-              <button
-                onClick={() => setViewMode("list")}
-                className={`p-2 ${
-                  viewMode === "list" ? "bg-white shadow-sm" : ""
-                }`}
-              >
-                <List className="w-4 h-4" strokeWidth={1.5} />
-              </button>
-            </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex gap-8">
-          {/* Filters Sidebar */}
-          <div
-            className={`${showFilters ? "block" : "hidden"} w-64 flex-shrink-0`}
-          >
-            <div className="bg-white p-6 shadow-sm sticky top-24">
+          {/* Filters Sidebar - Always Visible */}
+          <div className="w-64 flex-shrink-0">
+            <div className="bg-white p-6 shadow-sm sticky top-32">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-[#3a3735] font-semibold">Filters</h3>
+                <h3 className="text-[#3a3735] font-semibold text-lg">
+                  Filters
+                </h3>
                 {activeFiltersCount > 0 && (
                   <button
                     onClick={resetFilters}
-                    className="text-[#c8a882] text-sm hover:underline"
+                    className="text-[#c8a882] text-sm hover:underline flex items-center gap-1"
                   >
-                    Clear All
+                    <X className="w-3 h-3" />
+                    Clear
                   </button>
                 )}
               </div>
@@ -345,17 +320,17 @@ export default function SearchPage() {
                   Category
                 </label>
                 <select
-                  value={selectedCategory}
+                  value={selectedCategoryId}
                   onChange={(e) => {
-                    setSelectedCategory(e.target.value);
+                    setSelectedCategoryId(e.target.value);
                     setPagination((prev) => ({ ...prev, page: 1 }));
                   }}
                   className="w-full px-3 py-2 bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] text-sm focus:outline-none focus:border-[#c8a882]"
                 >
                   <option value="">All Categories</option>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
+                  {categories?.map((cat) => (
+                    <option key={cat._id} value={cat._id}>
+                      {cat.name}
                     </option>
                   ))}
                 </select>
@@ -399,15 +374,15 @@ export default function SearchPage() {
                   {conditions.map((cond) => (
                     <label
                       key={cond.value}
-                      className="flex items-center gap-2 cursor-pointer"
+                      className="flex items-center gap-2 cursor-pointer group"
                     >
                       <input
                         type="checkbox"
                         checked={selectedConditions.includes(cond.value)}
                         onChange={() => toggleCondition(cond.value)}
-                        className="w-4 h-4 accent-[#c8a882]"
+                        className="w-4 h-4 accent-[#c8a882] cursor-pointer"
                       />
-                      <span className="text-[#3a3735] text-sm">
+                      <span className="text-[#3a3735] text-sm group-hover:text-[#c8a882] transition-colors">
                         {cond.label}
                       </span>
                     </label>
@@ -440,10 +415,12 @@ export default function SearchPage() {
           <div className="flex-1">
             {/* Results Header */}
             <div className="flex items-center justify-between mb-6">
-              <p className="text-[#5a524b]">
+              <p className="text-[#5a524b] text-lg">
                 {loading
-                  ? "Loading..."
-                  : `${pagination.total.toLocaleString()} results found`}
+                  ? "Searching..."
+                  : `${pagination.total.toLocaleString()} ${
+                      pagination.total === 1 ? "result" : "results"
+                    }`}
               </p>
             </div>
 
@@ -455,8 +432,8 @@ export default function SearchPage() {
             )}
 
             {/* Grid View */}
-            {!loading && viewMode === "grid" && (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {!loading && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {listings.map((listing) => {
                   const isAuction = listing.type === "AUCTION";
                   const displayPrice = isAuction
@@ -473,15 +450,13 @@ export default function SearchPage() {
                     >
                       <div className="relative aspect-square overflow-hidden bg-[#e8dfd0]">
                         {listing.isBoosted && (
-                          <div className="absolute top-2 left-2 bg-[#c8a882] text-white px-2 py-1 text-xs z-10">
+                          <div className="absolute top-2 left-2 bg-[#c8a882] text-white px-2 py-1 text-xs z-10 font-medium">
                             FEATURED
                           </div>
                         )}
                         <img
                           src={listing.images[0]?.url || "/placeholder.jpg"}
                           alt={listing.name}
-                          width={300}
-                          height={300}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                         <button
@@ -495,7 +470,7 @@ export default function SearchPage() {
                         </button>
                       </div>
                       <div className="p-3">
-                        <h4 className="text-[#3a3735] mb-2 text-sm line-clamp-2 group-hover:text-[#c8a882] transition-colors font-serif">
+                        <h4 className="text-[#3a3735] mb-2 text-sm line-clamp-2 group-hover:text-[#c8a882] transition-colors font-serif min-h-[40px]">
                           {listing.name}
                         </h4>
                         <div className="flex items-center justify-between text-xs mb-2">
@@ -533,82 +508,6 @@ export default function SearchPage() {
               </div>
             )}
 
-            {/* List View */}
-            {!loading && viewMode === "list" && (
-              <div className="space-y-4">
-                {listings.map((listing) => {
-                  const isAuction = listing.type === "AUCTION";
-                  const displayPrice = isAuction
-                    ? listing.currentPrice
-                    : listing.buyNowPrice;
-                  const priceLabel = isAuction ? "Current Bid" : "Buy Now";
-                  const listingUrl = getListingUrl(listing);
-
-                  return (
-                    <Link
-                      key={listing._id}
-                      href={listingUrl}
-                      className="group bg-white hover:bg-[#f5f1ea] cursor-pointer transition-all shadow-sm hover:shadow-lg p-4 flex gap-4"
-                    >
-                      <div className="relative w-48 h-48 flex-shrink-0 overflow-hidden bg-[#e8dfd0]">
-                        {listing.isBoosted && (
-                          <div className="absolute top-2 left-2 bg-[#c8a882] text-white px-2 py-1 text-xs z-10">
-                            FEATURED
-                          </div>
-                        )}
-                        <img
-                          src={listing.images[0]?.url || "/placeholder.jpg"}
-                          alt={listing.name}
-                          width={200}
-                          height={200}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-[#3a3735] text-lg mb-2 group-hover:text-[#c8a882] transition-colors font-serif">
-                          {listing.name}
-                        </h4>
-                        <p className="text-[#5a524b] text-sm mb-3 line-clamp-2">
-                          {listing.description}
-                        </p>
-                        <div className="flex items-center gap-6 text-sm mb-3">
-                          <div className="flex flex-col">
-                            <span className="text-[#5a524b]/60 text-xs">
-                              {priceLabel}
-                            </span>
-                            <span className="text-[#c8a882] font-medium text-lg">
-                              ${displayPrice?.toLocaleString()}
-                            </span>
-                          </div>
-                          <span className="text-[#5a524b]">
-                            Condition: {listing.condition.replace(/_/g, " ")}
-                          </span>
-                          {isAuction && listing.endTime && (
-                            <div className="flex items-center gap-1 text-[#5a524b]">
-                              <Clock className="w-4 h-4" strokeWidth={1.5} />
-                              <span>{getTimeRemaining(listing.endTime)}</span>
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-4 text-sm text-[#5a524b]">
-                          {isAuction && (
-                            <div className="flex items-center gap-1">
-                              <TrendingUp className="w-4 h-4" />
-                              <span>{listing.totalBids} bids</span>
-                            </div>
-                          )}
-                          <div className="flex items-center gap-1">
-                            <Eye className="w-4 h-4" />
-                            <span>{listing.views} views</span>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-
             {/* Empty State */}
             {!loading && listings.length === 0 && (
               <div className="text-center py-20">
@@ -626,7 +525,7 @@ export default function SearchPage() {
                   onClick={resetFilters}
                   className="px-6 py-3 bg-[#3a3735] hover:bg-[#c8a882] text-white hover:text-[#3a3735] transition-all"
                 >
-                  Clear Filters
+                  Clear All Filters
                 </button>
               </div>
             )}

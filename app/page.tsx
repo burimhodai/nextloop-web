@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <Header />
+      {/* <Header /> */}
       <main>
         <Hero />
         <ListingsComponent />
