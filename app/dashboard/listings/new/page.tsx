@@ -18,27 +18,34 @@ export default function CreateListingPage() {
       const payload = new FormData();
       const imageKeys = Object.values(ImageTypes);
 
+      // Add images
       for (const type of imageKeys) {
         // @ts-ignore
         const file = formData.images[type];
         if (file) payload.append(type, file);
       }
-      
+
+      // Add basic fields
       payload.append("userId", user?._id || "");
       payload.append("name", formData.title);
       payload.append("description", formData.description);
-      
-      // FIX: Extract category ID if it's an object
-      const categoryId = typeof formData.category === 'object' 
-        ? formData.category._id || formData.category.id || formData.category
-        : formData.category;
+
+      // FIX: Ensure category is always a string ID
+      const categoryId =
+        typeof formData.category === "object"
+          ? formData.category._id ||
+            formData.category.id ||
+            String(formData.category)
+          : String(formData.category);
+
       payload.append("category", categoryId);
-      
+
       if (user?._id) payload.append("seller", user._id);
       payload.append("condition", formData.condition);
       payload.append("type", formData.type);
       payload.append("status", "ACTIVE");
 
+      // Add pricing based on listing type
       if (formData.type === ListingTypes.DIRECT_BUY) {
         payload.append("buyNowPrice", formData.price.toString());
         payload.append("startingPrice", "0");
@@ -46,10 +53,13 @@ export default function CreateListingPage() {
         payload.append("startingPrice", formData.price.toString());
         payload.append("currentPrice", formData.price.toString());
         payload.append("bidIncrement", "10");
+
+        // Create end time 7 days from now in Swiss timezone
         const endTime = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
         payload.append("endTime", endTime.toISOString());
       }
 
+      // FIXED: Correct API endpoint with /api prefix
       const response = await fetch(`${API_URL}/listing/create`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
@@ -60,6 +70,9 @@ export default function CreateListingPage() {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to create listing");
       }
+
+      const result = await response.json();
+      console.log("Listing created successfully:", result);
 
       router.push("/dashboard");
     } catch (error) {

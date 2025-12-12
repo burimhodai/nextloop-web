@@ -24,7 +24,9 @@ import {
   fetchListingById,
   getMainImage,
   formatCondition,
+  createCheckoutSession,
 } from "@/services/listings";
+import { useAuthStore } from "@/lib/stores/authStore";
 
 export default function ListingDetailPage() {
   const params = useParams();
@@ -35,7 +37,7 @@ export default function ListingDetailPage() {
   const [activeImage, setActiveImage] = useState<string>("");
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-
+  const { user } = useAuthStore();
   useEffect(() => {
     if (params.id) {
       fetchListing();
@@ -77,9 +79,14 @@ export default function ListingDetailPage() {
     setActiveImage(listing.images[newIndex].url);
   };
 
-  const handleBuyNow = () => {
-    // TODO: Implement checkout
-    console.log("Buy now:", listing?._id, "quantity:", quantity);
+  const handleBuyNow = async () => {
+    const response = await createCheckoutSession({
+      listingId: listing?._id || "",
+      userId: user?._id!, // From auth
+    });
+
+    // Redirects to Stripe checkout
+    window.location.href = response.data.url;
   };
 
   if (loading) {
@@ -241,7 +248,7 @@ export default function ListingDetailPage() {
               </div>
 
               {/* Quantity */}
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <label className="block text-sm text-[#5a524b] mb-2">
                   Quantity
                 </label>
@@ -268,7 +275,7 @@ export default function ListingDetailPage() {
                     +
                   </button>
                 </div>
-              </div>
+              </div> */}
 
               {/* Action Buttons */}
               <div className="space-y-3 mb-6">

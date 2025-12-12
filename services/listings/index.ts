@@ -24,6 +24,74 @@ export const fetchListingById = async (id: string): Promise<IListing> => {
 };
 
 /**
+ * Create checkout session for direct buy
+ */
+export interface CreateCheckoutParams {
+  listingId: string;
+  userId: string;
+}
+
+export interface CheckoutResponse {
+  success: boolean;
+  data: {
+    sessionId: string;
+    url: string;
+  };
+  message?: string;
+}
+
+export const createCheckoutSession = async (
+  params: CreateCheckoutParams
+): Promise<CheckoutResponse> => {
+  try {
+    const response = await fetch(`${API_URL}/payment/create-checkout-session`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(params),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to create checkout session");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error creating checkout:", error);
+    throw error;
+  }
+};
+
+/**
+ * Verify checkout session after payment
+ */
+export const verifyCheckoutSession = async (sessionId: string) => {
+  try {
+    const response = await fetch(`${API_URL}/payment/verify-session`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ sessionId }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to verify session");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error verifying session:", error);
+    throw error;
+  }
+};
+
+/**
  * Place a bid on an auction
  */
 export interface PlaceBidParams {
@@ -44,16 +112,19 @@ export const placeBid = async (
   params: PlaceBidParams
 ): Promise<PlaceBidResponse> => {
   try {
-    const response = await fetch(`${API_URL}/listing/${params.listingId}/bid`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        bidderId: params.bidderId,
-        amount: params.amount,
-      }),
-    });
+    const response = await fetch(
+      `${API_URL}/listings/${params.listingId}/bid`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          bidderId: params.bidderId,
+          amount: params.amount,
+        }),
+      }
+    );
 
     const data = await response.json();
 
