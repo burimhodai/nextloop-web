@@ -113,7 +113,7 @@ export const placeBid = async (
 ): Promise<PlaceBidResponse> => {
   try {
     const response = await fetch(
-      `${API_URL}/listings/${params.listingId}/bid`,
+      `${API_URL}/listing/${params.listingId}/bid`,
       {
         method: "POST",
         headers: {

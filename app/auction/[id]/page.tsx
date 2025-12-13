@@ -104,7 +104,7 @@ export default function AuctionDetailPage() {
       direction === "next"
         ? (activeImageIndex + 1) % listing.images.length
         : (activeImageIndex - 1 + listing.images.length) %
-          listing.images.length;
+        listing.images.length;
 
     setActiveImageIndex(newIndex);
     setActiveImage(listing.images[newIndex].url);
@@ -146,12 +146,12 @@ export default function AuctionDetailPage() {
 
       if (response.extended) {
         alert(
-          `Auction extended! ${
-            response.extensionsRemaining || 0
+          `Auction extended! ${response.extensionsRemaining || 0
           } extensions remaining.`
         );
       }
     } catch (error: any) {
+      console.error("Failed to place bid:", error);
       setBidError(error.message || "Failed to place bid");
     } finally {
       setBidding(false);
@@ -255,11 +255,10 @@ export default function AuctionDetailPage() {
                       setActiveImage(image.url);
                       setActiveImageIndex(index);
                     }}
-                    className={`aspect-square bg-[#e8dfd0] overflow-hidden border-2 transition-all ${
-                      activeImageIndex === index
+                    className={`aspect-square bg-[#e8dfd0] overflow-hidden border-2 transition-all ${activeImageIndex === index
                         ? "border-[#c8a882]"
                         : "border-transparent hover:border-[#d4cec4]"
-                    }`}
+                      }`}
                   >
                     <img
                       src={image.url}
@@ -326,14 +325,13 @@ export default function AuctionDetailPage() {
                     {auctionEnded
                       ? "Auction Ended"
                       : auctionStarted
-                      ? "Time Remaining"
-                      : "Starts In"}
+                        ? "Time Remaining"
+                        : "Starts In"}
                   </span>
                 </div>
                 <div
-                  className={`text-2xl font-medium ${
-                    auctionEnded ? "text-red-600" : "text-[#3a3735]"
-                  }`}
+                  className={`text-2xl font-medium ${auctionEnded ? "text-red-600" : "text-[#3a3735]"
+                    }`}
                 >
                   {auctionEnded ? "ENDED" : timeRemaining || "Loading..."}
                 </div>
@@ -491,9 +489,8 @@ export default function AuctionDetailPage() {
                     return (
                       <div
                         key={bid._id || index}
-                        className={`flex items-center justify-between p-3 border border-[#d4cec4] ${
-                          index === 0 ? "bg-[#f5f1ea]" : "bg-white"
-                        }`}
+                        className={`flex items-center justify-between p-3 border border-[#d4cec4] ${index === 0 ? "bg-[#f5f1ea]" : "bg-white"
+                          }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 bg-[#c8a882] rounded-full flex items-center justify-center text-white text-sm">
