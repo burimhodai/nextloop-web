@@ -3,14 +3,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Select } from "@/components/ui/Select"; // Assuming you have this similarly styled
 import { CategorySelect } from "@/components/categories/CategorySelect";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import {
   ListingConditions,
   ListingTypes,
@@ -24,8 +18,8 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-// ... [Interfaces remain the same as your original code] ...
-interface ListingFormData {
+// Export this interface for use in the parent page
+export interface ListingFormData {
   title: string;
   description: string;
   price: number;
@@ -44,7 +38,7 @@ interface ListingFormProps {
 
 const CONDITION_OPTIONS = Object.values(ListingConditions).map((c) => ({
   value: c,
-  label: c.replace("_", " "),
+  label: c.replace(/_/g, " "), // Improved regex replacement
 }));
 
 const REQUIRED_IMAGE_TYPES = Object.values(ImageTypes);
@@ -76,6 +70,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
       ? "Starting Bid (CHF)"
       : "Buy Now Price (CHF)";
 
+  // Standard handler for Inputs and HTML Selects
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -86,6 +81,11 @@ export const ListingForm: React.FC<ListingFormProps> = ({
       ...prev,
       [name]: name === "price" ? parseFloat(value) || 0 : value,
     }));
+  };
+
+  // Specific handler for custom CategorySelect (if it returns a value directly)
+  const handleCategoryChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, category: value }));
   };
 
   const handleImageUpload = (type: ImageTypes, file: File) => {
@@ -113,12 +113,14 @@ export const ListingForm: React.FC<ListingFormProps> = ({
     if (!formData.description.trim()) return "Description is required";
     if (formData.price <= 0) return "Price must be greater than 0";
     if (!formData.category) return "Category is required";
+
+    // Check missing images
     const missingImages = REQUIRED_IMAGE_TYPES.filter(
       (type) => !formData.images[type]
     );
     if (missingImages.length > 0)
       return `Missing images: ${missingImages
-        .map((t) => t.replace("_", " "))
+        .map((t) => t.replace(/_/g, " "))
         .join(", ")}`;
     return null;
   };
@@ -136,6 +138,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
       await onSubmit(formData);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit listing");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
       setIsSubmitting(false);
     }
@@ -143,7 +146,6 @@ export const ListingForm: React.FC<ListingFormProps> = ({
 
   return (
     <div className="max-w-5xl mx-auto pb-24">
-      {/* Luxury Header Section */}
       <div className="mb-10 text-center">
         <h1
           className="text-4xl text-[#3a3735] mb-3"
@@ -158,7 +160,6 @@ export const ListingForm: React.FC<ListingFormProps> = ({
       </div>
 
       <Card className="border-none shadow-xl bg-white relative overflow-hidden">
-        {/* Decorative Top Border similar to Hero separator */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-[#3a3735]" />
 
         <div className="p-8 md:p-12 space-y-12">
@@ -297,7 +298,6 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                 />
 
                 <div className="space-y-2">
-                  {/* Replace with your specific Select component */}
                   <label className="text-xs font-medium uppercase tracking-wider text-[#5a524b]">
                     Condition
                   </label>
@@ -306,7 +306,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                       name="condition"
                       value={formData.condition}
                       onChange={handleChange}
-                      className="w-full h-12 px-4 bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] appearance-none focus:bg-white focus:border-[#c8a882] focus:outline-none transition-all"
+                      className="w-full h-12 px-4 bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] appearance-none focus:bg-white focus:border-[#c8a882] focus:outline-none transition-all cursor-pointer"
                     >
                       {CONDITION_OPTIONS.map((opt) => (
                         <option key={opt.value} value={opt.value}>
@@ -321,12 +321,18 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                 </div>
 
                 <div className="space-y-2">
-                  {/* Simplification of CategorySelect for demo */}
+                  {/* Category Select usually passes value directly, not an event */}
                   <CategorySelect
                     name="category"
                     value={formData.category}
-                    onChange={handleChange}
-                    // Pass specific styling props if your component accepts them
+                    // Handle specific change event for Custom Select
+                    onChange={(valOrEvent: any) => {
+                      if (typeof valOrEvent === "string") {
+                        handleCategoryChange(valOrEvent);
+                      } else if (valOrEvent?.target?.value) {
+                        handleChange(valOrEvent);
+                      }
+                    }}
                   />
                 </div>
               </div>

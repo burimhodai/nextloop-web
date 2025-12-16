@@ -3,20 +3,36 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Heart, Clock, TrendingUp, Eye } from "lucide-react";
-import { getListingUrl } from "@/services/listings"; // Ensure this path is correct
+import { getListingUrl, toggleWatchlist } from "@/services/listings";
+import { useAuthStore } from "@/lib/stores/authStore";
 
-// You can share types in a separate file, but defining here for clarity
 interface ListingCardProps {
-  listing: any; // Replace 'any' with your actual Listing interface if available globally
+  listing: any;
+  isInWatchlist?: boolean;
+  onWatchlistChange?: (listingId: string, isInWatchlist: boolean) => void;
 }
 
-export const ListingCard = ({ listing }: ListingCardProps) => {
+export const ListingCard = ({
+  listing,
+  isInWatchlist: initialIsInWatchlist = false,
+  onWatchlistChange,
+}: ListingCardProps) => {
+  const { user, token, isAuthenticated } = useAuthStore();
   const isAuction = listing.type === "AUCTION";
 
-  // --- TIMER LOGIC ---
+  // Wishlist state
+  const [isInWatchlist, setIsInWatchlist] = useState(initialIsInWatchlist);
+  const [isTogglingWatchlist, setIsTogglingWatchlist] = useState(false);
+
+  // Timer state
   const [timeLeft, setTimeLeft] = useState<string>("");
   const [isLastMinute, setIsLastMinute] = useState(false);
 
+  useEffect(() => {
+    setIsInWatchlist(initialIsInWatchlist);
+  }, [initialIsInWatchlist]);
+
+  // Timer logic
   useEffect(() => {
     if (!isAuction || !listing.endTime) return;
 
@@ -34,7 +50,6 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-      // Check if last minute
       setIsLastMinute(diff < 60000);
 
       if (days > 0) return `${days}d ${hours}h`;
@@ -44,14 +59,52 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
 
     setTimeLeft(calculateTime());
 
-    // Update every second
     const timer = setInterval(() => {
       setTimeLeft(calculateTime());
     }, 1000);
 
     return () => clearInterval(timer);
   }, [listing.endTime, isAuction]);
-  // -------------------
+
+  // Handle watchlist toggle
+  const handleWatchlistToggle = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isAuthenticated || !user) {
+      // Redirect to login or show message
+      window.location.href = "/auth/login";
+      return;
+    }
+
+    if (isTogglingWatchlist) return;
+
+    setIsTogglingWatchlist(true);
+
+    try {
+      const response = await toggleWatchlist(
+        listing._id,
+        user._id,
+        token || undefined
+      );
+      const newIsInWatchlist = response.isInWatchlist ?? !isInWatchlist;
+
+      setIsInWatchlist(newIsInWatchlist);
+
+      // Call parent callback if provided
+      if (onWatchlistChange) {
+        onWatchlistChange(listing._id, newIsInWatchlist);
+      }
+
+      // Optional: Show success toast
+      console.log(response.message);
+    } catch (error) {
+      console.error("Failed to toggle watchlist:", error);
+      // Optional: Show error toast
+    } finally {
+      setIsTogglingWatchlist(false);
+    }
+  };
 
   const displayPrice = isAuction ? listing.currentPrice : listing.buyNowPrice;
   const priceLabel = isAuction ? "Current Bid" : "Buy Now";
@@ -60,11 +113,11 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
   return (
     <Link
       href={listingUrl}
-      className="group bg-white hover:bg-[#f5f1ea] cursor-pointer transition-all shadow-sm hover:shadow-lg flex flex-col h-full"
+      className="group bg-white hover:bg-[#f5f1ea] cursor-pointer transition-all shadow-sm hover:shadow-lg flex flex-col h-full rounded-lg overflow-hidden border border-[#e8dfd0]"
     >
       <div className="relative aspect-square overflow-hidden bg-[#e8dfd0]">
         {listing.isBoosted && (
-          <div className="absolute top-2 left-2 bg-[#c8a882] text-white px-2 py-1 text-xs z-10 font-medium">
+          <div className="absolute top-2 left-2 bg-[#c8a882] text-white px-2 py-1 text-xs z-10 font-medium rounded">
             FEATURED
           </div>
         )}
@@ -73,18 +126,23 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
           alt={listing.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        {/* <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          className="absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm flex items-center justify-center hover:bg-[#c8a882] hover:text-white transition-colors rounded-full"
+        <button
+          onClick={handleWatchlistToggle}
+          disabled={isTogglingWatchlist}
+          className={`absolute top-2 right-2 w-9 h-9 backdrop-blur-sm flex items-center justify-center transition-all rounded-full ${
+            isInWatchlist
+              ? "bg-red-500 text-white hover:bg-red-600"
+              : "bg-white/90 text-[#5a524b] hover:bg-[#c8a882] hover:text-white"
+          } ${isTogglingWatchlist ? "opacity-50 cursor-not-allowed" : ""}`}
         >
-          <Heart className="w-4 h-4" strokeWidth={1.5} />
-        </button> */}
+          <Heart
+            className={`w-4 h-4 ${isInWatchlist ? "fill-current" : ""}`}
+            strokeWidth={1.5}
+          />
+        </button>
       </div>
 
-      <div className="p-3 flex flex-col flex-1">
+      <div className="p-4 flex flex-col flex-1">
         <h4 className="text-[#3a3735] mb-2 text-sm line-clamp-2 group-hover:text-[#c8a882] transition-colors font-serif min-h-[40px]">
           {listing.name}
         </h4>
@@ -92,7 +150,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
         <div className="flex items-center justify-between text-xs mb-2 mt-auto">
           <div className="flex flex-col">
             <span className="text-[#5a524b]/60 text-[10px]">{priceLabel}</span>
-            <span className="text-[#c8a882] font-medium text-base">
+            <span className="text-[#c8a882] font-semibold text-base">
               ${displayPrice?.toLocaleString()}
             </span>
           </div>

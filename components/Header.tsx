@@ -20,7 +20,8 @@ const Link: React.FC<LinkProps> = ({ href, children, className, onClick }) => (
 export function Header() {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
-  const [currentPath, setCurrentPath] = useState<string>("/profile");
+  const [showCategoriesMenu, setShowCategoriesMenu] = useState<boolean>(false);
+  const [currentPath, setCurrentPath] = useState<string>("/");
 
   // Use the state and action from the real Zustand store
   const user = useAuthStore((state) => state.user);
@@ -28,6 +29,8 @@ export function Header() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   useEffect(() => {
+    setCurrentPath(window.location.pathname);
+
     const handleScroll = () => {
       const categoriesElement = document.getElementById("hero-categories");
       if (categoriesElement) {
@@ -41,6 +44,9 @@ export function Header() {
       const target = event.target as HTMLElement;
       if (!target.closest(".user-menu-container")) {
         setShowUserMenu(false);
+      }
+      if (!target.closest(".categories-menu-container")) {
+        setShowCategoriesMenu(false);
       }
     };
 
@@ -57,10 +63,17 @@ export function Header() {
     ? user.fullName.charAt(0).toUpperCase()
     : "U";
 
-  const navItems = [
-    { name: "Profile", href: "/profile" },
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "Marketplace", href: "/marketplace" },
+  const isHomePage = currentPath === "/" || currentPath.includes("/search");
+
+  const categories = [
+    { name: "Watches", icon: "⌚" },
+    { name: "Art", icon: "🎨" },
+    { name: "Electronics", icon: "💻" },
+    { name: "Jewelry", icon: "💎" },
+    { name: "Furniture", icon: "🪑" },
+    { name: "Wine", icon: "🍷" },
+    { name: "Collectibles", icon: "📸" },
+    { name: "Instruments", icon: "🎵" },
   ];
 
   const handleLogoutClick = (
@@ -71,7 +84,11 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#faf8f4] border-b border-black/10">
+    <header
+      className={`${
+        !isHomePage && "hidden"
+      } sticky top-0 z-50 bg-[#faf8f4] border-b border-black/10`}
+    >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between gap-6">
           <div className="flex items-center gap-10">
@@ -93,26 +110,54 @@ export function Header() {
             </Link>
 
             <nav className="hidden lg:flex items-center gap-8 text-sm text-[#5a524b]">
-              {navItems.map((item) => {
-                const isActive = currentPath === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setCurrentPath(item.href);
-                    }}
-                    className={`transition-colors py-1 ${
-                      isActive
-                        ? "text-[#3a3735] font-semibold border-b-2 border-black"
-                        : "hover:text-black/70"
-                    }`}
+              <>
+                <Link
+                  href="/"
+                  className="transition-colors py-1 hover:text-black/70"
+                >
+                  Home
+                </Link>
+                <div className="relative categories-menu-container">
+                  <button
+                    onClick={() => setShowCategoriesMenu(!showCategoriesMenu)}
+                    className="transition-colors py-1 hover:text-black/70 flex items-center gap-1"
                   >
-                    {item.name}
-                  </Link>
-                );
-              })}
+                    Categories
+                    <svg
+                      className={`w-4 h-4 transition-transform ${
+                        showCategoriesMenu ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                  {showCategoriesMenu && (
+                    <div className="absolute left-0 mt-2 w-56 bg-[#faf8f4] rounded-md border border-[#e8dfd0] shadow-xl animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden z-50">
+                      <div className="py-2">
+                        {categories.map((category) => (
+                          <Link
+                            key={category.name}
+                            href={`/category/${category.name.toLowerCase()}`}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#3a3735] hover:bg-[#f5f1ea] transition-colors"
+                            onClick={() => setShowCategoriesMenu(false)}
+                          >
+                            <span>{category.icon}</span>
+                            <span>{category.name}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
             </nav>
           </div>
 

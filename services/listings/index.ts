@@ -112,19 +112,16 @@ export const placeBid = async (
   params: PlaceBidParams
 ): Promise<PlaceBidResponse> => {
   try {
-    const response = await fetch(
-      `${API_URL}/listing/${params.listingId}/bid`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          bidderId: params.bidderId,
-          amount: params.amount,
-        }),
-      }
-    );
+    const response = await fetch(`${API_URL}/listing/${params.listingId}/bid`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        bidderId: params.bidderId,
+        amount: params.amount,
+      }),
+    });
 
     const data = await response.json();
 
@@ -293,4 +290,162 @@ export const getBidHistory = (listing: IListing): IBid[] => {
     const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
     return timeB - timeA;
   });
+};
+
+export interface WishlistResponse {
+  message: string;
+  isInWatchlist?: boolean;
+  watchlistCount?: number;
+  watchlist?: any[];
+  count?: number;
+}
+
+export const toggleWatchlist = async (
+  listingId: string,
+  userId: string,
+  token?: string
+): Promise<WishlistResponse> => {
+  try {
+    const response = await fetch(`${API_URL}/watchlist/toggle/${listingId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to toggle watchlist");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error toggling watchlist:", error);
+    throw error;
+  }
+};
+
+/**
+ * Add item to watchlist
+ */
+export const addToWatchlist = async (
+  listingId: string,
+  userId: string,
+  token?: string
+): Promise<WishlistResponse> => {
+  try {
+    const response = await fetch(`${API_URL}/watchlist/${listingId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to add to watchlist");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error adding to watchlist:", error);
+    throw error;
+  }
+};
+
+/**
+ * Remove item from watchlist
+ */
+export const removeFromWatchlist = async (
+  listingId: string,
+  userId: string,
+  token?: string
+): Promise<WishlistResponse> => {
+  try {
+    const response = await fetch(`${API_URL}/watchlist/${listingId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to remove from watchlist");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error removing from watchlist:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get user's watchlist
+ */
+export const getWatchlist = async (
+  userId: string,
+  token?: string
+): Promise<any[]> => {
+  try {
+    const response = await fetch(`${API_URL}/watchlist/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to fetch watchlist");
+    }
+
+    return data.watchlist || [];
+  } catch (error) {
+    console.error("Error fetching watchlist:", error);
+    throw error;
+  }
+};
+
+/**
+ * Check if listing is in watchlist
+ */
+export const isInWatchlist = async (
+  listingId: string,
+  userId: string,
+  token?: string
+): Promise<boolean> => {
+  try {
+    const response = await fetch(`${API_URL}/watchlist/check/${listingId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to check watchlist status");
+    }
+
+    return data.isInWatchlist || false;
+  } catch (error) {
+    console.error("Error checking watchlist:", error);
+    return false;
+  }
 };
