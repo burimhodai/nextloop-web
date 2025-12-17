@@ -1,92 +1,154 @@
+// app/create-listing/page.tsx
 "use client";
 
-import React from "react";
-import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/stores/authStore";
-import { ListingForm } from "@/components/listings/ListingForm";
-import { ListingTypes, ImageTypes } from "@/lib/types/listing.types";
-import { ArrowLeft } from "lucide-react";
-import type { ListingFormData } from "@/components/listings/ListingForm";
+import { useRouter } from "next/navigation";
+import { ShieldAlert, ArrowLeft } from "lucide-react";
+import {
+  ListingForm,
+  ListingFormData,
+} from "@/components/listings/ListingForm";
 
 export default function CreateListingPage() {
   const router = useRouter();
   const { user, token } = useAuthStore();
 
-  const handleSubmit = async (formData: ListingFormData) => {
+  const isIdVerified = user?.idVerification?.success || false;
+
+  const handleSubmit = async (data: ListingFormData) => {
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const payload = new FormData();
+      const formData = new FormData();
 
-      // Add images
-      Object.values(ImageTypes).forEach((type) => {
-        const file = formData.images[type];
-        if (file) payload.append(type, file);
-      });
+      // Add all the form fields
+      formData.append("name", data.title);
+      formData.append("description", data.description);
+      formData.append("condition", data.condition);
+      formData.append("type", data.type);
+      formData.append("category", data.category);
+      formData.append("seller", user?._id || "");
 
-      payload.append("userId", user?._id || "");
-      payload.append("name", formData.title);
-      payload.append("description", formData.description);
-
-      const categoryId =
-        typeof formData.category === "object"
-          ? // @ts-ignore
-            formData.category._id || formData.category.id
-          : String(formData.category);
-
-      payload.append("category", categoryId);
-      if (user?._id) payload.append("seller", user._id);
-      payload.append("condition", formData.condition);
-      payload.append("type", formData.type);
-      payload.append("status", "ACTIVE");
-
-      if (formData.type === ListingTypes.DIRECT_BUY) {
-        payload.append("buyNowPrice", formData.price.toString());
-        payload.append("startingPrice", "0");
-      } else if (formData.type === ListingTypes.AUCTION) {
-        payload.append("startingPrice", formData.price.toString());
-        payload.append("currentPrice", formData.price.toString());
-        payload.append("bidIncrement", "10");
-        const endTime = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-        payload.append("endTime", endTime.toISOString());
+      // Add pricing based on listing type
+      if (data.type === "AUCTION") {
+        formData.append("startingPrice", data.price.toString());
+      } else {
+        formData.append("buyNowPrice", data.price.toString());
       }
 
+      // Add images
+      Object.entries(data.images).forEach(([type, file]) => {
+        if (file) {
+          formData.append("images", file);
+          formData.append("imageTypes", type);
+        }
+      });
+
+      const API_URL =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
       const response = await fetch(`${API_URL}/listing/create`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: payload,
+        headers: {
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
+        body: formData,
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create listing");
+        const error = await response.json();
+        throw new Error(error.message || "Failed to create listing");
       }
 
-      router.push("/dashboard");
+      const result = await response.json();
+
+      // Redirect to the new listing
+      router.push(`/listing/${result._id}`);
     } catch (error) {
       console.error("Error creating listing:", error);
-      alert(error instanceof Error ? error.message : "An error occurred");
+      throw error;
     }
   };
 
-  return (
-    <div className="min-h-screen bg-[#faf8f4] py-12">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="mb-12">
-          <button
-            onClick={() => router.push("/dashboard")}
-            className="group flex items-center text-[#5a524b] hover:text-[#3a3735] transition-colors text-xs uppercase tracking-[0.2em] font-bold"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform" />
-            Back to Collection
-          </button>
-        </div>
+  const handleCancel = () => {
+    router.push("/dashboard/listings");
+  };
 
-        <ListingForm
-          onSubmit={handleSubmit}
-          onCancel={() => router.push("/dashboard")}
-        />
+  // If not verified, show verification required page
+  if (!isIdVerified) {
+    return (
+      <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center p-6">
+        <div className="max-w-2xl w-full">
+          <div className="bg-white border border-[#d4cec4] rounded-lg p-12 text-center shadow-lg">
+            <div className="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-6">
+              <ShieldAlert
+                className="w-10 h-10 text-amber-600"
+                strokeWidth={1.5}
+              />
+            </div>
+
+            <h1
+              className="text-3xl font-bold text-[#3a3735] mb-4"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              ID Verification Required
+            </h1>
+
+            <p className="text-[#5a524b] mb-8 leading-relaxed max-w-lg mx-auto">
+              To maintain the quality and authenticity of our marketplace, all
+              sellers must complete ID verification before creating listings.
+              This helps protect both buyers and sellers.
+            </p>
+
+            <div className="bg-[#f5f1ea] border border-[#d4cec4] rounded-lg p-6 mb-8 text-left">
+              <h3 className="text-sm font-semibold text-[#3a3735] mb-3 uppercase tracking-wider">
+                Why We Verify
+              </h3>
+              <ul className="space-y-2 text-sm text-[#5a524b]">
+                <li className="flex items-start gap-2">
+                  <span className="text-[#c8a882] mt-0.5">•</span>
+                  <span>Prevents fraud and ensures marketplace safety</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#c8a882] mt-0.5">•</span>
+                  <span>Builds trust between buyers and sellers</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#c8a882] mt-0.5">•</span>
+                  <span>Complies with legal requirements</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#c8a882] mt-0.5">•</span>
+                  <span>Quick and secure process (takes 2-3 minutes)</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onClick={() => router.push("/dashboard")}
+                className="px-6 py-3 bg-[#f5f1ea] text-[#3a3735] rounded-lg hover:bg-[#e8dfd0] transition-colors font-medium flex items-center justify-center gap-2"
+              >
+                <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
+                Back to Dashboard
+              </button>
+              <a
+                href="/profile/verify"
+                className="px-8 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
+              >
+                Verify ID Now
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#faf8f4] py-12 px-4">
+      <ListingForm
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+        isEdit={false}
+      />
     </div>
   );
 }

@@ -537,7 +537,7 @@ export default function MyListingsPage() {
                     <div className="flex-1"></div>
 
                     <Link
-                      href={`/listings/edit/${listing._id}`}
+                      href={`/dashboard/listings/edit/${listing._id}`}
                       className="flex items-center gap-1 px-3 py-1.5 bg-[#f5f1ea] text-[#3a3735] rounded hover:bg-[#e8dfd0] transition-colors text-sm font-medium"
                     >
                       <Edit className="w-4 h-4" /> Edit

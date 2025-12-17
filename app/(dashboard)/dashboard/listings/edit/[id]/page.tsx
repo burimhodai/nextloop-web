@@ -1,137 +1,103 @@
-// app/dashboard/listings/edit/[id]/page.tsx
+// app/listing/[id]/edit/page.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
 import { useAuthStore } from "@/lib/stores/authStore";
-import { ListingForm } from "@/components/listings/ListingForm";
-
-interface Listing {
-  _id: string;
-  title: string;
-  description: string;
-  price: number;
-  images: Array<{ url: string; type: string }>;
-  condition: string;
-  type: "DIRECT_BUY" | "AUCTION";
-  category: {
-    _id: string;
-    name: string;
-  };
-  seller: {
-    _id: string;
-  };
-  status: string;
-}
+import { useRouter, useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import {
+  ListingForm,
+  ListingFormData,
+} from "@/components/listings/ListingForm";
+import { Loader2, AlertCircle, Ban } from "lucide-react";
 
 export default function EditListingPage() {
   const router = useRouter();
   const params = useParams();
-  const { user, token, isAuthenticated } = useAuthStore();
+  const { user, token } = useAuthStore();
   const listingId = params.id as string;
 
-  const [listing, setListing] = useState<Listing | null>(null);
+  const [listing, setListing] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/auth/login");
-      return;
-    }
-
-    if (listingId) {
+    if (listingId && token) {
       fetchListing();
     }
-  }, [listingId, isAuthenticated]);
+  }, [listingId, token]);
 
   const fetchListing = async () => {
     setIsLoading(true);
     setError(null);
+
     try {
       const API_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const response = await fetch(`${API_URL}/listings/${listingId}`, {
+      const response = await fetch(`${API_URL}/listing/${listingId}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
       });
 
       if (!response.ok) {
-        throw new Error("Listing not found");
+        throw new Error("Failed to fetch listing");
       }
 
       const data = await response.json();
 
       // Check if user owns this listing
-      if (data.seller._id !== user?._id) {
+      if (data.seller._id !== user?._id && data.seller !== user?._id) {
         setError("You don't have permission to edit this listing");
-        setTimeout(() => router.push("/dashboard"), 2000);
         return;
       }
 
       setListing(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load listing");
+      console.error("Error fetching listing:", err);
+      setError("Failed to load listing. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (data: ListingFormData) => {
     try {
-      const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const formData = new FormData();
 
-      // Handle image updates if new images were added
-      const imageUrls: Array<{ url: string; type: string }> = [];
-
-      // Keep existing images
-      if (listing?.images) {
-        imageUrls.push(...listing.images);
-      }
+      // Add all the form fields
+      formData.append("name", data.title);
+      formData.append("description", data.description);
+      formData.append("condition", data.condition);
+      formData.append("category", data.category);
+      formData.append("buyNowPrice", data.price.toString());
 
       // Add new images if any
-      for (let i = 0; i < formData.images.length; i++) {
-        const file = formData.images[i];
-        // If it's a File object (new upload), handle it
-        if (file instanceof File) {
-          // You'll need to implement image upload endpoint
-          // For now, using placeholder
-          const imageType = imageUrls.length === 0 ? "MAIN" : "DETAILS";
-          imageUrls.push({
-            url: URL.createObjectURL(file), // Replace with actual upload
-            type: imageType,
-          });
+      Object.entries(data.images).forEach(([type, file]) => {
+        if (file) {
+          formData.append("images", file);
+          formData.append("imageTypes", type);
         }
-      }
+      });
 
-      // Update listing
-      const listingData = {
-        title: formData.title,
-        description: formData.description,
-        price: formData.price,
-        condition: formData.condition,
-        type: formData.type,
-        category: formData.category,
-        images: imageUrls,
-      };
-
-      const response = await fetch(`${API_URL}/listings/edit/${listingId}`, {
-        method: "POST",
+      const API_URL =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const response = await fetch(`${API_URL}/listing/${listingId}`, {
+        method: "PUT",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
-        body: JSON.stringify(listingData),
+        body: formData,
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update listing");
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update listing");
       }
 
-      // Redirect to listing detail or dashboard
-      router.push(`/listing/${listingId}`);
+      const result = await response.json();
+
+      // Redirect to the listing
+      router.push(`/listing/${result._id}`);
     } catch (error) {
       console.error("Error updating listing:", error);
       throw error;
@@ -142,103 +108,152 @@ export default function EditListingPage() {
     router.push(`/listing/${listingId}`);
   };
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-[var(--ivory)] flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--charcoal)] mx-auto mb-4"></div>
-          <p className="text-[var(--deep-brown)]">Checking authentication...</p>
-        </div>
-      </div>
-    );
-  }
-
+  // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[var(--ivory)] flex items-center justify-center">
+      <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--charcoal)] mx-auto mb-4"></div>
-          <p className="text-[var(--deep-brown)]">Loading listing...</p>
+          <Loader2 className="w-12 h-12 text-[#c8a882] animate-spin mx-auto mb-4" />
+          <p className="text-[#5a524b]">Loading listing...</p>
         </div>
       </div>
     );
   }
 
-  if (error || !listing) {
+  // Error state
+  if (error) {
     return (
-      <div className="min-h-screen bg-[var(--ivory)] flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-[var(--sand)] rounded-xl shadow-lg p-8 text-center">
-          <svg
-            className="w-16 h-16 text-red-500 mx-auto mb-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+      <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center p-6">
+        <div className="max-w-md w-full bg-white border border-[#d4cec4] rounded-lg p-8 text-center shadow-lg">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <AlertCircle className="w-8 h-8 text-red-600" strokeWidth={1.5} />
+          </div>
+          <h2
+            className="text-2xl font-semibold text-[#3a3735] mb-3"
+            style={{ fontFamily: "Playfair Display, serif" }}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <h2 className="text-xl font-semibold text-[var(--charcoal)] mb-2">
-            Error
+            Unable to Edit Listing
           </h2>
-          <p className="text-[var(--deep-brown)] mb-6">
-            {error || "Failed to load listing"}
-          </p>
+          <p className="text-[#5a524b] mb-6">{error}</p>
           <button
-            onClick={() => router.push("/dashboard")}
-            className="px-6 py-3 bg-[var(--charcoal)] text-[var(--ivory)] rounded-lg hover:bg-[var(--deep-brown)] transition-colors"
+            onClick={() => router.push("/dashboard/listings")}
+            className="px-6 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
           >
-            Back to Dashboard
+            Back to My Listings
           </button>
         </div>
       </div>
     );
   }
+
+  // Check if listing is an auction
+  if (listing?.type === "AUCTION") {
+    return (
+      <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center p-6">
+        <div className="max-w-2xl w-full bg-white border border-[#d4cec4] rounded-lg p-8 shadow-lg">
+          <div className="text-center mb-6">
+            <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Ban className="w-10 h-10 text-amber-600" strokeWidth={1.5} />
+            </div>
+            <h2
+              className="text-2xl font-semibold text-[#3a3735] mb-3"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              Auctions Cannot Be Edited
+            </h2>
+            <p className="text-[#5a524b] leading-relaxed">
+              Once an auction is live, it cannot be edited to maintain fairness
+              for all bidders. Any changes to auction details could affect
+              ongoing bids and bidding strategies.
+            </p>
+          </div>
+
+          <div className="bg-[#f5f1ea] border border-[#d4cec4] rounded-lg p-6 mb-6">
+            <h3 className="text-sm font-semibold text-[#3a3735] mb-3 uppercase tracking-wider">
+              Why Can't I Edit?
+            </h3>
+            <ul className="space-y-2 text-sm text-[#5a524b]">
+              <li className="flex items-start gap-2">
+                <span className="text-[#c8a882] mt-0.5">•</span>
+                <span>
+                  Ensures fairness for all participants in the auction
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[#c8a882] mt-0.5">•</span>
+                <span>
+                  Prevents manipulation of auction terms after bids are placed
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[#c8a882] mt-0.5">•</span>
+                <span>Maintains trust and integrity in the marketplace</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[#c8a882] mt-0.5">•</span>
+                <span>Protects both sellers and bidders from disputes</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <h4 className="text-sm font-semibold text-blue-900 mb-2">
+              What You Can Do
+            </h4>
+            <ul className="text-sm text-blue-800 space-y-1">
+              <li className="flex items-start gap-2">
+                <span className="text-blue-600 mt-0.5">•</span>
+                <span>View your auction details and current bids</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-blue-600 mt-0.5">•</span>
+                <span>Wait for the auction to end and complete the sale</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-blue-600 mt-0.5">•</span>
+                <span>Contact support if you need to cancel the auction</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="flex gap-4">
+            <button
+              onClick={() => router.push(`/listing/${listingId}`)}
+              className="flex-1 px-6 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
+            >
+              View Auction
+            </button>
+            <button
+              onClick={() => router.push("/dashboard/listings")}
+              className="flex-1 px-6 py-3 bg-[#f5f1ea] text-[#3a3735] rounded-lg hover:bg-[#e8dfd0] transition-all font-medium"
+            >
+              My Listings
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Only allow editing BUY_NOW listings
+  const initialData: Partial<ListingFormData> = {
+    title: listing?.name || "",
+    description: listing?.description || "",
+    price: listing?.buyNowPrice || 0,
+    condition: listing?.condition,
+    type: listing?.type,
+    category: listing?.category?._id || listing?.category || "",
+    images: {}, // Images will be handled separately
+  };
 
   return (
-    <div className="min-h-screen bg-[var(--ivory)] py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-6">
-          <button
-            onClick={() => router.push(`/listing/${listingId}`)}
-            className="flex items-center text-[var(--deep-brown)] hover:text-[var(--charcoal)] mb-4 transition-colors"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Back to Listing
-          </button>
-        </div>
-
-        {/* <ListingForm
-          initialData={{
-            title: listing.title,
-            description: listing.description,
-            price: listing.price,
-            condition: listing.condition,
-            type: listing.type,
-            category: listing.category._id,
-            images: [], // Don't pre-fill images, let user add new ones
-          }}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-          isEdit={true}
-        /> */}
-      </div>
+    <div className="min-h-screen bg-[#faf8f4] py-12 px-4">
+      <ListingForm
+        initialData={initialData}
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+        isEdit={true}
+      />
     </div>
   );
 }

@@ -12,44 +12,44 @@ export type UserRole = "user" | "seller" | "admin";
 export type PreferredLanguage = "de" | "fr" | "it" | "en";
 // Enums
 export enum ListingConditions {
-  NEW = 'new',
-  LIKE_NEW = 'like_new',
-  VERY_GOOD = 'very_good',
-  GOOD = 'good',
-  ACCEPTABLE = 'acceptable'
+  NEW = "new",
+  LIKE_NEW = "like_new",
+  VERY_GOOD = "very_good",
+  GOOD = "good",
+  ACCEPTABLE = "acceptable",
 }
 
 export enum ListingStatus {
-  PENDING = 'pending',
-  ACTIVE = 'active',
-  SOLD = 'sold',
-  EXPIRED = 'expired',
-  CANCELLED = 'cancelled'
+  PENDING = "pending",
+  ACTIVE = "active",
+  SOLD = "sold",
+  EXPIRED = "expired",
+  CANCELLED = "cancelled",
 }
 
 export enum ListingTypes {
-  AUCTION = 'auction',
-  DIRECT_BUY = 'direct_buy',
-  BOTH = 'both'
+  AUCTION = "auction",
+  DIRECT_BUY = "direct_buy",
+  BOTH = "both",
 }
 
 export enum ImageTypes {
-  MAIN = 'main',
-  GALLERY = 'gallery',
-  THUMBNAIL = 'thumbnail'
+  MAIN = "main",
+  GALLERY = "gallery",
+  THUMBNAIL = "thumbnail",
 }
 
 export enum BoostTypes {
-  FEATURED = 'featured',
-  HIGHLIGHTED = 'highlighted',
-  TOP_LISTING = 'top_listing',
-  URGENT = 'urgent'
+  FEATURED = "featured",
+  HIGHLIGHTED = "highlighted",
+  TOP_LISTING = "top_listing",
+  URGENT = "urgent",
 }
 
 export enum BoostStatus {
-  ACTIVE = 'active',
-  EXPIRED = 'expired',
-  CANCELLED = 'cancelled'
+  ACTIVE = "active",
+  EXPIRED = "expired",
+  CANCELLED = "cancelled",
 }
 
 // Interfaces
@@ -66,6 +66,8 @@ export interface IIdVerification {
   expiryDate?: string;
   documentNumber?: string;
   success?: boolean;
+  state?: "NOT_SUBMITTED" | "APPROVED" | "REJECTED" | "IN_REVIEW";
+  rejection_reason?: string; // Make it optional with ?
 }
 
 export interface IUser {
@@ -83,10 +85,10 @@ export interface IUser {
   verificationTokenExpires?: Date;
   isSeller?: boolean;
   balance?: number;
-  preferredLanguage?: 'de' | 'fr' | 'it' | 'en';
+  preferredLanguage?: "de" | "fr" | "it" | "en";
   vatNumber?: string;
   businessName?: string;
-  role?: 'user' | 'seller' | 'admin';
+  role?: "user" | "seller" | "admin";
   idVerification?: IIdVerification;
   createdAt?: Date;
   updatedAt?: Date;
