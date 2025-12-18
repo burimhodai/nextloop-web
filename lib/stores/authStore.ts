@@ -16,6 +16,9 @@ interface AuthState {
   _hasHydrated: boolean; // New state to track if persistence has loaded
 
   // Actions
+
+  refreshUser: () => Promise<void>;
+
   setUser: (user: IUser | null) => void;
   setToken: (token: string | null) => void;
   setLoading: (loading: boolean) => void;
@@ -147,7 +150,29 @@ export const useAuthStore = create<AuthState>()(
           throw error;
         }
       },
+      refreshUser: async () => {
+        const { token, user } = get();
+        if (!token || !user) return;
 
+        try {
+          const response = await fetch(`${API_URL}/user/${user._id}`);
+          console.log({ response });
+          if (!response.ok) {
+            throw new Error("Failed to refresh user data");
+          }
+
+          const data = await response.json();
+
+          set({
+            user: data.data,
+            isAuthenticated: true,
+          });
+        } catch (error) {
+          console.error("Error refreshing user:", error);
+          // Optionally logout if refresh fails
+          // get().logout();
+        }
+      },
       logout: () => {
         set({
           user: null,

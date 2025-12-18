@@ -11,7 +11,20 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    // List of public routes that don't require authentication
+    const refreshUser = useAuthStore.getState().refreshUser;
+
+    if (isAuthenticated) {
+      refreshUser(); // Initial refresh
+
+      const interval = setInterval(() => {
+        refreshUser();
+      }, 30000); // 30 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
     const publicRoutes = [
       "/auth/login",
       "/auth/signup",

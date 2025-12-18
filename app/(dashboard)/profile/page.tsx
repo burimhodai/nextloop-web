@@ -189,7 +189,7 @@ export default function ProfilePage() {
               <div className="relative group">
                 <div className="w-28 h-28 rounded-full bg-[#e8dfd0] flex items-center justify-center border-4 border-white shadow-sm overflow-hidden">
                   <span className="text-4xl font-bold text-[#3a3735]">
-                    {user.fullName.charAt(0).toUpperCase()}
+                    {user?.fullName?.charAt(0).toUpperCase() || "U"}
                   </span>
                 </div>
                 {/* Optional: Add functionality to change photo later */}

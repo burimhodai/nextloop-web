@@ -4,8 +4,6 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { Search, ChevronDown, Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import _ from "lodash";
-
-// Import new components
 import { ListingCard } from "@/components/search/listing-card";
 import { SearchFilters } from "@/components/search/search-filters";
 

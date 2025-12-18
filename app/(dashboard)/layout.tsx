@@ -122,13 +122,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="flex items-center gap-3">
               <div className="hidden sm:block text-right">
                 <p className="text-sm font-semibold text-[#3a3735]">
-                  {user.fullName}
+                  {user?.fullName}
                 </p>
                 <p className="text-xs text-[#5a524b]">@{user.username}</p>
               </div>
               <div className="w-10 h-10 rounded-full bg-[#c8a882] flex items-center justify-center border-2 border-[#3a3735]/10">
                 <span className="text-sm font-semibold text-[#3a3735]">
-                  {user.fullName.charAt(0).toUpperCase()}
+                  {user?.fullName?.charAt(0).toUpperCase() || "U"}
                 </span>
               </div>
             </div>
@@ -229,7 +229,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <div className="flex items-center justify-between">
                 <span className="text-xs text-[#5a524b]">Balance</span>
                 <span className="text-sm font-bold text-[#3a3735]">
-                  CHF {user?.balance.toFixed(2) || "0.00"}
+                  CHF {user?.balance?.toFixed(2) || "0.00"}
                 </span>
               </div>
               <div className="flex items-center justify-between">
@@ -243,7 +243,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                   <span className="text-sm font-semibold text-[#3a3735]">
-                    {user?.rating.toFixed(1) || "0.0"}
+                    {user?.rating?.toFixed(1) || "0.0"}
                   </span>
                 </div>
               </div>
