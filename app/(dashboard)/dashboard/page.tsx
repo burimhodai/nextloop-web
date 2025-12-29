@@ -415,7 +415,7 @@ export default function DashboardPage() {
                   <span className="text-sm text-[#5a524b]">Balance</span>
                 </div>
                 <span className="font-semibold text-[#3a3735]">
-                  CHF {user?.balance.toFixed(2)}
+                  CHF {user?.balance?.toFixed(2)}
                 </span>
               </div>
             </div>

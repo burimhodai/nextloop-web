@@ -90,7 +90,7 @@ export interface IUser {
   businessName?: string;
   role?: "user" | "seller" | "admin";
   idVerification?: IIdVerification;
-  createdAt?: Date;
+  createdAt?: Date | string;
   updatedAt?: Date;
 }
 
