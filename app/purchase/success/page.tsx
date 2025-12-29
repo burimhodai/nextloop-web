@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   CheckCircle2,
@@ -10,6 +11,7 @@ import {
   Home,
   ShoppingBag,
 } from "lucide-react";
+
 // Stellen Sie sicher, dass verifyCheckoutSession korrekt importiert wird
 import { verifyCheckoutSession } from "@/services/listings";
 
@@ -35,7 +37,7 @@ interface SessionData {
   };
 }
 
-export default function PurchaseSuccessPage() {
+function PurchaseSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
@@ -58,7 +60,6 @@ export default function PurchaseSuccessPage() {
       setLoading(true);
       // Führen Sie die Überprüfung der Sitzung mit der bereitgestellten ID durch
       const response = await verifyCheckoutSession(sessionId!);
-
       if (response.success) {
         setSessionData(response.data);
       } else {
@@ -74,10 +75,10 @@ export default function PurchaseSuccessPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f5f1ea] flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#c8a882] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-[#5a524b]">Ihr Kauf wird überprüft...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#3a3735] mb-4"></div>
+          <p className="text-[#3a3735] text-lg">Ihr Kauf wird überprüft...</p>
         </div>
       </div>
     );
@@ -85,15 +86,13 @@ export default function PurchaseSuccessPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center">
-        <div className="max-w-md mx-auto text-center p-8">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl">⚠️</span>
-          </div>
-          <h2 className="text-2xl text-[#3a3735] mb-4">
+      <div className="min-h-screen bg-[#f5f1ea] flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+          <div className="text-6xl mb-4">⚠️</div>
+          <h1 className="text-2xl font-bold text-[#3a3735] mb-4">
             Verifizierung Fehlgeschlagen
-          </h2>
-          <p className="text-[#5a524b] mb-6">{error}</p>
+          </h1>
+          <p className="text-gray-600 mb-6">{error}</p>
           <button
             onClick={() => router.push("/search")}
             className="px-6 py-3 bg-[#3a3735] text-white hover:bg-[#c8a882] transition-colors"
@@ -106,17 +105,15 @@ export default function PurchaseSuccessPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#faf8f4] py-12">
-      <div className="max-w-4xl mx-auto px-6">
+    <div className="min-h-screen bg-[#f5f1ea] py-12 px-4">
+      <div className="max-w-4xl mx-auto">
         {/* Success Header */}
-        <div className="text-center mb-12">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle2 className="w-12 h-12 text-green-600" />
-          </div>
-          <h1 className="text-4xl font-serif text-[#3a3735] mb-4">
+        <div className="bg-white rounded-lg shadow-lg p-8 mb-6 text-center">
+          <CheckCircle2 className="w-20 h-20 text-green-600 mx-auto mb-4" />
+          <h1 className="text-3xl font-bold text-[#3a3735] mb-2">
             Kauf Erfolgreich!
           </h1>
-          <p className="text-lg text-[#5a524b]">
+          <p className="text-gray-600">
             Vielen Dank für Ihre Bestellung. Wir haben Ihre Zahlung erhalten.
           </p>
         </div>
@@ -124,146 +121,129 @@ export default function PurchaseSuccessPage() {
         {sessionData && (
           <>
             {/* Order Summary */}
-            <div className="bg-white p-8 mb-6 shadow-sm">
-              <h2 className="text-2xl font-serif text-[#3a3735] mb-6">
+            <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
+              <h2 className="text-2xl font-bold text-[#3a3735] mb-6 flex items-center gap-2">
+                <Package className="w-6 h-6" />
                 Bestellübersicht
               </h2>
-
-              <div className="flex gap-6 mb-8 pb-8 border-b border-[#d4cec4]">
+              <div className="flex items-start gap-4 mb-6">
                 {sessionData.listing.images?.[0] && (
-                  <div className="w-32 h-32 bg-[#e8dfd0] flex-shrink-0">
-                    <img
-                      src={sessionData.listing.images[0].url}
-                      alt={sessionData.listing.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+                  <img
+                    src={sessionData.listing.images[0].url}
+                    alt={sessionData.listing.name}
+                    className="w-24 h-24 object-cover rounded"
+                  />
                 )}
                 <div className="flex-1">
-                  <h3 className="text-xl text-[#3a3735] font-medium mb-2">
+                  <h3 className="font-semibold text-lg text-[#3a3735] mb-2">
                     {sessionData.listing.name}
                   </h3>
-                  <div className="space-y-2 text-sm text-[#5a524b]">
-                    <div className="flex justify-between">
-                      <span>Artikelpreis:</span>
-                      <span className="font-medium text-[#3a3735]">
-                        CHF {sessionData.amount.toFixed(2)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Versandkosten:</span>
-                      <span className="font-medium text-[#3a3735]">
-                        CHF {sessionData.shippingCost.toFixed(2)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between pt-2 border-t border-[#d4cec4]">
-                      <span className="font-medium">Gesamtbetrag Bezahlt:</span>
-                      <span className="font-medium text-[#c8a882] text-lg">
-                        CHF {sessionData.totalAmount.toFixed(2)}
-                      </span>
-                    </div>
+                  <div className="space-y-1 text-gray-600">
+                    <p>Artikelpreis: CHF {sessionData.amount.toFixed(2)}</p>
+                    <p>
+                      Versandkosten: CHF {sessionData.shippingCost.toFixed(2)}
+                    </p>
+                    <p className="font-bold text-[#3a3735] text-lg pt-2 border-t">
+                      Gesamtbetrag Bezahlt: CHF{" "}
+                      {sessionData.totalAmount.toFixed(2)}
+                    </p>
                   </div>
                 </div>
-              </div>
-
-              {/* Shipping Address */}
-              <div className="mb-8">
-                <h3 className="text-lg font-medium text-[#3a3735] mb-4 flex items-center gap-2">
-                  <Truck className="w-5 h-5 text-[#c8a882]" />
-                  Lieferadresse
-                </h3>
-                <div className="bg-[#f5f1ea] p-4 text-sm text-[#5a524b]">
-                  <p className="font-medium text-[#3a3735] mb-1">
-                    {sessionData.customer.name}
-                  </p>
-                  <p>{sessionData.shippingAddress.line1}</p>
-                  {sessionData.shippingAddress.line2 && (
-                    <p>{sessionData.shippingAddress.line2}</p>
-                  )}
-                  <p>
-                    {sessionData.shippingAddress.postal_code}{" "}
-                    {sessionData.shippingAddress.city}
-                  </p>
-                  <p>{sessionData.shippingAddress.country}</p>
-                </div>
-              </div>
-
-              {/* Customer Email */}
-              <div className="mb-8">
-                <h3 className="text-lg font-medium text-[#3a3735] mb-4 flex items-center gap-2">
-                  <Mail className="w-5 h-5 text-[#c8a882]" />
-                  Bestätigungs-E-Mail
-                </h3>
-                <p className="text-sm text-[#5a524b]">
-                  Die Bestellbestätigung und Quittung wurden gesendet an:{" "}
-                  <span className="font-medium text-[#3a3735]">
-                    {sessionData.customer.email}
-                  </span>
-                </p>
               </div>
             </div>
 
+            {/* Shipping Address */}
+            <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
+              <h2 className="text-2xl font-bold text-[#3a3735] mb-4 flex items-center gap-2">
+                <Home className="w-6 h-6" />
+                Lieferadresse
+              </h2>
+              <div className="text-gray-600">
+                <p className="font-semibold">{sessionData.customer.name}</p>
+                <p>{sessionData.shippingAddress.line1}</p>
+                {sessionData.shippingAddress.line2 && (
+                  <p>{sessionData.shippingAddress.line2}</p>
+                )}
+                <p>
+                  {sessionData.shippingAddress.postal_code}{" "}
+                  {sessionData.shippingAddress.city}
+                </p>
+                <p>{sessionData.shippingAddress.country}</p>
+              </div>
+            </div>
+
+            {/* Customer Email */}
+            <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
+              <h2 className="text-2xl font-bold text-[#3a3735] mb-4 flex items-center gap-2">
+                <Mail className="w-6 h-6" />
+                Bestätigungs-E-Mail
+              </h2>
+              <p className="text-gray-600">
+                Die Bestellbestätigung und Quittung wurden gesendet an:{" "}
+                <span className="font-semibold">
+                  {sessionData.customer.email}
+                </span>
+              </p>
+            </div>
+
             {/* Next Steps */}
-            <div className="bg-white p-8 mb-6 shadow-sm">
-              <h2 className="text-2xl font-serif text-[#3a3735] mb-6">
+            <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
+              <h2 className="text-2xl font-bold text-[#3a3735] mb-6">
                 Was passiert als Nächstes?
               </h2>
               <div className="space-y-6">
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 bg-[#c8a882] rounded-full flex items-center justify-center flex-shrink-0 text-white font-medium">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#c8a882] text-white rounded-full flex items-center justify-center font-bold">
                     1
                   </div>
                   <div>
-                    <h4 className="font-medium text-[#3a3735] mb-1">
+                    <h3 className="font-semibold text-[#3a3735] mb-1">
                       Bestellbestätigung
-                    </h4>
-                    <p className="text-sm text-[#5a524b]">
+                    </h3>
+                    <p className="text-gray-600">
                       Sie erhalten in Kürze eine Bestellbestätigung per E-Mail
                       mit allen Details.
                     </p>
                   </div>
                 </div>
-
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 bg-[#c8a882] rounded-full flex items-center justify-center flex-shrink-0 text-white font-medium">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#c8a882] text-white rounded-full flex items-center justify-center font-bold">
                     2
                   </div>
                   <div>
-                    <h4 className="font-medium text-[#3a3735] mb-1">
+                    <h3 className="font-semibold text-[#3a3735] mb-1">
                       Bearbeitung durch den Verkäufer
-                    </h4>
-                    <p className="text-sm text-[#5a524b]">
+                    </h3>
+                    <p className="text-gray-600">
                       Der Verkäufer wird benachrichtigt und bereitet Ihren
                       Artikel für den Versand vor.
                     </p>
                   </div>
                 </div>
-
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 bg-[#c8a882] rounded-full flex items-center justify-center flex-shrink-0 text-white font-medium">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#c8a882] text-white rounded-full flex items-center justify-center font-bold">
                     3
                   </div>
                   <div>
-                    <h4 className="font-medium text-[#3a3735] mb-1">
+                    <h3 className="font-semibold text-[#3a3735] mb-1">
                       Versand & Sendungsverfolgung
-                    </h4>
-                    <p className="text-sm text-[#5a524b]">
+                    </h3>
+                    <p className="text-gray-600">
                       Sobald die Ware versendet wurde, erhalten Sie eine
                       Sendungsverfolgungsnummer, um Ihre Lieferung zu
                       überwachen.
                     </p>
                   </div>
                 </div>
-
                 <div className="flex gap-4">
-                  <div className="w-10 h-10 bg-[#c8a882] rounded-full flex items-center justify-center flex-shrink-0 text-white font-medium">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#c8a882] text-white rounded-full flex items-center justify-center font-bold">
                     4
                   </div>
                   <div>
-                    <h4 className="font-medium text-[#3a3735] mb-1">
+                    <h3 className="font-semibold text-[#3a3735] mb-1">
                       Lieferung
-                    </h4>
-                    <p className="text-sm text-[#5a524b]">
+                    </h3>
+                    <p className="text-gray-600">
                       Ihr Artikel wird sorgfältig verpackt und an Ihre Adresse
                       geliefert.
                     </p>
@@ -273,38 +253,25 @@ export default function PurchaseSuccessPage() {
             </div>
 
             {/* Important Information */}
-            <div className="bg-[#f5f1ea] p-6 mb-8">
-              <h3 className="font-medium text-[#3a3735] mb-3 flex items-center gap-2">
-                <Package className="w-5 h-5 text-[#c8a882]" />
+            <div className="bg-[#fff9f0] border border-[#c8a882] rounded-lg p-8 mb-6">
+              <h2 className="text-2xl font-bold text-[#3a3735] mb-4">
                 Wichtige Informationen
-              </h3>
-              <ul className="space-y-2 text-sm text-[#5a524b]">
-                <li className="flex items-start gap-2">
-                  <span className="text-[#c8a882] mt-1">•</span>
-                  <span>
-                    Alle Artikel werden mit vollständiger Versicherung und
-                    Sendungsverfolgung versandt.
-                  </span>
+              </h2>
+              <ul className="space-y-2 text-gray-700">
+                <li>
+                  • Alle Artikel werden mit vollständiger Versicherung und
+                  Sendungsverfolgung versandt.
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#c8a882] mt-1">•</span>
-                  <span>
-                    Bitte überprüfen Sie Ihren Artikel sofort bei der Lieferung.
-                  </span>
+                <li>
+                  • Bitte überprüfen Sie Ihren Artikel sofort bei der Lieferung.
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#c8a882] mt-1">•</span>
-                  <span>
-                    Wenden Sie sich an den Kundendienst, wenn Sie Probleme mit
-                    Ihrer Bestellung haben.
-                  </span>
+                <li>
+                  • Wenden Sie sich an den Kundendienst, wenn Sie Probleme mit
+                  Ihrer Bestellung haben.
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#c8a882] mt-1">•</span>
-                  <span>
-                    Ihre Zahlung wird sicher verwahrt, bis Sie den Erhalt
-                    bestätigen.
-                  </span>
+                <li>
+                  • Ihre Zahlung wird sicher verwahrt, bis Sie den Erhalt
+                  bestätigen.
                 </li>
               </ul>
             </div>
@@ -312,23 +279,40 @@ export default function PurchaseSuccessPage() {
         )}
 
         {/* Action Buttons */}
-        <div className="flex gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={() => router.push("/search")}
-            className="flex items-center gap-2 px-6 py-3 bg-white border border-[#d4cec4] text-[#3a3735] hover:bg-[#f5f1ea] transition-colors"
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-white border border-[#d4cec4] text-[#3a3735] hover:bg-[#f5f1ea] transition-colors rounded"
           >
             <ShoppingBag className="w-5 h-5" />
-            <span>Weiter einkaufen</span>
+            Weiter einkaufen
           </button>
           <button
             onClick={() => router.push("/account/orders")}
-            className="flex items-center gap-2 px-6 py-3 bg-[#3a3735] text-white hover:bg-[#c8a882] hover:text-[#3a3735] transition-colors"
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-[#3a3735] text-white hover:bg-[#c8a882] hover:text-[#3a3735] transition-colors rounded"
           >
-            <span>Meine Bestellungen ansehen</span>
+            Meine Bestellungen ansehen
             <ArrowRight className="w-5 h-5" />
           </button>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PurchaseSuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#f5f1ea] flex items-center justify-center p-4">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#3a3735] mb-4"></div>
+            <p className="text-[#3a3735] text-lg">Lädt...</p>
+          </div>
+        </div>
+      }
+    >
+      <PurchaseSuccessContent />
+    </Suspense>
   );
 }

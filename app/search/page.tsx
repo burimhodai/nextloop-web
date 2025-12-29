@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, Suspense } from "react";
 import { Search, ChevronDown, Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import _ from "lodash";
@@ -48,7 +48,7 @@ const SORT_OPTIONS = [
   { value: "newest", label: "Newly Listed" },
 ];
 
-export default function SearchPage() {
+function SearchPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -350,5 +350,22 @@ export default function SearchPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="w-8 h-8 animate-spin text-[#c8a882] mx-auto mb-4" />
+            <p className="text-[#5a524b] text-lg">Loading search...</p>
+          </div>
+        </div>
+      }
+    >
+      <SearchPageContent />
+    </Suspense>
   );
 }
