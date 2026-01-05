@@ -34,6 +34,7 @@ import {
   placeBid,
 } from "@/services/listings";
 import { useAuthStore } from "@/lib/stores/authStore";
+import Link from "next/link";
 
 export default function AuctionDetailPage() {
   const params = useParams();
@@ -217,13 +218,13 @@ export default function AuctionDetailPage() {
       {/* Breadcrumb */}
       <div className="bg-white border-b border-[#d4cec4]">
         <div className="max-w-7xl mx-auto px-6 py-4">
-          <button
-            onClick={() => router.back()}
+          <Link
+            href={"/"}
             className="flex items-center gap-2 text-[#5a524b] hover:text-[#c8a882] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back</span>
-          </button>
+          </Link>
         </div>
       </div>
 

@@ -26,6 +26,7 @@ export default function CreateListingPage() {
       formData.append("type", data.type);
       formData.append("category", data.category);
       formData.append("seller", user?._id || "");
+      formData.append("endTime", data.endTime?.toISOString() || "");
 
       // Add pricing based on listing type
       if (data.type === "AUCTION") {

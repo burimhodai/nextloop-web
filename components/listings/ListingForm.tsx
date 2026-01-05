@@ -16,6 +16,7 @@ import {
   DollarSign,
   Gavel,
   CheckCircle2,
+  Clock,
 } from "lucide-react";
 
 // Export this interface for use in the parent page
@@ -27,6 +28,7 @@ export interface ListingFormData {
   type: ListingTypes;
   category: string;
   images: Partial<Record<ImageTypes, File>>;
+  endTime?: Date;
 }
 
 interface ListingFormProps {
@@ -38,10 +40,19 @@ interface ListingFormProps {
 
 const CONDITION_OPTIONS = Object.values(ListingConditions).map((c) => ({
   value: c,
-  label: c.replace(/_/g, " "), // Improved regex replacement
+  label: c.replace(/_/g, " "),
 }));
 
 const REQUIRED_IMAGE_TYPES = Object.values(ImageTypes);
+
+// Auction duration presets in hours
+const DURATION_PRESETS = [
+  { label: "1 Day", hours: 24 },
+  { label: "3 Days", hours: 72 },
+  { label: "5 Days", hours: 120 },
+  { label: "7 Days", hours: 168 },
+  { label: "14 Days", hours: 336 },
+];
 
 export const ListingForm: React.FC<ListingFormProps> = ({
   initialData,
@@ -57,6 +68,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
     type: initialData?.type || ListingTypes.DIRECT_BUY,
     category: initialData?.category || "",
     images: initialData?.images || {},
+    endTime: initialData?.endTime,
   });
 
   const [previews, setPreviews] = useState<Partial<Record<ImageTypes, string>>>(
@@ -64,13 +76,13 @@ export const ListingForm: React.FC<ListingFormProps> = ({
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [customEndTime, setCustomEndTime] = useState<string>("");
 
   const getPriceLabel = () =>
     formData.type === ListingTypes.AUCTION
       ? "Starting Bid (CHF)"
       : "Buy Now Price (CHF)";
 
-  // Standard handler for Inputs and HTML Selects
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -83,9 +95,24 @@ export const ListingForm: React.FC<ListingFormProps> = ({
     }));
   };
 
-  // Specific handler for custom CategorySelect (if it returns a value directly)
   const handleCategoryChange = (value: string) => {
     setFormData((prev) => ({ ...prev, category: value }));
+  };
+
+  const handleDurationPreset = (hours: number) => {
+    const endTime = new Date();
+    endTime.setHours(endTime.getHours() + hours);
+    setFormData((prev) => ({ ...prev, endTime }));
+    setCustomEndTime("");
+  };
+
+  const handleCustomEndTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setCustomEndTime(value);
+    if (value) {
+      const endTime = new Date(value);
+      setFormData((prev) => ({ ...prev, endTime }));
+    }
   };
 
   const handleImageUpload = (type: ImageTypes, file: File) => {
@@ -114,7 +141,13 @@ export const ListingForm: React.FC<ListingFormProps> = ({
     if (formData.price <= 0) return "Price must be greater than 0";
     if (!formData.category) return "Category is required";
 
-    // Check missing images
+    // Auction-specific validation
+    if (formData.type === ListingTypes.AUCTION) {
+      if (!formData.endTime) return "Auction end time is required";
+      if (formData.endTime <= new Date())
+        return "Auction end time must be in the future";
+    }
+
     const missingImages = REQUIRED_IMAGE_TYPES.filter(
       (type) => !formData.images[type]
     );
@@ -142,6 +175,17 @@ export const ListingForm: React.FC<ListingFormProps> = ({
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const formatEndTime = (date?: Date) => {
+    if (!date) return "";
+    return new Date(date).toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   return (
@@ -321,11 +365,9 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                 </div>
 
                 <div className="space-y-2">
-                  {/* Category Select usually passes value directly, not an event */}
                   <CategorySelect
                     name="category"
                     value={formData.category}
-                    // Handle specific change event for Custom Select
                     onChange={(valOrEvent: any) => {
                       if (typeof valOrEvent === "string") {
                         handleCategoryChange(valOrEvent);
@@ -336,6 +378,70 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                   />
                 </div>
               </div>
+
+              {/* AUCTION DURATION SECTION */}
+              {formData.type === ListingTypes.AUCTION && (
+                <div className="space-y-4 p-6 bg-[#faf8f4] border border-[#d4cec4]">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Clock className="w-5 h-5 text-[#c8a882]" />
+                    <h4
+                      className="text-base text-[#3a3735] font-medium"
+                      style={{ fontFamily: "Playfair Display, serif" }}
+                    >
+                      Auction Duration
+                    </h4>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                      {DURATION_PRESETS.map((preset) => (
+                        <button
+                          key={preset.hours}
+                          type="button"
+                          onClick={() => handleDurationPreset(preset.hours)}
+                          className={`px-4 py-3 text-sm font-medium transition-all ${
+                            formData.endTime &&
+                            Math.abs(
+                              formData.endTime.getTime() -
+                                Date.now() -
+                                preset.hours * 3600000
+                            ) < 60000
+                              ? "bg-[#3a3735] text-white border-[#3a3735]"
+                              : "bg-white text-[#3a3735] border-[#d4cec4] hover:border-[#c8a882]"
+                          } border`}
+                        >
+                          {preset.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="relative">
+                      <label className="text-xs font-medium uppercase tracking-wider text-[#5a524b] mb-2 block">
+                        Or Choose Custom End Time
+                      </label>
+                      <input
+                        type="datetime-local"
+                        value={customEndTime}
+                        onChange={handleCustomEndTime}
+                        min={new Date().toISOString().slice(0, 16)}
+                        className="w-full px-4 py-3 bg-white border border-[#d4cec4] text-[#3a3735] focus:border-[#c8a882] focus:ring-1 focus:ring-[#c8a882] focus:outline-none transition-all"
+                      />
+                    </div>
+
+                    {formData.endTime && (
+                      <div className="flex items-center gap-2 text-sm text-[#5a524b] bg-white p-3 border border-[#d4cec4]">
+                        <CheckCircle2 className="w-4 h-4 text-green-600" />
+                        <span>
+                          Auction ends:{" "}
+                          <strong className="text-[#3a3735]">
+                            {formatEndTime(formData.endTime)}
+                          </strong>
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </section>
 
