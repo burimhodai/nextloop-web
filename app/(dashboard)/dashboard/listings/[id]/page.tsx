@@ -105,12 +105,12 @@ export default function ListingDetailPage() {
       : "Uncategorized";
 
   // FIX: Handle listing.boost as a single object (IBoost | null)
-  const boostObject = listing.boost as IBoost | null;
+  const boostObject: IBoost | undefined = listing.boost as IBoost | undefined;
   const activeBoost =
     boostObject &&
-    boostObject.status === "ACTIVE" &&
-    boostObject.endTime &&
-    new Date(boostObject.endTime) > new Date()
+    boostObject?.status === "ACTIVE" &&
+    boostObject?.endTime &&
+    new Date(boostObject?.endTime) > new Date()
       ? boostObject
       : null;
 

@@ -56,7 +56,7 @@ export const useAuthStore = create<AuthState>()(
 
       clearError: () => set({ error: null }),
 
-      setHasHydrated: (hydrated) => set({ _hasHydrated: hydrated }), // Action implementation
+      setHasHydrated: (hydrated) => set({ _hasHydrated: hydrated }),
 
       login: async (credentials) => {
         set({ isLoading: true, error: null });

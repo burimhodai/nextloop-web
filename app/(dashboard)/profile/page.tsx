@@ -200,12 +200,12 @@ export default function ProfilePage() {
 
               <div className="text-center mt-4">
                 <h2 className="text-xl font-bold text-[#3a3735]">
-                  {user.fullName}
+                  {user?.fullName}
                 </h2>
-                <p className="text-sm text-[#5a524b] mb-1">@{user.username}</p>
+                <p className="text-sm text-[#5a524b] mb-1">@{user?.username}</p>
                 <div className="flex items-center justify-center gap-1.5 text-xs text-[#5a524b] bg-[#f5f1ea] px-3 py-1 rounded-full w-fit mx-auto">
                   <Mail className="w-3 h-3" />
-                  {user.email}
+                  {user?.email}
                 </div>
               </div>
             </div>
@@ -219,7 +219,7 @@ export default function ProfilePage() {
                 </span>
               )}
 
-              {user.idVerification?.success ? (
+              {user?.idVerification?.success ? (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
                   <ShieldCheck className="w-3 h-3" />
                   ID Verified
@@ -234,7 +234,7 @@ export default function ProfilePage() {
                 </button>
               )}
 
-              {user.isSeller && (
+              {user?.isSeller && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-[#3a3735] text-[#c8a882] border border-[#3a3735]">
                   <Building className="w-3 h-3" />
                   Seller Account
@@ -250,7 +250,7 @@ export default function ProfilePage() {
                   <span className="text-sm">Balance</span>
                 </div>
                 <span className="font-bold text-[#3a3735]">
-                  CHF {user.balance?.toFixed(2) || "0.00"}
+                  CHF {user?.balance?.toFixed(2) || "0.00"}
                 </span>
               </div>
 
@@ -261,10 +261,10 @@ export default function ProfilePage() {
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="font-bold text-[#3a3735]">
-                    {user.rating?.toFixed(1) || "0.0"}
+                    {user?.rating?.toFixed(1) || "0.0"}
                   </span>
                   <span className="text-xs text-[#5a524b]">
-                    ({user.totalRatings || 0})
+                    ({user?.totalRatings || 0})
                   </span>
                 </div>
               </div>
@@ -274,12 +274,14 @@ export default function ProfilePage() {
                   <Calendar className="w-4 h-4 text-[#c8a882]" />
                   <span className="text-sm">Joined</span>
                 </div>
-                <span className="text-sm font-medium text-[#3a3735]">
-                  {new Date(user.createdAt).toLocaleDateString("en-US", {
+                {/* <span className="text-sm font-medium text-[#3a3735]">
+                  {new Date(
+                    user?.createdAt && user.createdAt
+                  ).toLocaleDateString("en-US", {
                     month: "short",
                     year: "numeric",
                   })}
-                </span>
+                </span> */}
               </div>
             </div>
           </div>

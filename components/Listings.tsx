@@ -13,11 +13,9 @@ import { fetchBoostedListings } from "@/services/listings";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// If you have an enum for BoostTypes, import it. Otherwise, we use the string literal.
-const BOOST_TYPE_HOMEPAGE = "HOMEPAGE";
-
 export default function ListingsComponent() {
   // --- Logic State ---
+
   const [listings, setListings] = useState<IListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
