@@ -21,7 +21,7 @@ export default function Home() {
       <main>
         <Hero />
         <ListingsComponent />
-        <Categories />
+        {/* <Categories /> */}
         <FeaturedAuctions />
         <LiveAuctions />
         <Editorial />

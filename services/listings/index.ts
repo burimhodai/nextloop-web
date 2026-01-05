@@ -449,3 +449,51 @@ export const isInWatchlist = async (
     return false;
   }
 };
+/**
+ * Fetch boosted listings (Featured) based on boost type
+ * Typically used for the HOMEPAGE section
+ */
+export const fetchBoostedListings = async (
+  boostType: string = "HOMEPAGE",
+  params: {
+    page?: number;
+    limit?: number;
+    status?: string;
+    type?: string;
+    category?: string;
+    search?: string;
+  } = {}
+): Promise<any> => {
+  try {
+    const queryParams = new URLSearchParams();
+
+    // Fill query parameters if provided
+    if (params.page) queryParams.append("page", params.page.toString());
+    if (params.limit) queryParams.append("limit", params.limit.toString());
+    if (params.status) queryParams.append("status", params.status);
+    if (params.type) queryParams.append("type", params.type);
+    if (params.category) queryParams.append("category", params.category);
+    if (params.search) queryParams.append("search", params.search);
+
+    const response = await fetch(
+      `${API_URL}/search/listings/boosted/${boostType}?${queryParams.toString()}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to fetch boosted listings");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in fetchBoostedListings:", error);
+    throw error;
+  }
+};

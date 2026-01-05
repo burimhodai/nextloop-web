@@ -315,33 +315,6 @@ export default function ListingDetailPage() {
                 </div>
               </div>
             </div>
-
-            {/* Seller Info */}
-            {seller && (
-              <div className="bg-white p-6">
-                <h3 className="text-lg font-medium text-[#3a3735] mb-4">
-                  Seller Information
-                </h3>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#c8a882] rounded-full flex items-center justify-center text-white font-medium">
-                    {seller.username?.[0]?.toUpperCase() || "S"}
-                  </div>
-                  <div className="flex-1">
-                    <div className="font-medium text-[#3a3735] mb-1">
-                      {seller.username}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-[#5a524b] mb-3">
-                      <Star className="w-4 h-4 fill-[#c8a882] text-[#c8a882]" />
-                      <span>{seller.rating?.toFixed(1) || "New Seller"}</span>
-                      <span>({seller.totalRatings || 0} reviews)</span>
-                    </div>
-                    <button className="px-4 py-2 border border-[#d4cec4] text-[#3a3735] hover:bg-[#f5f1ea] transition-colors text-sm">
-                      View Profile
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 

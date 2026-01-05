@@ -44,6 +44,7 @@ export default function AuctionDetailPage() {
   const [activeImage, setActiveImage] = useState<string>("");
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const { user } = useAuthStore();
+
   // Bidding state
   const [bidAmount, setBidAmount] = useState<string>("");
   const [bidding, setBidding] = useState(false);
@@ -59,16 +60,29 @@ export default function AuctionDetailPage() {
     }
   }, [params.id]);
 
-  // Update timer every second
+  // Updated timer logic
   useEffect(() => {
     if (!listing?.endTime) return;
 
-    const interval = setInterval(() => {
-      setTimeRemaining(getTimeRemaining(listing.endTime));
-    }, 1000);
+    // Function to calculate and update the state
+    const updateTimer = () => {
+      const remaining = getTimeRemaining(listing.endTime);
+      setTimeRemaining(remaining);
+
+      // If the auction has ended, we can stop the interval
+      if (isAuctionEnded(listing.endTime)) {
+        clearInterval(interval);
+      }
+    };
+
+    // Initial call to prevent the 1s delay
+    updateTimer();
+
+    // Set up the interval
+    const interval = setInterval(updateTimer, 1000);
 
     return () => clearInterval(interval);
-  }, [listing?.endTime]);
+  }, [listing?.endTime]); // Re-runs if endTime changes (e.g., extension)
 
   const fetchAuction = async () => {
     try {
@@ -84,7 +98,6 @@ export default function AuctionDetailPage() {
       setListing(data);
       const mainImageUrl = getMainImage(data);
       setActiveImage(mainImageUrl);
-      setTimeRemaining(getTimeRemaining(data.endTime));
 
       // Set initial bid amount to minimum bid
       const minBid = getMinimumBid(data);
@@ -104,7 +117,7 @@ export default function AuctionDetailPage() {
       direction === "next"
         ? (activeImageIndex + 1) % listing.images.length
         : (activeImageIndex - 1 + listing.images.length) %
-        listing.images.length;
+          listing.images.length;
 
     setActiveImageIndex(newIndex);
     setActiveImage(listing.images[newIndex].url);
@@ -133,7 +146,7 @@ export default function AuctionDetailPage() {
         amount,
       });
 
-      // Update listing with new data
+      // Update listing with new data (this will also update the timer via useEffect)
       setListing(response.listing);
       setBidSuccess(true);
 
@@ -146,7 +159,8 @@ export default function AuctionDetailPage() {
 
       if (response.extended) {
         alert(
-          `Auction extended! ${response.extensionsRemaining || 0
+          `Auction extended! ${
+            response.extensionsRemaining || 0
           } extensions remaining.`
         );
       }
@@ -255,10 +269,11 @@ export default function AuctionDetailPage() {
                       setActiveImage(image.url);
                       setActiveImageIndex(index);
                     }}
-                    className={`aspect-square bg-[#e8dfd0] overflow-hidden border-2 transition-all ${activeImageIndex === index
+                    className={`aspect-square bg-[#e8dfd0] overflow-hidden border-2 transition-all ${
+                      activeImageIndex === index
                         ? "border-[#c8a882]"
                         : "border-transparent hover:border-[#d4cec4]"
-                      }`}
+                    }`}
                   >
                     <img
                       src={image.url}
@@ -325,13 +340,14 @@ export default function AuctionDetailPage() {
                     {auctionEnded
                       ? "Auction Ended"
                       : auctionStarted
-                        ? "Time Remaining"
-                        : "Starts In"}
+                      ? "Time Remaining"
+                      : "Starts In"}
                   </span>
                 </div>
                 <div
-                  className={`text-2xl font-medium ${auctionEnded ? "text-red-600" : "text-[#3a3735]"
-                    }`}
+                  className={`text-2xl font-medium ${
+                    auctionEnded ? "text-red-600" : "text-[#3a3735]"
+                  }`}
                 >
                   {auctionEnded ? "ENDED" : timeRemaining || "Loading..."}
                 </div>
@@ -489,8 +505,9 @@ export default function AuctionDetailPage() {
                     return (
                       <div
                         key={bid._id || index}
-                        className={`flex items-center justify-between p-3 border border-[#d4cec4] ${index === 0 ? "bg-[#f5f1ea]" : "bg-white"
-                          }`}
+                        className={`flex items-center justify-between p-3 border border-[#d4cec4] ${
+                          index === 0 ? "bg-[#f5f1ea]" : "bg-white"
+                        }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 bg-[#c8a882] rounded-full flex items-center justify-center text-white text-sm">

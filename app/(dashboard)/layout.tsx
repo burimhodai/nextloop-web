@@ -16,6 +16,7 @@ import {
   X,
   AlertCircle,
   ShieldAlert,
+  DollarSign,
 } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -61,6 +62,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       name: "Watchlist",
       href: "/dashboard/watchlist",
       icon: Heart,
+    },
+    {
+      name: "Purchases",
+      href: "/dashboard/purchases",
+      icon: DollarSign,
     },
     // {
     //   name: "Settings",
