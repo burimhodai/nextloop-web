@@ -85,9 +85,7 @@ export function Header() {
 
   return (
     <header
-      className={`${
-        !isHomePage && "hidden"
-      } sticky top-0 z-50 bg-[#faf8f4] border-b border-black/10`}
+      className={`sticky top-0 z-50 bg-[#faf8f4] border-b border-black/10`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between gap-6">

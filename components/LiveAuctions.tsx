@@ -1,70 +1,134 @@
 "use client";
-import { Clock, Users, Gavel } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { Clock, Users, Gavel, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { IListing } from "@/lib/types/listing.types";
+import { fetchLatestAuctions } from "@/services/listings";
 
-interface LiveAuction {
-  id: number;
-  title: string;
-  currentBid: number;
-  bidders: number;
-  image: string;
-  endsIn: number; // seconds
-}
-
-const liveAuctions: LiveAuction[] = [
-  {
-    id: 1,
-    title: "Château Margaux 1900",
-    currentBid: 52000,
-    bidders: 14,
-    image: "https://images.unsplash.com/photo-1734490037300-6ff9ffd4ed13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwd2luZSUyMGNlbGxhcnxlbnwxfHx8fDE3NjMxMjI3NDd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    endsIn: 3542
-  },
-  {
-    id: 2,
-    title: "18th Century Pocket Watch",
-    currentBid: 38500,
-    bidders: 8,
-    image: "https://images.unsplash.com/photo-1554151447-b9d2197448f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjB3YXRjaCUyMGNsb3NlJTIwdXB8ZW58MXx8fHwxNjMwMzQzMzN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    endsIn: 1822
-  },
-  {
-    id: 3,
-    title: "Handcrafted Leather Set",
-    currentBid: 4200,
-    bidders: 5,
-    image: "https://images.unsplash.com/photo-1758887263106-48f9934c1cdb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBoZXJpdGFnZSUyMGNyYWZ0c21hbnNoaXB8ZW58MXx8fHwxNzYzMTIyNzQ3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    endsIn: 7234
-  }
-];
-
-function CountdownTimer({ seconds }: { seconds: number }) {
-  const [timeLeft, setTimeLeft] = useState(seconds);
+function CountdownTimer({ endTime }: { endTime?: Date | string }) {
+  const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
+    if (!endTime) return;
+
+    const calculateTimeLeft = () => {
+      const now = new Date().getTime();
+      const end = new Date(endTime).getTime();
+      const diff = Math.max(0, Math.floor((end - now) / 1000));
+      setTimeLeft(diff);
+    };
+
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [endTime]);
 
   const hours = Math.floor(timeLeft / 3600);
   const minutes = Math.floor((timeLeft % 3600) / 60);
   const secs = timeLeft % 60;
 
+  if (timeLeft === 0) {
+    return (
+      <div className="flex items-center gap-2 text-red-600">
+        <Clock className="w-4 h-4" strokeWidth={1.5} />
+        <span className="text-sm tracking-wider">ENDED</span>
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center gap-2 text-[#c8a882]">
       <Clock className="w-4 h-4" strokeWidth={1.5} />
       <span className="text-sm tracking-wider">
-        {String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:{String(secs).padStart(2, '0')}
+        {String(hours).padStart(2, "0")}:{String(minutes).padStart(2, "0")}:
+        {String(secs).padStart(2, "0")}
       </span>
     </div>
   );
 }
 
 export function LiveAuctions() {
+  const [auctions, setAuctions] = useState<IListing[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchAuctions();
+  }, []);
+
+  const fetchAuctions = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const data = await fetchLatestAuctions(3);
+      setAuctions(data.data || []);
+    } catch (err) {
+      console.error("Error fetching live auctions:", err);
+      setError(
+        err instanceof Error ? err.message : "Failed to load live auctions"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getMainImage = (listing: IListing) => {
+    return (
+      listing.images?.find((img) => img.type === "MAIN")?.url ||
+      listing.images?.[0]?.url ||
+      "/placeholder.jpg"
+    );
+  };
+
+  const getCurrentPrice = (listing: IListing) => {
+    return listing.currentPrice || listing.startingPrice || 0;
+  };
+
+  const isAuctionEnded = (endTime?: Date | string) => {
+    if (!endTime) return false;
+    return new Date(endTime).getTime() <= Date.now();
+  };
+
+  if (loading) {
+    return (
+      <section className="py-24 bg-[#f5f1ea]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col justify-center items-center py-20">
+            <Loader2 className="h-10 w-10 text-[#c8a882] animate-spin mb-4" />
+            <p className="text-[#5a524b] font-serif italic">
+              Loading live auctions...
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-24 bg-[#f5f1ea]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="bg-red-50 border-l-4 border-red-400 p-6 rounded-r">
+            <p className="text-red-700 font-serif mb-2">{error}</p>
+            <button
+              onClick={fetchAuctions}
+              className="text-red-700 text-sm underline hover:no-underline"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (auctions.length === 0) {
+    return null; // Don't show section if no live auctions
+  }
+
   return (
     <section className="py-24 bg-[#f5f1ea]">
       <div className="max-w-7xl mx-auto px-6">
@@ -78,77 +142,95 @@ export function LiveAuctions() {
             </span>
             <div className="h-px w-12 bg-[#c8a882]"></div>
           </div>
-          <h2 
-            className="text-[#3a3735] mb-4"
-            style={{ fontFamily: 'Playfair Display, serif' }}
+          <h2
+            className="text-[#3a3735] text-4xl md:text-5xl mb-4"
+            style={{ fontFamily: "Playfair Display, serif" }}
           >
             Active Bidding
           </h2>
           <p className="text-[#5a524b] max-w-2xl mx-auto">
-            Join live auctions and compete with collectors worldwide for exceptional pieces
+            Join live auctions and compete with collectors worldwide for
+            exceptional pieces
           </p>
         </div>
 
         {/* Live Auction Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {liveAuctions.map((auction) => (
-            <div 
-              key={auction.id}
+          {auctions.map((auction) => (
+            <Link
+              href={`/auction/${auction._id}`}
+              key={auction._id}
               className="group bg-white shadow-md hover:shadow-2xl transition-all duration-500"
             >
               {/* Image */}
               <div className="relative aspect-[4/3] overflow-hidden bg-[#e8dfd0]">
                 <Image
-                fill
-                  src={auction.image}
-                  alt={auction.title}
+                  fill
+                  src={getMainImage(auction)}
+                  alt={auction.name || "Live auction"}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#3a3735]/60 via-transparent to-transparent"></div>
-                <div className="absolute top-4 right-4 bg-[#c8a882] text-[#3a3735] px-3 py-1 text-xs tracking-wider flex items-center gap-1">
-                  <Gavel className="w-3 h-3" strokeWidth={2} />
-                  LIVE
-                </div>
+                {!isAuctionEnded(auction.endTime) && (
+                  <div className="absolute top-4 right-4 bg-[#c8a882] text-[#3a3735] px-3 py-1 text-xs tracking-wider flex items-center gap-1">
+                    <Gavel className="w-3 h-3" strokeWidth={2} />
+                    LIVE
+                  </div>
+                )}
               </div>
 
               {/* Details */}
               <div className="p-6">
-                <h3 
-                  className="text-[#3a3735] mb-4"
-                  style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.25rem' }}
+                <h3
+                  className="text-[#3a3735] mb-4 line-clamp-2 group-hover:text-[#c8a882] transition-colors"
+                  style={{
+                    fontFamily: "Playfair Display, serif",
+                    fontSize: "1.25rem",
+                  }}
                 >
-                  {auction.title}
+                  {auction.name}
                 </h3>
 
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#5a524b]">Current Bid</span>
-                    <span className="text-[#c8a882]">
-                      ${auction.currentBid.toLocaleString()}
+                    <span className="text-[#5a524b]">
+                      {auction.currentPrice ? "Current Bid" : "Starting Bid"}
+                    </span>
+                    <span className="text-[#c8a882] font-medium">
+                      ${getCurrentPrice(auction).toLocaleString()}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-[#5a524b] flex items-center gap-2">
                       <Users className="w-4 h-4" strokeWidth={1.5} />
-                      {auction.bidders} bidders
+                      {auction.totalBids || 0} bidders
                     </span>
-                    <CountdownTimer seconds={auction.endsIn} />
+                    <CountdownTimer endTime={auction.endTime} />
                   </div>
                 </div>
 
-                <button className="w-full bg-[#3a3735] hover:bg-[#c8a882] text-[#faf8f4] hover:text-[#3a3735] py-3 text-center tracking-wide transition-colors">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = `/auction/${auction._id}`;
+                  }}
+                  className="w-full bg-[#3a3735] hover:bg-[#c8a882] text-[#faf8f4] hover:text-[#3a3735] py-3 text-center tracking-wide transition-colors"
+                >
                   Place Bid
                 </button>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
         {/* CTA */}
         <div className="mt-12 text-center">
-          <button className="text-[#3a3735] hover:text-[#c8a882] text-sm tracking-wide border-b border-[#3a3735] hover:border-[#c8a882] pb-1">
+          <Link
+            href="/search?type=AUCTION"
+            className="text-[#3a3735] hover:text-[#c8a882] text-sm tracking-wide border-b border-[#3a3735] hover:border-[#c8a882] pb-1 transition-colors"
+          >
             View All Live Auctions
-          </button>
+          </Link>
         </div>
       </div>
     </section>

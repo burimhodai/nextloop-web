@@ -3,7 +3,92 @@
 import { IListing, ImageTypes, IBid } from "@/lib/types/listing.types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+export interface ListingStatusUpdate {
+  status: string;
+}
+export const fetchLatestAuctions = async (limit: number = 15): Promise<any> => {
+  try {
+    const response = await fetch(
+      `${API_URL}/search/auctions/latest?limit=${limit}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to fetch latest auctions");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching latest auctions:", error);
+    throw error;
+  }
+};
+
+export const fetchListingStatus = async (
+  id: string
+): Promise<ListingStatusUpdate> => {
+  try {
+    const response = await fetch(`${API_URL}/listing/${id}?fields=status`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch status: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching listing status:", error);
+    throw error;
+  }
+};
+export interface AuctionBidUpdate {
+  currentPrice?: number;
+  highestBidder?: string;
+  totalBids?: number;
+  bids: IBid[];
+  endTime?: string;
+}
+
+export const fetchAuctionBidUpdates = async (
+  id: string
+): Promise<AuctionBidUpdate> => {
+  try {
+    const response = await fetch(`${API_URL}/listing/${id}?fields=bids`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch bid updates: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching bid updates:", error);
+    throw error;
+  }
+};
+/**
+ * Increment view count for a listing
+ */
+export const incrementListingView = async (id: string): Promise<void> => {
+  try {
+    await fetch(`${API_URL}/listing/${id}/views`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("Error incrementing view:", error);
+    // Fail silently - view tracking shouldn't disrupt user experience
+  }
+};
 /**
  * Fetch a single listing by ID
  */
@@ -430,11 +515,6 @@ export const isInWatchlist = async (
   try {
     const response = await fetch(`${API_URL}/watchlist/check/${listingId}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
-      body: JSON.stringify({ userId }),
     });
 
     const data = await response.json();
@@ -467,16 +547,8 @@ export const fetchBoostedListings = async (
   try {
     const queryParams = new URLSearchParams();
 
-    // Fill query parameters if provided
-    if (params.page) queryParams.append("page", params.page.toString());
-    if (params.limit) queryParams.append("limit", params.limit.toString());
-    if (params.status) queryParams.append("status", params.status);
-    if (params.type) queryParams.append("type", params.type);
-    if (params.category) queryParams.append("category", params.category);
-    if (params.search) queryParams.append("search", params.search);
-
     const response = await fetch(
-      `${API_URL}/search/listings/boosted/${boostType}?${queryParams.toString()}`,
+      `${API_URL}/search/listings/boosted/${boostType}`,
       {
         method: "GET",
         headers: {

@@ -1,414 +1,208 @@
-"use client";
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
-import {
-  Heart,
-  Share2,
-  Flag,
-  MapPin,
-  Truck,
-  Shield,
-  Clock,
-  Eye,
-  ChevronLeft,
-  ChevronRight,
-  Star,
-  CheckCircle2,
-  Package,
-  CreditCard,
-  ArrowLeft,
-} from "lucide-react";
-import { IListing, ImageTypes } from "@/lib/types/listing.types";
-import {
-  fetchListingById,
-  getMainImage,
-  formatCondition,
-  createCheckoutSession,
-} from "@/services/listings";
-import { useAuthStore } from "@/lib/stores/authStore";
+import { Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
+import ListingDetailClient from "./ListingDetailClient";
 
-export default function ListingDetailPage() {
-  const params = useParams();
-  const router = useRouter();
-  const [listing, setListing] = useState<IListing | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [activeImage, setActiveImage] = useState<string>("");
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  const { user } = useAuthStore();
-  useEffect(() => {
-    if (params.id) {
-      fetchListing();
-    }
-  }, [params.id]);
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
-  const fetchListing = async () => {
-    try {
-      setLoading(true);
-      const data = await fetchListingById(params.id as string);
-
-      // If it's an auction, redirect to auction page
-      if (data.type === "AUCTION") {
-        router.push(`/auction/${params.id}`);
-        return;
-      }
-
-      setListing(data);
-      const mainImageUrl = getMainImage(data);
-      setActiveImage(mainImageUrl);
-    } catch (error) {
-      console.error("Failed to fetch listing:", error);
-      setError("Failed to load listing details.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleImageChange = (direction: "next" | "prev") => {
-    if (!listing?.images) return;
-
-    const newIndex =
-      direction === "next"
-        ? (activeImageIndex + 1) % listing.images.length
-        : (activeImageIndex - 1 + listing.images.length) %
-          listing.images.length;
-
-    setActiveImageIndex(newIndex);
-    setActiveImage(listing.images[newIndex].url);
-  };
-
-  const handleBuyNow = async () => {
-    const response = await createCheckoutSession({
-      listingId: listing?._id || "",
-      userId: user?._id!, // From auth
+// Fetch listing data on the server
+async function getListing(id: string) {
+  try {
+    const response = await fetch(`${API_URL}/listing/${id}`, {
+      cache: "no-store", // Always fetch fresh data
     });
 
-    // Redirects to Stripe checkout
-    window.location.href = response.data.url;
-  };
+    if (!response.ok) {
+      return null;
+    }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#c8a882] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-[#5a524b]">Loading listing...</p>
-        </div>
-      </div>
-    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching listing:", error);
+    return null;
+  }
+}
+
+// Generate metadata for SEO
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const listing = await getListing(id);
+
+  if (!listing) {
+    return {
+      title: "Listing Not Found",
+      description: "The requested listing could not be found.",
+    };
   }
 
-  if (error || !listing) {
-    return (
-      <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl text-[#3a3735] mb-4">Listing Not Found</h2>
-          <p className="text-[#5a524b] mb-6">
-            {error || "This listing does not exist."}
-          </p>
-          <button
-            onClick={() => router.push("/search")}
-            className="px-6 py-3 bg-[#3a3735] text-white hover:bg-[#c8a882] transition-colors"
-          >
-            Back to Search
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // Get main image
+  const mainImage =
+    listing.images?.find((img: any) => img.type === "MAIN")?.url ||
+    listing.images?.[0]?.url ||
+    "";
 
-  const seller = typeof listing.seller === "object" ? listing.seller : null;
+  const price = listing.buyNowPrice || 0;
+  const seller =
+    typeof listing.seller === "object"
+      ? listing.seller
+      : { username: "Seller" };
   const category =
-    typeof listing.category === "object" ? listing.category : null;
+    typeof listing.category === "object"
+      ? listing.category
+      : { name: "Collectibles" };
+
+  const description = listing.description
+    ? `${listing.description.slice(0, 155)}...`
+    : `Buy ${listing.name} for $${price.toLocaleString()}. ${formatCondition(
+        listing.condition
+      )} condition. ${listing.views || 0} views. Shop now!`;
+
+  const title = `${listing.name} - $${price.toLocaleString()} | Buy Now`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `${process.env.NEXT_PUBLIC_BASE_URL || ""}/listing/${listing._id}`,
+      images: mainImage
+        ? [
+            {
+              url: mainImage,
+              width: 1200,
+              height: 630,
+              alt: listing.name,
+            },
+          ]
+        : [],
+      siteName: "GoBusly Marketplace",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: mainImage ? [mainImage] : [],
+    },
+    other: {
+      "product:price:amount": price.toString(),
+      "product:price:currency": "USD",
+      "product:condition": listing.condition?.replace(/_/g, " ") || "Used",
+      "product:availability":
+        listing.status === "ACTIVE" ? "in stock" : "out of stock",
+      "product:category": category.name,
+    },
+  };
+}
+
+// Helper function
+function formatCondition(condition: string): string {
+  return condition.replace(/_/g, " ");
+}
+
+// Generate JSON-LD structured data for rich snippets
+function generateStructuredData(listing: any) {
+  const mainImage =
+    listing.images?.find((img: any) => img.type === "MAIN")?.url ||
+    listing.images?.[0]?.url ||
+    "";
+  const price = listing.buyNowPrice || 0;
+  const seller =
+    typeof listing.seller === "object"
+      ? listing.seller
+      : { username: "Seller", rating: 5 };
+  const category =
+    typeof listing.category === "object"
+      ? listing.category
+      : { name: "Collectibles" };
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: listing.name,
+    description: listing.description || `Buy ${listing.name}`,
+    image: listing.images?.map((img: any) => img.url) || [mainImage],
+    brand: {
+      "@type": "Brand",
+      name: seller.username,
+    },
+    category: category.name,
+    offers: {
+      "@type": "Offer",
+      url: `${process.env.NEXT_PUBLIC_BASE_URL || ""}/listing/${listing._id}`,
+      priceCurrency: "USD",
+      price: price,
+      itemCondition: `https://schema.org/${
+        listing.condition === "NEW"
+          ? "NewCondition"
+          : listing.condition === "LIKE_NEW"
+          ? "RefurbishedCondition"
+          : "UsedCondition"
+      }`,
+      availability:
+        listing.status === "ACTIVE"
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      seller: {
+        "@type": "Organization",
+        name: seller.username,
+      },
+      shippingDetails: listing.shippingCost
+        ? {
+            "@type": "OfferShippingDetails",
+            shippingRate: {
+              "@type": "MonetaryAmount",
+              value: listing.shippingCost,
+              currency: "USD",
+            },
+          }
+        : undefined,
+    },
+    aggregateRating: seller.rating
+      ? {
+          "@type": "AggregateRating",
+          ratingValue: seller.rating,
+          reviewCount: listing.views || 1,
+        }
+      : undefined,
+  };
+}
+
+export default async function ListingPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const listing = await getListing(id);
+
+  // If listing doesn't exist
+  if (!listing) {
+    notFound();
+  }
+
+  // If it's an auction, redirect to auction page
+  if (listing.type === "AUCTION") {
+    redirect(`/auction/${id}`);
+  }
+
+  const structuredData = generateStructuredData(listing);
 
   return (
-    <div className="min-h-screen bg-[#faf8f4]">
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-[#d4cec4]">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-[#5a524b] hover:text-[#c8a882] transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back</span>
-          </button>
-        </div>
-      </div>
+    <>
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Image Gallery */}
-          <div>
-            <div className="bg-white p-4 mb-4">
-              <div className="relative aspect-square bg-[#e8dfd0] overflow-hidden group">
-                <Image
-                  src={activeImage}
-                  alt={listing.name || "Product image"}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-
-                {/* Navigation Arrows */}
-                {listing.images && listing.images.length > 1 && (
-                  <>
-                    <button
-                      onClick={() => handleImageChange("prev")}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
-                    >
-                      <ChevronLeft className="w-5 h-5 text-[#3a3735]" />
-                    </button>
-                    <button
-                      onClick={() => handleImageChange("next")}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
-                    >
-                      <ChevronRight className="w-5 h-5 text-[#3a3735]" />
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {/* Thumbnail Gallery */}
-            {listing.images && listing.images.length > 1 && (
-              <div className="grid grid-cols-6 gap-2">
-                {listing.images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      setActiveImage(image.url);
-                      setActiveImageIndex(index);
-                    }}
-                    className={`aspect-square bg-[#e8dfd0] overflow-hidden border-2 transition-all ${
-                      activeImageIndex === index
-                        ? "border-[#c8a882]"
-                        : "border-transparent hover:border-[#d4cec4]"
-                    }`}
-                  >
-                    <Image
-                      src={image.url}
-                      alt={image.alt || `Thumbnail ${index + 1}`}
-                      width={100}
-                      height={100}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Product Details */}
-          <div>
-            <div className="bg-white p-6 mb-4">
-              {/* Category */}
-              {category && (
-                <div className="text-sm text-[#5a524b] mb-2">
-                  {category.name}
-                </div>
-              )}
-
-              {/* Title */}
-              <h1 className="text-3xl font-serif text-[#3a3735] mb-4">
-                {listing.name}
-              </h1>
-
-              {/* Stats */}
-              <div className="flex items-center gap-6 mb-6 text-sm text-[#5a524b]">
-                <div className="flex items-center gap-1">
-                  <Eye className="w-4 h-4" />
-                  <span>{listing.views || 0} views</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 fill-[#c8a882] text-[#c8a882]" />
-                  <span>{seller?.rating?.toFixed(1) || "New"}</span>
-                </div>
-              </div>
-
-              {/* Price */}
-              <div className="mb-6">
-                <div className="text-sm text-[#5a524b] mb-1">Buy Now Price</div>
-                <div className="text-4xl font-serif text-[#c8a882]">
-                  ${listing.buyNowPrice?.toLocaleString()}
-                </div>
-              </div>
-
-              {/* Condition */}
-              <div className="mb-6">
-                <div className="text-sm text-[#5a524b] mb-2">Condition</div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#f5f1ea] text-[#3a3735]">
-                  <CheckCircle2 className="w-4 h-4 text-[#c8a882]" />
-                  <span className="font-medium">
-                    {formatCondition(listing.condition)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Quantity */}
-              {/* <div className="mb-6">
-                <label className="block text-sm text-[#5a524b] mb-2">
-                  Quantity
-                </label>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 bg-[#f5f1ea] hover:bg-[#d4cec4] flex items-center justify-center transition-colors"
-                  >
-                    -
-                  </button>
-                  <input
-                    type="number"
-                    min="1"
-                    value={quantity}
-                    onChange={(e) =>
-                      setQuantity(Math.max(1, parseInt(e.target.value) || 1))
-                    }
-                    className="w-20 h-10 text-center bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] focus:outline-none focus:border-[#c8a882]"
-                  />
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 bg-[#f5f1ea] hover:bg-[#d4cec4] flex items-center justify-center transition-colors"
-                  >
-                    +
-                  </button>
-                </div>
-              </div> */}
-
-              {/* Action Buttons */}
-              <div className="space-y-3 mb-6">
-                <button
-                  onClick={handleBuyNow}
-                  className="w-full py-4 bg-[#3a3735] text-white hover:bg-[#c8a882] hover:text-[#3a3735] transition-all flex items-center justify-center gap-2 text-lg font-medium"
-                >
-                  <CreditCard className="w-5 h-5" />
-                  <span>Buy Now</span>
-                </button>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <button className="py-3 border border-[#d4cec4] text-[#3a3735] hover:bg-[#f5f1ea] transition-colors flex items-center justify-center gap-2">
-                    <Heart className="w-4 h-4" />
-                    <span>Save</span>
-                  </button>
-                  <button className="py-3 border border-[#d4cec4] text-[#3a3735] hover:bg-[#f5f1ea] transition-colors flex items-center justify-center gap-2">
-                    <Share2 className="w-4 h-4" />
-                    <span>Share</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Features */}
-              <div className="space-y-3 pt-6 border-t border-[#d4cec4]">
-                <div className="flex items-center gap-3 text-sm text-[#5a524b]">
-                  <Truck className="w-5 h-5 text-[#c8a882]" />
-                  <span>Free shipping on orders over $500</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-[#5a524b]">
-                  <Shield className="w-5 h-5 text-[#c8a882]" />
-                  <span>Authenticity guaranteed</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-[#5a524b]">
-                  <Package className="w-5 h-5 text-[#c8a882]" />
-                  <span>Secure packaging and handling</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Description & Details */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <div className="bg-white p-6 mb-6">
-              <h2 className="text-2xl font-serif text-[#3a3735] mb-4">
-                Description
-              </h2>
-              <div className="text-[#5a524b] leading-relaxed whitespace-pre-line">
-                {listing.description}
-              </div>
-            </div>
-
-            {/* Shipping Options */}
-            {listing.shippingOptions && listing.shippingOptions.length > 0 && (
-              <div className="bg-white p-6">
-                <h2 className="text-2xl font-serif text-[#3a3735] mb-4">
-                  Shipping Options
-                </h2>
-                <div className="space-y-3">
-                  {listing.shippingOptions.map((option, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between py-3 border-b border-[#d4cec4] last:border-0"
-                    >
-                      <div>
-                        <div className="font-medium text-[#3a3735]">
-                          {option.method}
-                        </div>
-                        {option.estimatedDays && (
-                          <div className="text-sm text-[#5a524b]">
-                            Estimated delivery: {option.estimatedDays} days
-                          </div>
-                        )}
-                      </div>
-                      <div className="font-medium text-[#3a3735]">
-                        ${option.cost.toFixed(2)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Additional Info Sidebar */}
-          <div className="space-y-6">
-            <div className="bg-white p-6">
-              <h3 className="text-lg font-medium text-[#3a3735] mb-4">
-                Item Details
-              </h3>
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Status:</span>
-                  <span className="text-[#3a3735] font-medium capitalize">
-                    {listing.status}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Condition:</span>
-                  <span className="text-[#3a3735] font-medium">
-                    {formatCondition(listing.condition)}
-                  </span>
-                </div>
-                {listing.shippingCost && (
-                  <div className="flex justify-between">
-                    <span className="text-[#5a524b]">Base Shipping:</span>
-                    <span className="text-[#3a3735] font-medium">
-                      ${listing.shippingCost.toFixed(2)}
-                    </span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Listed:</span>
-                  <span className="text-[#3a3735] font-medium">
-                    {listing.createdAt
-                      ? new Date(listing.createdAt).toLocaleDateString()
-                      : "N/A"}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white p-6">
-              <button className="w-full py-3 border border-[#d4cec4] text-[#3a3735] hover:bg-[#f5f1ea] transition-colors flex items-center justify-center gap-2">
-                <Flag className="w-4 h-4" />
-                <span>Report this listing</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      {/* Client Component */}
+      <ListingDetailClient initialListing={listing} />
+    </>
   );
 }
