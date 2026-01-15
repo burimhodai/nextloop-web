@@ -14,51 +14,51 @@ interface BoostModalProps {
 const BOOST_TYPES = [
   {
     type: "FEATURED",
-    name: "Featured",
+    name: "Hervorgehoben",
     icon: "⭐",
-    description: "Stand out with a featured badge on your listing",
+    description: "Fallen Sie auf mit einem 'Hervorgehoben'-Abzeichen",
     costPerDay: 10,
     benefits: [
-      "Featured badge on listing",
-      "Higher visibility in search",
-      "Stand out from competitors",
+      "Benachmarkung auf dem Inserat",
+      "Höhere Sichtbarkeit in der Suche",
+      "Heben Sie sich von der Konkurrenz ab",
     ],
   },
   {
     type: "CATEGORY_TOP",
-    name: "Category Top",
+    name: "Kategorie Top",
     icon: "🏆",
-    description: "Appear at the top of your category",
+    description: "Erscheinen Sie ganz oben in Ihrer Kategorie",
     costPerDay: 15,
     benefits: [
-      "Top position in category",
-      "Increased category exposure",
-      "Priority placement",
+      "Topposition in der Kategorie",
+      "Erhöhte Präsenz",
+      "Bevorzugte Platzierung",
     ],
   },
   {
     type: "HOMEPAGE",
-    name: "Homepage",
+    name: "Startseite",
     icon: "🚀",
-    description: "Feature on the homepage for maximum visibility",
+    description: "Erscheinen Sie auf der Startseite für maximale Sichtbarkeit",
     costPerDay: 25,
     benefits: [
-      "Homepage feature",
-      "Maximum exposure",
-      "Premium positioning",
-      "Best conversion rates",
+      "Startseiten-Feature",
+      "Maximale Reichweite",
+      "Premium-Positionierung",
+      "Beste Konversionsrate",
     ],
   },
   {
     type: "SEARCH_PRIORITY",
-    name: "Search Priority",
+    name: "Such-Priorität",
     icon: "🔍",
-    description: "Boost your ranking in search results",
+    description: "Verbessern Sie Ihr Ranking in den Suchergebnissen",
     costPerDay: 20,
     benefits: [
-      "Higher search ranking",
-      "Appear before competitors",
-      "More search impressions",
+      "Höheres Suchranking",
+      "Vor Wettbewerbern erscheinen",
+      "Mehr Suchimpressionen",
     ],
   },
 ];
@@ -99,12 +99,12 @@ export const BoostModal: React.FC<BoostModalProps> = ({
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Failed to create boost");
+        throw new Error(data.message || "Boost konnte nicht erstellt werden");
       }
 
       onSuccess();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to boost listing");
+      setError(err instanceof Error ? err.message : "Inserat konnte nicht geboostet werden");
     } finally {
       setIsSubmitting(false);
     }
@@ -117,7 +117,7 @@ export const BoostModal: React.FC<BoostModalProps> = ({
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
-              Boost Your Listing
+              Inserat boosten
             </h2>
             <p className="text-sm text-gray-600 mt-1">{listingTitle}</p>
           </div>
@@ -151,18 +151,17 @@ export const BoostModal: React.FC<BoostModalProps> = ({
           {/* Boost Types */}
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Select Boost Type
+              Wähle Boost-Typ
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {BOOST_TYPES.map((boost) => (
                 <button
                   key={boost.type}
                   onClick={() => setSelectedType(boost.type)}
-                  className={`p-4 rounded-lg border-2 text-left transition-all ${
-                    selectedType === boost.type
+                  className={`p-4 rounded-lg border-2 text-left transition-all ${selectedType === boost.type
                       ? "border-purple-500 bg-purple-50"
                       : "border-gray-200 hover:border-gray-300"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
@@ -172,7 +171,7 @@ export const BoostModal: React.FC<BoostModalProps> = ({
                       </h4>
                     </div>
                     <span className="text-sm font-medium text-purple-600">
-                      CHF {boost.costPerDay}/day
+                      CHF {boost.costPerDay}/Tag
                     </span>
                   </div>
                   <p className="text-sm text-gray-600 mb-3">
@@ -209,21 +208,20 @@ export const BoostModal: React.FC<BoostModalProps> = ({
           {/* Duration */}
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Select Duration
+              Wähle Dauer
             </h3>
             <div className="grid grid-cols-4 gap-3">
               {[3, 7, 14, 30].map((days) => (
                 <button
                   key={days}
                   onClick={() => setDuration(days)}
-                  className={`p-4 rounded-lg border-2 transition-all ${
-                    duration === days
+                  className={`p-4 rounded-lg border-2 transition-all ${duration === days
                       ? "border-purple-500 bg-purple-50"
                       : "border-gray-200 hover:border-gray-300"
-                  }`}
+                    }`}
                 >
                   <div className="text-2xl font-bold text-gray-900">{days}</div>
-                  <div className="text-xs text-gray-600 mt-1">days</div>
+                  <div className="text-xs text-gray-600 mt-1">Tage</div>
                 </button>
               ))}
             </div>
@@ -232,7 +230,7 @@ export const BoostModal: React.FC<BoostModalProps> = ({
           {/* Custom Duration */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Or enter custom duration (days)
+              Oder geben Sie eine benutzerdefinierte Dauer ein (Tage)
             </label>
             <input
               type="number"
@@ -241,30 +239,30 @@ export const BoostModal: React.FC<BoostModalProps> = ({
               value={duration}
               onChange={(e) => setDuration(parseInt(e.target.value) || 1)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
-              placeholder="Enter number of days"
+              placeholder="Anzahl der Tage eingeben"
             />
           </div>
 
           {/* Summary */}
           <div className="bg-gray-50 rounded-lg p-6 mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Summary
+              Zusammenfassung
             </h3>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-gray-600">Boost Type:</span>
+                <span className="text-gray-600">Boost-Typ:</span>
                 <span className="font-medium text-gray-900">
                   {selectedBoost.icon} {selectedBoost.name}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Duration:</span>
+                <span className="text-gray-600">Dauer:</span>
                 <span className="font-medium text-gray-900">
-                  {duration} days
+                  {duration} Tage
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Cost per day:</span>
+                <span className="text-gray-600">Kosten pro Tag:</span>
                 <span className="font-medium text-gray-900">
                   CHF {selectedBoost.costPerDay.toFixed(2)}
                 </span>
@@ -272,7 +270,7 @@ export const BoostModal: React.FC<BoostModalProps> = ({
               <div className="pt-3 border-t border-gray-200">
                 <div className="flex justify-between">
                   <span className="text-lg font-semibold text-gray-900">
-                    Total Cost:
+                    Gesamtkosten:
                   </span>
                   <span className="text-2xl font-bold text-purple-600">
                     CHF {totalCost.toFixed(2)}
@@ -290,7 +288,7 @@ export const BoostModal: React.FC<BoostModalProps> = ({
               className="flex-1"
               disabled={isSubmitting}
             >
-              Cancel
+              Abbrechen
             </Button>
             <Button
               onClick={handleSubmit}
@@ -299,7 +297,7 @@ export const BoostModal: React.FC<BoostModalProps> = ({
               isLoading={isSubmitting}
               disabled={isSubmitting}
             >
-              Boost Listing for CHF {totalCost.toFixed(2)}
+              Inserat boosten für CHF {totalCost.toFixed(2)}
             </Button>
           </div>
 
@@ -320,14 +318,14 @@ export const BoostModal: React.FC<BoostModalProps> = ({
                 />
               </svg>
               <div className="text-sm text-blue-800">
-                <p className="font-medium mb-1">How boosting works:</p>
+                <p className="font-medium mb-1">So funktioniert das Boosten:</p>
                 <ul className="list-disc list-inside space-y-1 text-xs">
                   <li>
-                    Your listing will be promoted immediately after payment
+                    Ihr Inserat wird sofort nach der Zahlung beworben
                   </li>
-                  <li>Boost is active for the selected duration</li>
-                  <li>You can track performance in your dashboard</li>
-                  <li>Cancel anytime for a prorated refund</li>
+                  <li>Der Boost ist für die gewählte Dauer aktiv</li>
+                  <li>Sie können die Leistung in Ihrem Dashboard verfolgen</li>
+                  <li>Jederzeit kündbar für eine anteilige Rückerstattung</li>
                 </ul>
               </div>
             </div>

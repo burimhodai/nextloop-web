@@ -11,17 +11,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     <>
       {/* Overlay */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-[#3a3735]/40 backdrop-blur-sm z-40 transition-opacity"
           onClick={onClose}
         ></div>
       )}
 
       {/* Sidebar */}
-      <aside 
-        className={`fixed top-0 left-0 h-full w-80 bg-[#faf8f4] shadow-2xl z-50 transform transition-transform duration-500 ease-out ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+      <aside
+        className={`fixed top-0 left-0 h-full w-80 bg-[#faf8f4] shadow-2xl z-50 transform transition-transform duration-500 ease-out ${isOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
       >
         <div className="h-full flex flex-col">
           {/* Header */}
@@ -34,7 +33,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 NextLoop
               </span>
             </div>
-            <button 
+            <button
               onClick={onClose}
               className="text-[#3a3735] hover:text-[#c8a882] transition-colors"
             >
@@ -47,47 +46,47 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             <div className="space-y-8">
               {/* Main Navigation */}
               <div>
-                <h6 
+                <h6
                   className="text-[#c8a882] mb-4 text-xs tracking-[0.2em] uppercase"
                   style={{ fontFamily: 'Playfair Display, serif' }}
                 >
-                  Browse
+                  Durchsuchen
                 </h6>
                 <ul className="space-y-1">
                   <li>
                     <a href="#" className="flex items-center gap-3 px-4 py-3 text-[#3a3735] hover:bg-[#f5f1ea] hover:text-[#c8a882] transition-colors">
                       <Gavel className="w-5 h-5" strokeWidth={1.5} />
-                      <span className="tracking-wide">Auctions</span>
+                      <span className="tracking-wide">Auktionen</span>
                     </a>
                   </li>
                   <li>
                     <a href="#" className="flex items-center gap-3 px-4 py-3 text-[#3a3735] hover:bg-[#f5f1ea] hover:text-[#c8a882] transition-colors">
                       <Grid className="w-5 h-5" strokeWidth={1.5} />
-                      <span className="tracking-wide">Categories</span>
+                      <span className="tracking-wide">Kategorien</span>
                     </a>
                   </li>
                   <li>
                     <a href="#" className="flex items-center gap-3 px-4 py-3 text-[#3a3735] hover:bg-[#f5f1ea] hover:text-[#c8a882] transition-colors">
                       <Zap className="w-5 h-5" strokeWidth={1.5} />
-                      <span className="tracking-wide">Live Bidding</span>
+                      <span className="tracking-wide">Live bieten</span>
                     </a>
                   </li>
                   <li>
                     <a href="#" className="flex items-center gap-3 px-4 py-3 text-[#3a3735] hover:bg-[#f5f1ea] hover:text-[#c8a882] transition-colors">
                       <Zap className="w-5 h-5" strokeWidth={1.5} />
-                      <span className="tracking-wide">Promoted</span>
+                      <span className="tracking-wide">Hervorgehoben</span>
                     </a>
                   </li>
                   <li>
                     <a href="#" className="flex items-center gap-3 px-4 py-3 text-[#3a3735] hover:bg-[#f5f1ea] hover:text-[#c8a882] transition-colors">
                       <Heart className="w-5 h-5" strokeWidth={1.5} />
-                      <span className="tracking-wide">Saved Items</span>
+                      <span className="tracking-wide">Gespeicherte Artikel</span>
                     </a>
                   </li>
                   <li>
                     <a href="#" className="flex items-center gap-3 px-4 py-3 text-[#3a3735] hover:bg-[#f5f1ea] hover:text-[#c8a882] transition-colors">
                       <Settings className="w-5 h-5" strokeWidth={1.5} />
-                      <span className="tracking-wide">Settings</span>
+                      <span className="tracking-wide">Einstellungen</span>
                     </a>
                   </li>
                 </ul>
@@ -95,35 +94,35 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
               {/* Account Section */}
               <div>
-                <h6 
+                <h6
                   className="text-[#c8a882] mb-4 text-xs tracking-[0.2em] uppercase"
                   style={{ fontFamily: 'Playfair Display, serif' }}
                 >
-                  Account
+                  Konto
                 </h6>
                 <ul className="space-y-1">
                   <li>
                     <a href="#" className="flex items-center gap-3 px-4 py-3 text-[#3a3735] hover:bg-[#f5f1ea] hover:text-[#c8a882] transition-colors">
                       <User className="w-5 h-5" strokeWidth={1.5} />
-                      <span className="tracking-wide">Profile</span>
+                      <span className="tracking-wide">Profil</span>
                     </a>
                   </li>
                   <li>
                     <a href="#" className="flex items-center gap-3 px-4 py-3 text-[#3a3735] hover:bg-[#f5f1ea] hover:text-[#c8a882] transition-colors">
                       <Gavel className="w-5 h-5" strokeWidth={1.5} />
-                      <span className="tracking-wide">My Bids</span>
+                      <span className="tracking-wide">Meine Gebote</span>
                     </a>
                   </li>
                   <li>
                     <a href="#" className="flex items-center gap-3 px-4 py-3 text-[#3a3735] hover:bg-[#f5f1ea] hover:text-[#c8a882] transition-colors">
                       <List className="w-5 h-5" strokeWidth={1.5} />
-                      <span className="tracking-wide">My Listings</span>
+                      <span className="tracking-wide">Meine Inserate</span>
                     </a>
                   </li>
                   <li>
                     <a href="#" className="flex items-center gap-3 px-4 py-3 text-[#3a3735] hover:bg-[#f5f1ea] hover:text-[#c8a882] transition-colors">
                       <Eye className="w-5 h-5" strokeWidth={1.5} />
-                      <span className="tracking-wide">Watchlist</span>
+                      <span className="tracking-wide">Merkliste</span>
                     </a>
                   </li>
                 </ul>

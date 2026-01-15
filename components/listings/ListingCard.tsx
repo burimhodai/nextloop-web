@@ -59,29 +59,29 @@ export const ListingCard: React.FC<ListingCardProps> = ({
       case ListingStatus.ACTIVE:
         return listing.type === ListingTypes.AUCTION ? (
           <span className={`${baseClass} bg-[#3a3735] text-white`}>
-            Active Auction
+            Laufende Auktion
           </span>
         ) : (
           <span className={`${baseClass} bg-white/90 text-[#3a3735]`}>
-            Buy Now
+            Sofort-Kauf
           </span>
         );
       case ListingStatus.SOLD:
         return (
           <span className={`${baseClass} bg-[#3a3735] text-[#c8a882]`}>
-            Sold
+            Verkauft
           </span>
         );
       case ListingStatus.DRAFT:
         return (
           <span className={`${baseClass} bg-gray-200 text-gray-600`}>
-            Draft
+            Entwurf
           </span>
         );
       case ListingStatus.PENDING:
         return (
           <span className={`${baseClass} bg-amber-100 text-amber-800`}>
-            Pending
+            Ausstehend
           </span>
         );
       default:
@@ -136,7 +136,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-[#d4cec4]">
-            <span className="font-serif italic text-lg">No Image</span>
+            <span className="font-serif italic text-lg">Kein Bild</span>
           </div>
         )}
 
@@ -156,7 +156,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
         {/* Quick View Overlay */}
         <div className="absolute inset-0 bg-[#3a3735]/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
           <div className="bg-white px-6 py-2 text-xs uppercase tracking-widest font-medium text-[#3a3735] shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-            View Details
+            Details ansehen
           </div>
         </div>
       </div>
@@ -186,7 +186,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
               CHF {displayPrice.toLocaleString()}
             </span>
             {listing.type === ListingTypes.AUCTION && (
-              <span className="text-xs text-[#5a524b]">Current Bid</span>
+              <span className="text-xs text-[#5a524b]">Aktuelles Gebot</span>
             )}
           </div>
         </div>
@@ -199,7 +199,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
                 variant="outline"
                 className="h-8 text-xs border-[#d4cec4]"
               >
-                Edit
+                Bearbeiten
               </Button>
             )}
             {onDelete && (
@@ -208,7 +208,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
                 variant="ghost"
                 className="h-8 text-xs text-red-700 hover:bg-red-50 hover:text-red-800"
               >
-                Delete
+                Löschen
               </Button>
             )}
             {onBoost &&
@@ -219,7 +219,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
                   variant="secondary"
                   className="col-span-2 h-8 text-xs"
                 >
-                  Boost Listing
+                  Inserat boosten
                 </Button>
               )}
           </div>

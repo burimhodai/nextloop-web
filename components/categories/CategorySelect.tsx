@@ -24,14 +24,14 @@ interface CategorySelectProps {
 }
 
 export const CategorySelect: React.FC<CategorySelectProps> = ({
-  label = "Category",
+  label = "Kategorie",
   name,
   value,
   onChange,
   required = false,
   error,
   helperText,
-  placeholder = "Select a category",
+  placeholder = "Wähle eine Kategorie",
 }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +44,7 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
     try {
       const API_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      
+
       // FIXED: Added /api prefix to match your server routes
       const response = await fetch(`${API_URL}/category`);
 
@@ -90,7 +90,7 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
         name={name}
         value=""
         onChange={onChange}
-        options={[{ value: "", label: "Loading categories..." }]}
+        options={[{ value: "", label: "Lade Kategorien..." }]}
         disabled
       />
     );

@@ -29,13 +29,13 @@ export const LoginForm: React.FC = () => {
     const errors: typeof validationErrors = {};
 
     if (!formData.email) {
-      errors.email = "Email is required";
+      errors.email = "E-Mail ist erforderlich";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = "Invalid email format";
+      errors.email = "Ungültiges E-Mail-Format";
     }
 
     if (!formData.password) {
-      errors.password = "Password is required";
+      errors.password = "Passwort ist erforderlich";
     }
 
     setValidationErrors(errors);
@@ -92,7 +92,7 @@ export const LoginForm: React.FC = () => {
               />
             </svg>
             <div>
-              <h4 className="text-sm font-medium text-red-800">Login Failed</h4>
+              <h4 className="text-sm font-medium text-red-800">Anmeldung fehlgeschlagen</h4>
               <p className="text-sm text-red-600 mt-1">{error}</p>
             </div>
           </div>
@@ -103,7 +103,7 @@ export const LoginForm: React.FC = () => {
       <Input
         type="email"
         name="email"
-        label="Email Address"
+        label="E-Mail Adresse"
         placeholder="you@example.com"
         value={formData.email}
         onChange={handleChange}
@@ -132,8 +132,8 @@ export const LoginForm: React.FC = () => {
         <Input
           type={showPassword ? "text" : "password"}
           name="password"
-          label="Password"
-          placeholder="Enter your password"
+          label="Passwort"
+          placeholder="Passwort eingeben"
           value={formData.password}
           onChange={handleChange}
           error={validationErrors.password}
@@ -159,7 +159,7 @@ export const LoginForm: React.FC = () => {
           type="button"
           onClick={() => setShowPassword(!showPassword)}
           className="absolute right-3 top-10 text-[var(--charcoal)] hover:text-[var(--muted-gold)] transition-colors focus:outline-none"
-          aria-label={showPassword ? "Hide password" : "Show password"}
+          aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
         >
           {showPassword ? (
             <svg
@@ -209,7 +209,7 @@ export const LoginForm: React.FC = () => {
             className="w-4 h-4 rounded border-[var(--warm-gray)] text-[var(--charcoal)] focus:ring-[var(--muted-gold)] transition-all"
           />
           <span className="ml-2 text-[var(--deep-brown)] group-hover:text-[var(--charcoal)] transition-colors">
-            Remember me
+            Angemeldet bleiben
           </span>
         </label>
 
@@ -217,7 +217,7 @@ export const LoginForm: React.FC = () => {
           href="/auth/forgot-password"
           className="text-[var(--charcoal)] hover:text-[var(--muted-gold)] font-medium transition-colors"
         >
-          Forgot password?
+          Passwort vergessen?
         </Link>
       </div>
 
@@ -228,7 +228,7 @@ export const LoginForm: React.FC = () => {
         className="w-full"
         isLoading={isLoading}
       >
-        {isLoading ? "Signing In..." : "Sign In"}
+        {isLoading ? "Wird angemeldet" : "Anmelden"}
       </Button>
 
       {/* Divider */}
@@ -238,7 +238,7 @@ export const LoginForm: React.FC = () => {
         </div>
         <div className="relative flex justify-center text-sm">
           <span className="px-4 bg-[var(--sand)] text-[var(--deep-brown)]">
-            New to NextLoop?
+            Neu bei NextLoop?
           </span>
         </div>
       </div>
@@ -249,7 +249,7 @@ export const LoginForm: React.FC = () => {
           href="/auth/signup"
           className="inline-flex items-center text-sm font-medium text-[var(--charcoal)] hover:text-[var(--muted-gold)] transition-colors group"
         >
-          Create your account
+          Konto erstellen
           <svg
             className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"
             fill="none"

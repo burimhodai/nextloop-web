@@ -41,7 +41,7 @@ export default function ListingsComponent() {
       setListings(data.data || []);
       setTotalPages(data.pagination?.totalPages || 1);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : "Ein Fehler ist aufgetreten");
     } finally {
       setLoading(false);
     }
@@ -56,14 +56,14 @@ export default function ListingsComponent() {
             <div className="mb-3 flex items-center gap-2">
               <Star className="w-4 h-4 text-[#c8a882]" fill="#c8a882" />
               <span className="text-[#c8a882] text-xs font-bold tracking-[0.2em] uppercase">
-                Curated Collection
+                Kuratierte Kollektion
               </span>
             </div>
             <h1
               className="text-[#3a3735] text-4xl md:text-5xl font-medium"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Exclusive Finds
+              Exklusive Fundstücke
             </h1>
           </div>
         </div>
@@ -76,7 +76,7 @@ export default function ListingsComponent() {
               onClick={fetchListings}
               className="text-red-700 text-sm underline mt-2"
             >
-              Try Again
+              Erneut versuchen
             </button>
           </div>
         )}
@@ -86,7 +86,7 @@ export default function ListingsComponent() {
           <div className="flex flex-col justify-center items-center py-32">
             <Loader2 className="h-10 w-10 text-[#c8a882] animate-spin mb-4" />
             <p className="text-[#9a928c] font-serif italic">
-              Curating selection...
+              Auswahl wird kuratiert…
             </p>
           </div>
         )}
@@ -95,10 +95,10 @@ export default function ListingsComponent() {
         {!loading && listings.length === 0 && !error && (
           <div className="flex flex-col items-center justify-center py-32 border border-dashed border-[#d4cec4] rounded-lg bg-white/50">
             <p className="text-[#3a3735] text-xl font-serif mb-2">
-              No items available
+              Keine Artikel verfügbar
             </p>
             <p className="text-[#9a928c]">
-              Check back later for new exclusive additions.
+              Schauen Sie später wieder vorbei für neue exklusive Ergänzungen.
             </p>
           </div>
         )}
@@ -111,7 +111,7 @@ export default function ListingsComponent() {
                 <ListingCard
                   key={listing._id}
                   listing={listing}
-                  // Pass watchlist state if available in parent
+                // Pass watchlist state if available in parent
                 />
               ))}
             </div>
@@ -128,7 +128,7 @@ export default function ListingsComponent() {
                 </button>
 
                 <span className="text-[#3a3735] font-serif text-lg tracking-wide">
-                  Page <span className="font-semibold">{page}</span> of{" "}
+                  Seite <span className="font-semibold">{page}</span> von{" "}
                   {totalPages}
                 </span>
 

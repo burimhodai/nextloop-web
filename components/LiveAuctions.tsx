@@ -33,7 +33,7 @@ function CountdownTimer({ endTime }: { endTime?: Date | string }) {
     return (
       <div className="flex items-center gap-2 text-red-600">
         <Clock className="w-4 h-4" strokeWidth={1.5} />
-        <span className="text-sm tracking-wider">ENDED</span>
+        <span className="text-sm tracking-wider">Beendet</span>
       </div>
     );
   }
@@ -99,7 +99,7 @@ export function LiveAuctions() {
           <div className="flex flex-col justify-center items-center py-20">
             <Loader2 className="h-10 w-10 text-[#c8a882] animate-spin mb-4" />
             <p className="text-[#5a524b] font-serif italic">
-              Loading live auctions...
+              Live-Auktionen laden…
             </p>
           </div>
         </div>
@@ -117,7 +117,7 @@ export function LiveAuctions() {
               onClick={fetchAuctions}
               className="text-red-700 text-sm underline hover:no-underline"
             >
-              Try Again
+              Erneut versuchen
             </button>
           </div>
         </div>
@@ -138,7 +138,7 @@ export function LiveAuctions() {
             <div className="h-px w-12 bg-[#c8a882]"></div>
             <span className="text-[#c8a882] text-sm tracking-[0.2em] uppercase flex items-center gap-2">
               <span className="w-2 h-2 bg-[#c8a882] rounded-full animate-pulse"></span>
-              Live Now
+              Jetzt Live
             </span>
             <div className="h-px w-12 bg-[#c8a882]"></div>
           </div>
@@ -146,11 +146,10 @@ export function LiveAuctions() {
             className="text-[#3a3735] text-4xl md:text-5xl mb-4"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
-            Active Bidding
+            Laufende Gebote
           </h2>
           <p className="text-[#5a524b] max-w-2xl mx-auto">
-            Join live auctions and compete with collectors worldwide for
-            exceptional pieces
+            Erlebe Live-Auktionen und tritt im Wettbewerb mit Sammlern weltweit um außergewöhnliche Stücke an.
           </p>
         </div>
 
@@ -174,7 +173,7 @@ export function LiveAuctions() {
                 {!isAuctionEnded(auction.endTime) && (
                   <div className="absolute top-4 right-4 bg-[#c8a882] text-[#3a3735] px-3 py-1 text-xs tracking-wider flex items-center gap-1">
                     <Gavel className="w-3 h-3" strokeWidth={2} />
-                    LIVE
+                    live
                   </div>
                 )}
               </div>
@@ -194,7 +193,7 @@ export function LiveAuctions() {
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-[#5a524b]">
-                      {auction.currentPrice ? "Current Bid" : "Starting Bid"}
+                      {auction.currentPrice ? "Aktuelles Gebot" : "Startgebot"}
                     </span>
                     <span className="text-[#c8a882] font-medium">
                       ${getCurrentPrice(auction).toLocaleString()}
@@ -203,7 +202,7 @@ export function LiveAuctions() {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-[#5a524b] flex items-center gap-2">
                       <Users className="w-4 h-4" strokeWidth={1.5} />
-                      {auction.totalBids || 0} bidders
+                      {auction.totalBids || 0} Bieter
                     </span>
                     <CountdownTimer endTime={auction.endTime} />
                   </div>
@@ -216,7 +215,7 @@ export function LiveAuctions() {
                   }}
                   className="w-full bg-[#3a3735] hover:bg-[#c8a882] text-[#faf8f4] hover:text-[#3a3735] py-3 text-center tracking-wide transition-colors"
                 >
-                  Place Bid
+                  Jetzt bieten
                 </button>
               </div>
             </Link>
@@ -229,7 +228,7 @@ export function LiveAuctions() {
             href="/search?type=AUCTION"
             className="text-[#3a3735] hover:text-[#c8a882] text-sm tracking-wide border-b border-[#3a3735] hover:border-[#c8a882] pb-1 transition-colors"
           >
-            View All Live Auctions
+            Jetzt alle Live-Auktionen entdecken
           </Link>
         </div>
       </div>

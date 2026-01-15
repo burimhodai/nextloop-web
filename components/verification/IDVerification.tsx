@@ -39,12 +39,12 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
   const handleImageSelect = async (file: File) => {
     // Validate file
     if (!file.type.startsWith("image/")) {
-      setError("Please upload an image file");
+      setError("Bitte laden Sie eine Bilddatei hoch");
       return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      setError("Image size must be less than 10MB");
+      setError("Bildgröße muss kleiner als 10MB sein");
       return;
     }
 
@@ -54,7 +54,7 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
       setFrontPreview(base64);
       setError(null);
     } catch (err) {
-      setError("Failed to process image");
+      setError("Fehler beim Verarbeiten des Bildes");
       console.error(err);
     }
   };
@@ -103,7 +103,7 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
 
     // Validate
     if (!frontImage) {
-      setError("Please upload your ID image");
+      setError("Bitte laden Sie Ihr Ausweisbild hoch");
       return;
     }
 
@@ -114,7 +114,7 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
         documentImages: [frontImage], // Array of base64 data URLs
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Submission failed");
+      setError(err instanceof Error ? err.message : "Einreichung fehlgeschlagen");
     }
   };
 
@@ -154,35 +154,35 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
         {/* Image Upload Section */}
         <div>
           <label className="block text-sm font-medium text-[#3a3735] mb-3">
-            Upload Swiss ID Card (Front) *
+            Schweizer ID-Karte hochladen (Vorderseite) *
           </label>
 
           {/* Guidelines */}
           <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <h4 className="font-semibold text-blue-900 mb-2 text-sm flex items-center gap-2">
               <Camera className="w-4 h-4" strokeWidth={1.5} />
-              Photo Guidelines
+              Foto-Richtlinien
             </h4>
             <ul className="text-xs text-blue-800 space-y-1">
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Ensure all text is clearly visible and readable</span>
+                <span>Stellen Sie sicher, dass der gesamte Text gut lesbar ist</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Avoid glare, shadows, and reflections</span>
+                <span>Vermeiden Sie Blendung, Schatten und Reflexionen</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Capture the entire ID card with all corners visible</span>
+                <span>Erfassen Sie die gesamte ID-Karte mit allen Ecken</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Use a plain, contrasting background</span>
+                <span>Verwenden Sie einen einfachen, kontrastreichen Hintergrund</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Max file size: 10MB (JPG, PNG formats)</span>
+                <span>Max. Dateigröße: 10MB (JPG, PNG)</span>
               </li>
             </ul>
           </div>
@@ -207,13 +207,12 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-lg transition-all duration-200 ${
-              isDragging
+            className={`border-2 border-dashed rounded-lg transition-all duration-200 ${isDragging
                 ? "border-[#c8a882] bg-[#f5f1ea] scale-[1.01]"
                 : frontPreview
-                ? "border-[#d4cec4]"
-                : "border-[#d4cec4] hover:border-[#c8a882] cursor-pointer"
-            } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                  ? "border-[#d4cec4]"
+                  : "border-[#d4cec4] hover:border-[#c8a882] cursor-pointer"
+              } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             {frontPreview ? (
               <div className="relative p-6">
@@ -225,7 +224,7 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
                 <div className="flex items-center justify-center gap-3 mt-6">
                   <div className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium">
                     <Check className="w-4 h-4" strokeWidth={2} />
-                    Image Uploaded Successfully
+                    Bild erfolgreich hochgeladen
                   </div>
                   {!isSubmitting && (
                     <button
@@ -237,7 +236,7 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
                       className="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors flex items-center gap-2"
                     >
                       <X className="w-4 h-4" strokeWidth={2} />
-                      Remove
+                      Entfernen
                     </button>
                   )}
                 </div>
@@ -245,24 +244,23 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
             ) : (
               <div className="p-12 text-center">
                 <div
-                  className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center transition-colors ${
-                    isDragging
+                  className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center transition-colors ${isDragging
                       ? "bg-[#c8a882] text-white"
                       : "bg-[#f5f1ea] text-[#5a524b]"
-                  }`}
+                    }`}
                 >
                   <Upload className="w-8 h-8" strokeWidth={1.5} />
                 </div>
                 <p className="text-[#3a3735] font-medium mb-2">
                   {isDragging
-                    ? "Drop image here"
-                    : "Click to upload or drag and drop"}
+                    ? "Bild hier ablegen"
+                    : "Klicken zum Hochladen oder Drag & Drop"}
                 </p>
                 <p className="text-sm text-[#5a524b]">
-                  Swiss ID Card - Front Side
+                  Schweizer ID-Karte - Vorderseite
                 </p>
                 <p className="text-xs text-[#5a524b] mt-1">
-                  JPG or PNG, up to 10MB
+                  JPG oder PNG, bis zu 10MB
                 </p>
               </div>
             )}
@@ -285,15 +283,15 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
               />
             </svg>
-            Legal Notice
+            Rechtlicher Hinweis
           </h4>
           <p className="text-sm text-amber-800 leading-relaxed">
-            By submitting this document, you confirm that you are the legitimate
-            holder of this Swiss identification card and that all information
-            shown is accurate. Your ID image will be securely stored and
-            reviewed by our verification team within 24-48 hours. After the
-            review is completed, all images will be automatically deleted from
-            our servers, regardless of the verification outcome.
+            Mit dem Absenden dieses Dokuments bestätigen Sie, dass Sie der rechtmäßige
+            Inhaber dieser Schweizer Identitätskarte sind und alle gezeigten Informationen
+            korrekt sind. Ihr ID-Bild wird sicher gespeichert und von unserem
+            Verifizierungsteam innerhalb von 24-48 Stunden überprüft. Nach Abschluss der
+            Überprüfung werden alle Bilder automatisch von unseren Servern gelöscht,
+            unabhängig vom Ergebnis der Verifizierung.
           </p>
         </div>
 
@@ -306,7 +304,7 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
             className="flex-1"
             disabled={isSubmitting}
           >
-            Cancel
+            Abbrechen
           </Button>
           <Button
             type="submit"
@@ -315,7 +313,7 @@ export const IDVerification: React.FC<IDVerificationProps> = ({
             isLoading={isSubmitting}
             disabled={isSubmitting || !frontImage}
           >
-            {isSubmitting ? "Submitting..." : "Submit for Review"}
+            {isSubmitting ? "Wird eingereicht..." : "Zur Überprüfung einreichen"}
           </Button>
         </div>
       </form>

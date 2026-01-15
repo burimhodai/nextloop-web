@@ -15,17 +15,17 @@ import { SearchForm } from "./search/search-form";
 
 const quickCategories = [
   {
-    name: "Watches",
+    name: "Uhren",
     value: "Watches & Timepieces",
     icon: <Watch className="w-5 h-5" strokeWidth={1.5} />,
   },
   {
-    name: "Art",
+    name: "Kunst",
     value: "Fine Art",
     icon: <Palette className="w-5 h-5" strokeWidth={1.5} />,
   },
   {
-    name: "Electronics",
+    name: "Elektronik",
     value: "Electronics",
     icon: <Laptop className="w-5 h-5" strokeWidth={1.5} />,
   },
@@ -35,7 +35,7 @@ const quickCategories = [
     icon: <Gem className="w-5 h-5" strokeWidth={1.5} />,
   },
   {
-    name: "Furniture",
+    name: "Designermöbel",
     value: "Furniture & Design",
     icon: <Armchair className="w-5 h-5" strokeWidth={1.5} />,
   },
@@ -45,12 +45,12 @@ const quickCategories = [
     icon: <Wine className="w-5 h-5" strokeWidth={1.5} />,
   },
   {
-    name: "Collectibles",
+    name: "Sammlerstücke",
     value: "Collectibles",
     icon: <Camera className="w-5 h-5" strokeWidth={1.5} />,
   },
   {
-    name: "Instruments",
+    name: "Instrumente",
     value: "Musical Instruments",
     icon: <Music className="w-5 h-5" strokeWidth={1.5} />,
   },
@@ -115,7 +115,7 @@ export function Hero() {
             <div className="flex items-center justify-center gap-3 mb-6">
               <div className="h-px w-8 bg-[#3A3735]"></div>
               <span className="text-[#3A3735] text-xs tracking-[0.2em] uppercase font-medium">
-                Browse Categories
+                Kategorien entdecken
               </span>
               <div className="h-px w-8 bg-[#3A3735]"></div>
             </div>

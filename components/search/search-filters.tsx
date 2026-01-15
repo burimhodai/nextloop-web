@@ -22,11 +22,11 @@ interface SearchFiltersProps {
 }
 
 const CONDITIONS = [
-  { value: "NEW", label: "New" },
-  { value: "LIKE_NEW", label: "Like New" },
-  { value: "VERY_GOOD", label: "Very Good" },
-  { value: "GOOD", label: "Good" },
-  { value: "FAIR", label: "Fair" },
+  { value: "NEW", label: "Neu" },
+  { value: "LIKE_NEW", label: "Wie neu" },
+  { value: "VERY_GOOD", label: "Sehr gut" },
+  { value: "GOOD", label: "Gut" },
+  { value: "FAIR", label: "Akzeptabel" },
 ];
 
 export const SearchFilters = ({
@@ -49,14 +49,14 @@ export const SearchFilters = ({
       <div className="bg-white p-6 shadow-sm sticky top-32 rounded-sm border border-[#d4cec4]/50">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-[#3a3735] font-semibold text-lg font-serif">
-            Filters
+            Filter
           </h3>
           {activeCount > 0 && (
             <button
               onClick={resetFilters}
               className="text-[#c8a882] text-xs hover:underline flex items-center gap-1"
             >
-              <X className="w-3 h-3" /> Clear
+              <X className="w-3 h-3" /> Zürücksetzen
             </button>
           )}
         </div>
@@ -64,14 +64,14 @@ export const SearchFilters = ({
         {/* Categories */}
         <div className="mb-6">
           <label className="block text-[#3a3735] text-xs uppercase tracking-wider font-medium mb-3">
-            Category
+            Kategorie
           </label>
           <select
             value={filters.category}
             onChange={(e) => setFilters("category", e.target.value)}
             className="w-full px-3 py-2 bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] text-sm focus:outline-none focus:border-[#c8a882] rounded-sm"
           >
-            <option value="">All Categories</option>
+            <option value="">Alle Kategorien</option>
             {categories?.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}
@@ -83,7 +83,7 @@ export const SearchFilters = ({
         {/* Price Range */}
         <div className="mb-6">
           <label className="block text-[#3a3735] text-xs uppercase tracking-wider font-medium mb-3">
-            Price Range
+            Preisbereich
           </label>
           <div className="flex gap-2">
             <input
@@ -106,7 +106,7 @@ export const SearchFilters = ({
         {/* Conditions */}
         <div className="mb-6">
           <label className="block text-[#3a3735] text-xs uppercase tracking-wider font-medium mb-3">
-            Condition
+            Zustand
           </label>
           <div className="space-y-2">
             {CONDITIONS.map((cond) => (
@@ -131,16 +131,16 @@ export const SearchFilters = ({
         {/* Listing Type */}
         <div className="mb-6">
           <label className="block text-[#3a3735] text-xs uppercase tracking-wider font-medium mb-3">
-            Type
+            Typ
           </label>
           <select
             value={filters.type}
             onChange={(e) => setFilters("type", e.target.value)}
             className="w-full px-3 py-2 bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] text-sm focus:outline-none focus:border-[#c8a882] rounded-sm"
           >
-            <option value="">All Types</option>
-            <option value="AUCTION">Auction</option>
-            <option value="DIRECT_BUY">Buy Now</option>
+            <option value="">Alle Typen</option>
+            <option value="AUCTION">Auktion</option>
+            <option value="DIRECT_BUY">Sofort-Kauf</option>
           </select>
         </div>
       </div>

@@ -35,30 +35,30 @@ export const SignupForm: React.FC = () => {
     const errors: typeof validationErrors = {};
 
     if (!formData.fullName || formData.fullName.trim().length < 2) {
-      errors.fullName = "Full name must be at least 2 characters";
+      errors.fullName = "Der Name muss mindestens zwei Zeichen haben";
     }
 
     if (!formData.email) {
-      errors.email = "Email is required";
+      errors.email = "E-Mail ist erforderlich";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = "Invalid email format";
+      errors.email = "Ungültiges E-Mail-Format";
     }
 
     if (!formData.password) {
-      errors.password = "Password is required";
+      errors.password = "Passwort ist erforderlich";
     } else if (formData.password.length < 8) {
-      errors.password = "Password must be at least 8 characters";
+      errors.password = "Passwort muss mindestens 8 Zeichen haben";
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
       errors.password =
-        "Password must contain uppercase, lowercase, and number";
+        "Passwort muss Groß-/Kleinbuchstaben und eine Zahl enthalten";
     }
 
     if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = "Passwords do not match";
+      errors.confirmPassword = "Passwörter stimmen nicht überein";
     }
 
     if (formData.phone && !/^\+?[\d\s-()]+$/.test(formData.phone)) {
-      errors.phone = "Invalid phone format";
+      errors.phone = "Ungültiges Telefonnummer-Format";
     }
 
     setValidationErrors(errors);
@@ -72,7 +72,7 @@ export const SignupForm: React.FC = () => {
 
     if (!agreedToTerms) {
       setValidationErrors({
-        fullName: "Please agree to the Terms and Conditions",
+        fullName: "Bitte stimme den AGB zu",
       });
       return;
     }
@@ -137,13 +137,13 @@ export const SignupForm: React.FC = () => {
           </svg>
         </div>
         <h3 className="text-xl font-semibold text-[var(--charcoal)] mb-2">
-          Account Created Successfully!
+          Konto erfolgreich erstellt!
         </h3>
         <p className="text-[var(--deep-brown)] mb-4">
-          Please check your email to verify your account.
+          Bitte prüfe deine E-Mails, um dein Konto zu bestätigen.
         </p>
         <p className="text-sm text-[var(--soft-taupe)]">
-          Redirecting you to login...
+          Du wirst zum Login weitergeleitet…
         </p>
       </div>
     );
@@ -170,7 +170,7 @@ export const SignupForm: React.FC = () => {
             </svg>
             <div>
               <h4 className="text-sm font-medium text-red-800">
-                Registration Failed
+                Registrierung fehlgeschlagen
               </h4>
               <p className="text-sm text-red-600 mt-1">{error}</p>
             </div>
@@ -182,7 +182,7 @@ export const SignupForm: React.FC = () => {
       <Input
         type="text"
         name="fullName"
-        label="Full Name"
+        label="Vollständiger Name"
         placeholder="John Doe"
         value={formData.fullName}
         onChange={handleChange}
@@ -210,7 +210,7 @@ export const SignupForm: React.FC = () => {
       <Input
         type="email"
         name="email"
-        label="Email Address"
+        label="E-Mail Adresse"
         placeholder="you@example.com"
         value={formData.email}
         onChange={handleChange}
@@ -238,7 +238,7 @@ export const SignupForm: React.FC = () => {
       <Input
         type="tel"
         name="phone"
-        label="Phone Number (Optional)"
+        label="Telefonnummer"
         placeholder="+41 79 123 45 67"
         value={formData.phone}
         onChange={handleChange}
@@ -266,8 +266,8 @@ export const SignupForm: React.FC = () => {
       <Input
         type="password"
         name="password"
-        label="Password"
-        placeholder="Create a strong password"
+        label="Passwort"
+        placeholder="Ein starkes Passwort erstellen"
         value={formData.password}
         onChange={handleChange}
         error={validationErrors.password}
@@ -294,8 +294,8 @@ export const SignupForm: React.FC = () => {
       <Input
         type="password"
         name="confirmPassword"
-        label="Confirm Password"
-        placeholder="Re-enter your password"
+        label="Passwort bestätigen"
+        placeholder="Passwort erneut eingeben"
         value={formData.confirmPassword}
         onChange={handleChange}
         error={validationErrors.confirmPassword}
@@ -327,20 +327,21 @@ export const SignupForm: React.FC = () => {
           className="w-4 h-4 mt-0.5 rounded border-[var(--warm-gray)] text-[var(--charcoal)] focus:ring-[var(--muted-gold)] transition-all"
         />
         <span className="ml-2 text-sm text-[var(--deep-brown)]">
-          I agree to the{" "}
+          Ich stimme den{" "}
           <Link
             href="/terms"
             className="text-[var(--charcoal)] hover:text-[var(--muted-gold)] font-medium transition-colors"
           >
-            Terms and Conditions
+            Allgemeine Geschäftsbedingungen (AGB)
           </Link>{" "}
-          and{" "}
+          {" "}und der{" "}
           <Link
             href="/privacy"
             className="text-[var(--charcoal)] hover:text-[var(--muted-gold)] font-medium transition-colors"
           >
-            Privacy Policy
+            Datenschutzerklärung
           </Link>
+          {" "}zu
         </span>
       </label>
 
@@ -352,7 +353,7 @@ export const SignupForm: React.FC = () => {
         isLoading={isLoading}
         disabled={isLoading}
       >
-        {isLoading ? "Creating Account..." : "Create Account"}
+        {isLoading ? "Konto wird erstellt…" : "Konto erstellen"}
       </Button>
 
       {/* Divider */}
@@ -362,7 +363,7 @@ export const SignupForm: React.FC = () => {
         </div>
         <div className="relative flex justify-center text-sm">
           <span className="px-4 bg-[var(--sand)] text-[var(--deep-brown)]">
-            Already have an account?
+            Hast du bereits ein Konto?
           </span>
         </div>
       </div>
@@ -373,7 +374,7 @@ export const SignupForm: React.FC = () => {
           href="/auth/login"
           className="inline-flex items-center text-sm font-medium text-[var(--charcoal)] hover:text-[var(--muted-gold)] transition-colors group"
         >
-          Sign in instead
+          Stattdessen anmelden
           <svg
             className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"
             fill="none"

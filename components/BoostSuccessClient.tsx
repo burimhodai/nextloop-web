@@ -41,7 +41,7 @@ export default function BoostSuccessClient() {
         const result = await response.json();
 
         if (!response.ok || !result.success) {
-          throw new Error(result.message || "Verification failed");
+          throw new Error(result.message || "Verifizierung fehlgeschlagen");
         }
 
         setData(result.data);
@@ -60,10 +60,10 @@ export default function BoostSuccessClient() {
       <div className="min-h-screen bg-[#faf8f4] flex flex-col items-center justify-center p-4">
         <Loader2 className="w-12 h-12 text-[#c8a882] animate-spin mb-4" />
         <h2 className="text-xl font-serif text-[#3a3735]">
-          Verifying Payment...
+          Zahlung wird verifiziert…
         </h2>
         <p className="text-[#5a524b] mt-2">
-          Please wait while we confirm your boost.
+          Bitte warten, während wir Ihren Boost bestätigen.
         </p>
       </div>
     );
@@ -77,14 +77,13 @@ export default function BoostSuccessClient() {
             <AlertCircle className="w-8 h-8 text-red-500" />
           </div>
           <h2 className="text-2xl font-serif text-[#3a3735] mb-2">
-            Something went wrong
+            Etwas ist schiefgelaufen
           </h2>
           <p className="text-[#5a524b] mb-8">
-            We couldn't verify the payment session. If you were charged, please
-            contact support.
+            Wir konnten die Zahlungssitzung nicht verifizieren. Falls Sie belastet wurden, kontaktieren Sie bitte den Support.
           </p>
           <Button onClick={() => router.push("/dashboard")} variant="outline">
-            Return to Dashboard
+            Zurück zum Dashboard
           </Button>
         </div>
       </div>
@@ -101,31 +100,30 @@ export default function BoostSuccessClient() {
         </div>
 
         <h1 className="text-3xl md:text-4xl font-serif text-[#3a3735] mb-4">
-          Payment Successful!
+          Zahlung erfolgreich!
         </h1>
 
         <p className="text-lg text-[#5a524b] mb-8">
-          Your listing <strong>{data?.listingTitle || "listing"}</strong> has
-          been successfully boosted.
+          Ihr Inserat <strong>{data?.listingTitle || "listing"}</strong> wurde erfolgreich geboostet.
         </p>
 
         <div className="bg-[#faf8f4] rounded-lg p-6 mb-8 text-left border border-[#e5e5e5]">
           <div className="flex justify-between mb-3">
-            <span className="text-sm text-[#5a524b]">Amount Paid:</span>
+            <span className="text-sm text-[#5a524b]">Gezahlter Betrag:</span>
             <span className="font-bold text-[#3a3735]">
               CHF {data?.cost?.toFixed(2)}
             </span>
           </div>
           <div className="flex justify-between mb-3">
-            <span className="text-sm text-[#5a524b]">Boost Type:</span>
+            <span className="text-sm text-[#5a524b]">Boost-Typ:</span>
             <span className="font-bold text-[#3a3735] capitalize">
               {data?.type?.replace("_", " ")}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-sm text-[#5a524b]">Duration:</span>
+            <span className="text-sm text-[#5a524b]">Dauer:</span>
             <span className="font-bold text-[#3a3735]">
-              {data?.duration} Days
+              {data?.duration} Tage
             </span>
           </div>
         </div>
@@ -134,14 +132,14 @@ export default function BoostSuccessClient() {
           onClick={() => router.push("/dashboard")}
           className="w-full bg-[#3a3735] hover:bg-[#c8a882] text-white h-12"
         >
-          View My Listings <ArrowRight className="w-4 h-4 ml-2" />
+          Meine Inserate ansehen <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
 
         <Link
           href="/dashboard"
           className="block text-[#5a524b] hover:text-[#3a3735] text-sm mt-3"
         >
-          Return to Dashboard
+          Zurück zum Dashboard
         </Link>
       </div>
     </div>

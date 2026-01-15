@@ -6,7 +6,7 @@ interface Listing {
   id: number;
   title: string;
   price: number;
-  status: 'Active' | 'Draft' | 'Cancelled' | 'Sold';
+  status: 'Aktiv' | 'Entwurf' | 'Storniert' | 'Verkauft';
   views: number;
   bids: number;
   timeRemaining: string;
@@ -18,49 +18,49 @@ const listings: Listing[] = [
     id: 1,
     title: "Patek Philippe Nautilus 5711/1A",
     price: 145000,
-    status: "Active",
+    status: "Aktiv",
     views: 2847,
     bids: 23,
-    timeRemaining: "2 days",
+    timeRemaining: "2 Tage",
     image: "https://images.unsplash.com/photo-1554151447-b9d2197448f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjB3YXRjaCUyMGNsb3NlJTIwdXB8ZW58MXx8fHwxNzYzMDM0MzMzfDA&ixlib=rb-4.1.0&q=80&w=1080"
   },
   {
     id: 2,
     title: "Cartier Love Bracelet 18K Gold",
     price: 8500,
-    status: "Active",
+    status: "Aktiv",
     views: 1523,
     bids: 12,
-    timeRemaining: "5 hours",
+    timeRemaining: "5 Stunden",
     image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBqZXdlbHJ5JTIwZGlhbW9uZHxlbnwxfHx8fDE3NjMwNDM5OTd8MA&ixlib=rb-4.1.0&q=80&w=1080"
   },
   {
     id: 3,
     title: "Eames Lounge Chair Original 1956",
     price: 18500,
-    status: "Draft",
+    status: "Entwurf",
     views: 0,
     bids: 0,
-    timeRemaining: "Not listed",
+    timeRemaining: "Nicht gelistet",
     image: "https://images.unsplash.com/photo-1760716478137-d861d5b354e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBmdXJuaXR1cmUlMjBjaGFpcnxlbnwxfHx8fDE3NjMxMjI3NDZ8MA&ixlib=rb-4.1.0&q=80&w=1080"
   },
   {
     id: 4,
     title: "Château Margaux 1900 Pristine",
     price: 52000,
-    status: "Sold",
+    status: "Verkauft",
     views: 3421,
     bids: 45,
-    timeRemaining: "Ended",
+    timeRemaining: "Beendet",
     image: "https://images.unsplash.com/photo-1734490037300-6ff9ffd4ed13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2aW50YWdlJTIwd2luZSUyMGNlbGxhcnxlbnwxfHx8fDE3NjMxMjI3NDd8MA&ixlib=rb-4.1.0&q=80&w=1080"
   }
 ];
 
 const statusColors = {
-  Active: 'bg-green-50 text-green-700 border-green-200',
-  Draft: 'bg-gray-50 text-gray-700 border-gray-200',
-  Cancelled: 'bg-red-50 text-red-700 border-red-200',
-  Sold: 'bg-blue-50 text-blue-700 border-blue-200'
+  Aktiv: 'bg-green-50 text-green-700 border-green-200',
+  Entwurf: 'bg-gray-50 text-gray-700 border-gray-200',
+  Storniert: 'bg-red-50 text-red-700 border-red-200',
+  Verkauft: 'bg-blue-50 text-blue-700 border-blue-200'
 };
 
 export function ListingsManagement() {
@@ -75,26 +75,26 @@ export function ListingsManagement() {
   return (
     <div className="mb-12">
       <div className="flex items-center justify-between mb-8">
-        <h2 
+        <h2
           className="text-[#3a3735]"
           style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem' }}
         >
-          My Listings
+          Meine Inserate
         </h2>
         <button className="bg-[#3a3735] hover:bg-[#c8a882] text-[#faf8f4] hover:text-[#3a3735] px-6 py-3 transition-colors tracking-wide">
-          Create New Listing
+          Neues Inserat erstellen
         </button>
       </div>
 
       {selectedListings.length > 0 && (
         <div className="bg-[#f5f1ea] p-4 mb-6 flex items-center justify-between">
-          <p className="text-[#3a3735]">{selectedListings.length} item(s) selected</p>
+          <p className="text-[#3a3735]">{selectedListings.length} Element(e) ausgewählt</p>
           <div className="flex gap-3">
             <button className="text-[#3a3735] hover:text-[#c8a882] text-sm tracking-wide border border-[#3a3735] hover:border-[#c8a882] px-4 py-2 transition-colors">
-              Change Status
+              Status ändern
             </button>
             <button className="text-[#3a3735] hover:text-[#c8a882] text-sm tracking-wide border border-[#3a3735] hover:border-[#c8a882] px-4 py-2 transition-colors">
-              Delete Selected
+              Ausgewählte löschen
             </button>
           </div>
         </div>
@@ -102,7 +102,7 @@ export function ListingsManagement() {
 
       <div className="space-y-4">
         {listings.map((listing) => (
-          <div 
+          <div
             key={listing.id}
             className="bg-white p-6 shadow-md hover:shadow-lg transition-all border border-[#e8dfd0]"
           >
@@ -118,8 +118,8 @@ export function ListingsManagement() {
               {/* Image */}
               <div className="w-24 h-24 flex-shrink-0 overflow-hidden bg-[#e8dfd0]">
                 <Image
-                width={300}
-                height={300}
+                  width={300}
+                  height={300}
                   src={listing.image}
                   alt={listing.title}
                   className="w-full h-full object-cover"
@@ -130,7 +130,7 @@ export function ListingsManagement() {
               <div className="flex-1">
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h3 
+                    <h3
                       className="text-[#3a3735] mb-2"
                       style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.25rem' }}
                     >
@@ -148,11 +148,11 @@ export function ListingsManagement() {
                 <div className="flex items-center gap-6 text-sm text-[#5a524b] mb-4">
                   <div className="flex items-center gap-2">
                     <Eye className="w-4 h-4" strokeWidth={1.5} />
-                    <span>{listing.views.toLocaleString()} views</span>
+                    <span>{listing.views.toLocaleString()} Aufrufe</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Gavel className="w-4 h-4" strokeWidth={1.5} />
-                    <span>{listing.bids} bids</span>
+                    <span>{listing.bids} Gebote</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4" strokeWidth={1.5} />
@@ -164,7 +164,7 @@ export function ListingsManagement() {
                 <div className="flex items-center gap-3">
                   <button className="flex items-center gap-2 text-[#3a3735] hover:text-[#c8a882] text-sm transition-colors">
                     <Edit className="w-4 h-4" strokeWidth={1.5} />
-                    Edit
+                    Bearbeiten
                   </button>
                   <button className="flex items-center gap-2 text-[#3a3735] hover:text-[#c8a882] text-sm transition-colors">
                     <TrendingUp className="w-4 h-4" strokeWidth={1.5} />
@@ -172,11 +172,11 @@ export function ListingsManagement() {
                   </button>
                   <button className="flex items-center gap-2 text-[#3a3735] hover:text-[#c8a882] text-sm transition-colors">
                     <Eye className="w-4 h-4" strokeWidth={1.5} />
-                    Analytics
+                    Statistiken
                   </button>
                   <button className="flex items-center gap-2 text-red-600 hover:text-red-700 text-sm transition-colors">
                     <Trash2 className="w-4 h-4" strokeWidth={1.5} />
-                    Delete
+                    Löschen
                   </button>
                 </div>
               </div>

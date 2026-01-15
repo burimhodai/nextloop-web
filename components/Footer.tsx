@@ -17,7 +17,7 @@ export function Footer() {
               </span>
             </div>
             <p className="text-[#5a524b] text-sm leading-relaxed mb-6">
-              Curating exceptional auctions for discerning collectors worldwide since 1999.
+              Außergewöhnliche Auktionen für anspruchsvolle Sammler weltweit – seit 2021.
             </p>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-[#5a524b] text-sm">
@@ -37,16 +37,16 @@ export function Footer() {
 
           {/* Auctions */}
           <div>
-            <h6 
+            <h6
               className="text-[#3a3735] mb-6"
               style={{ fontFamily: 'Playfair Display, serif' }}
             >
-              Auctions
+              Auktionen
             </h6>
             <ul className="space-y-3">
               <li>
                 <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-                  Current Auctions
+                  Laufende Auktionen
                 </a>
               </li>
               <li>
@@ -56,12 +56,12 @@ export function Footer() {
               </li>
               <li>
                 <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-                  Past Results
+                  Rückblick
                 </a>
               </li>
               <li>
                 <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-                  Private Sales
+                  Diskrete Privatverkäufe
                 </a>
               </li>
             </ul>
@@ -69,7 +69,7 @@ export function Footer() {
 
           {/* About */}
           <div>
-            <h6 
+            <h6
               className="text-[#3a3735] mb-6"
               style={{ fontFamily: 'Playfair Display, serif' }}
             >
@@ -78,22 +78,22 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-                  Our Story
+                  Unsere Geschichte
                 </a>
               </li>
               <li>
                 <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-                  Specialists
+                  Spezialisten
                 </a>
               </li>
               <li>
                 <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-                  Services
+                  Dienstleistungen
                 </a>
               </li>
               <li>
                 <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-                  Press
+                  Presse
                 </a>
               </li>
             </ul>
@@ -101,16 +101,16 @@ export function Footer() {
 
           {/* Resources */}
           <div>
-            <h6 
+            <h6
               className="text-[#3a3735] mb-6"
               style={{ fontFamily: 'Playfair Display, serif' }}
             >
-              Resources
+              Ressourcen
             </h6>
             <ul className="space-y-3">
               <li>
                 <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-                  Buyer's Guide
+                  Kaufratgeber
                 </a>
               </li>
               <li>
@@ -125,7 +125,7 @@ export function Footer() {
               </li>
               <li>
                 <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-                  Contact
+                  Kontakt
                 </a>
               </li>
             </ul>
@@ -138,17 +138,17 @@ export function Footer() {
         {/* Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[#5a524b] text-sm">
-            © 2025 NextLoop Auction House. All rights reserved.
+            ©2025 NextLoop. Sämtliche Rechte vorbehalten.
           </p>
           <div className="flex items-center gap-6">
             <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-              Privacy Policy
+              Datenschutzerklärung
             </a>
             <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-              Terms of Service
+              Allgemeine Geschäftsbedingungen (AGB)
             </a>
             <a href="#" className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors">
-              Cookie Policy
+              Cookie-Richtlinien
             </a>
           </div>
         </div>

@@ -47,11 +47,11 @@ const REQUIRED_IMAGE_TYPES = Object.values(ImageTypes);
 
 // Auction duration presets in hours
 const DURATION_PRESETS = [
-  { label: "1 Day", hours: 24 },
-  { label: "3 Days", hours: 72 },
-  { label: "5 Days", hours: 120 },
-  { label: "7 Days", hours: 168 },
-  { label: "14 Days", hours: 336 },
+  { label: "1 Tag", hours: 24 },
+  { label: "3 Tage", hours: 72 },
+  { label: "5 Tage", hours: 120 },
+  { label: "7 Tage", hours: 168 },
+  { label: "14 Tage", hours: 336 },
 ];
 
 export const ListingForm: React.FC<ListingFormProps> = ({
@@ -80,8 +80,8 @@ export const ListingForm: React.FC<ListingFormProps> = ({
 
   const getPriceLabel = () =>
     formData.type === ListingTypes.AUCTION
-      ? "Starting Bid (CHF)"
-      : "Buy Now Price (CHF)";
+      ? "Startgebot (CHF)"
+      : "Sofort-Kauf Preis (CHF)";
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -136,23 +136,23 @@ export const ListingForm: React.FC<ListingFormProps> = ({
   };
 
   const validateForm = () => {
-    if (!formData.title.trim()) return "Title is required";
-    if (!formData.description.trim()) return "Description is required";
-    if (formData.price <= 0) return "Price must be greater than 0";
-    if (!formData.category) return "Category is required";
+    if (!formData.title.trim()) return "Titel ist erforderlich";
+    if (!formData.description.trim()) return "Beschreibung ist erforderlich";
+    if (formData.price <= 0) return "Preis muss größer als 0 sein";
+    if (!formData.category) return "Kategorie ist erforderlich";
 
     // Auction-specific validation
     if (formData.type === ListingTypes.AUCTION) {
-      if (!formData.endTime) return "Auction end time is required";
+      if (!formData.endTime) return "Auktionsende ist erforderlich";
       if (formData.endTime <= new Date())
-        return "Auction end time must be in the future";
+        return "Auktionsende muss in der Zukunft liegen";
     }
 
     const missingImages = REQUIRED_IMAGE_TYPES.filter(
       (type) => !formData.images[type]
     );
     if (missingImages.length > 0)
-      return `Missing images: ${missingImages
+      return `Fehlende Bilder: ${missingImages
         .map((t) => t.replace(/_/g, " "))
         .join(", ")}`;
     return null;
@@ -170,7 +170,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
     try {
       await onSubmit(formData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to submit listing");
+      setError(err instanceof Error ? err.message : "Inserat konnte nicht erstellt werden");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
       setIsSubmitting(false);
@@ -195,11 +195,11 @@ export const ListingForm: React.FC<ListingFormProps> = ({
           className="text-4xl text-[#3a3735] mb-3"
           style={{ fontFamily: "Playfair Display, serif" }}
         >
-          {isEdit ? "Edit Your Collection" : "Consign an Item"}
+          {isEdit ? "Sammlung bearbeiten" : "Artikel einliefern"}
         </h1>
         <p className="text-[#5a524b] max-w-2xl mx-auto">
-          Provide the details of your item below. Our experts review all
-          submissions to ensure authenticity and quality.
+          Geben Sie die Details Ihres Artikels unten an. Unsere Experten prüfen alle
+          Einreichungen, um Authentizität und Qualität sicherzustellen.
         </p>
       </div>
 
@@ -223,21 +223,21 @@ export const ListingForm: React.FC<ListingFormProps> = ({
               <span className="flex items-center justify-center w-8 h-8 rounded-none border border-[#3a3735] text-sm font-medium">
                 01
               </span>
-              Sales Method
+              Verkaufsmethode
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 {
                   value: ListingTypes.DIRECT_BUY,
-                  label: "Direct Buy",
-                  desc: "Set a fixed price for instant purchase",
+                  label: "Sofort-Kauf",
+                  desc: "Festpreis für sofortigen Kauf festlegen",
                   icon: <DollarSign className="w-5 h-5" />,
                 },
                 {
                   value: ListingTypes.AUCTION,
-                  label: "Auction",
-                  desc: "Start bidding to get the best market price",
+                  label: "Auktion",
+                  desc: "Starten Sie eine Auktion für den besten Marktpreis",
                   icon: <Gavel className="w-5 h-5" />,
                 },
               ].map((option) => (
@@ -249,19 +249,17 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                       type: option.value as ListingTypes,
                     }))
                   }
-                  className={`cursor-pointer group relative flex flex-col p-6 border transition-all duration-300 ${
-                    formData.type === option.value
+                  className={`cursor-pointer group relative flex flex-col p-6 border transition-all duration-300 ${formData.type === option.value
                       ? "bg-[#3a3735] border-[#3a3735]"
                       : "bg-[#faf8f4] border-[#d4cec4] hover:border-[#c8a882] hover:bg-white"
-                  }`}
+                    }`}
                 >
                   <div className="flex justify-between items-start mb-3">
                     <span
-                      className={`${
-                        formData.type === option.value
+                      className={`${formData.type === option.value
                           ? "text-[#c8a882]"
                           : "text-[#3a3735]"
-                      }`}
+                        }`}
                     >
                       {option.icon}
                     </span>
@@ -270,21 +268,19 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                     )}
                   </div>
                   <h4
-                    className={`text-lg font-medium mb-1 ${
-                      formData.type === option.value
+                    className={`text-lg font-medium mb-1 ${formData.type === option.value
                         ? "text-white"
                         : "text-[#3a3735]"
-                    }`}
+                      }`}
                     style={{ fontFamily: "Playfair Display, serif" }}
                   >
                     {option.label}
                   </h4>
                   <p
-                    className={`text-sm ${
-                      formData.type === option.value
+                    className={`text-sm ${formData.type === option.value
                         ? "text-gray-300"
                         : "text-[#5a524b]"
-                    }`}
+                      }`}
                   >
                     {option.desc}
                   </p>
@@ -302,22 +298,22 @@ export const ListingForm: React.FC<ListingFormProps> = ({
               <span className="flex items-center justify-center w-8 h-8 rounded-none border border-[#3a3735] text-sm font-medium">
                 02
               </span>
-              Item Details
+              Artikeldetails
             </h3>
 
             <div className="space-y-6">
               <Input
-                label="Item Name"
+                label="Artikelname"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                placeholder="e.g. Rolex Submariner Date 1990"
+                placeholder="z.B. Rolex Submariner Date 1990"
                 required
               />
 
               <div className="space-y-2">
                 <label className="text-xs font-medium uppercase tracking-wider text-[#5a524b]">
-                  Description
+                  Beschreibung
                 </label>
                 <textarea
                   name="description"
@@ -325,7 +321,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                   onChange={handleChange}
                   rows={5}
                   className="w-full px-4 py-3 bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] placeholder:text-[#5a524b]/50 focus:bg-white focus:border-[#c8a882] focus:ring-1 focus:ring-[#c8a882] focus:outline-none transition-all resize-none shadow-sm"
-                  placeholder="Provide provenance, condition details, and history..."
+                  placeholder="Geben Sie Herkunft, Zustandsdetails und Historie an..."
                 />
               </div>
 
@@ -343,7 +339,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
 
                 <div className="space-y-2">
                   <label className="text-xs font-medium uppercase tracking-wider text-[#5a524b]">
-                    Condition
+                    Zustand
                   </label>
                   <div className="relative">
                     <select
@@ -388,7 +384,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                       className="text-base text-[#3a3735] font-medium"
                       style={{ fontFamily: "Playfair Display, serif" }}
                     >
-                      Auction Duration
+                      Auktionsdauer
                     </h4>
                   </div>
 
@@ -399,16 +395,15 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                           key={preset.hours}
                           type="button"
                           onClick={() => handleDurationPreset(preset.hours)}
-                          className={`px-4 py-3 text-sm font-medium transition-all ${
-                            formData.endTime &&
-                            Math.abs(
-                              formData.endTime.getTime() -
+                          className={`px-4 py-3 text-sm font-medium transition-all ${formData.endTime &&
+                              Math.abs(
+                                formData.endTime.getTime() -
                                 Date.now() -
                                 preset.hours * 3600000
-                            ) < 60000
+                              ) < 60000
                               ? "bg-[#3a3735] text-white border-[#3a3735]"
                               : "bg-white text-[#3a3735] border-[#d4cec4] hover:border-[#c8a882]"
-                          } border`}
+                            } border`}
                         >
                           {preset.label}
                         </button>
@@ -417,7 +412,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
 
                     <div className="relative">
                       <label className="text-xs font-medium uppercase tracking-wider text-[#5a524b] mb-2 block">
-                        Or Choose Custom End Time
+                        Oder benutzerdefiniertes Enddatum wählen
                       </label>
                       <input
                         type="datetime-local"
@@ -432,7 +427,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                       <div className="flex items-center gap-2 text-sm text-[#5a524b] bg-white p-3 border border-[#d4cec4]">
                         <CheckCircle2 className="w-4 h-4 text-green-600" />
                         <span>
-                          Auction ends:{" "}
+                          Auktion endet:{" "}
                           <strong className="text-[#3a3735]">
                             {formatEndTime(formData.endTime)}
                           </strong>
@@ -455,10 +450,10 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                 <span className="flex items-center justify-center w-8 h-8 rounded-none border border-[#3a3735] text-sm font-medium">
                   03
                 </span>
-                Gallery
+                Galerie
               </h3>
               <span className="text-xs text-[#c8a882] font-medium uppercase tracking-widest border border-[#c8a882] px-3 py-1">
-                All {REQUIRED_IMAGE_TYPES.length} Angles Required
+                Alle {REQUIRED_IMAGE_TYPES.length} Winkel erforderlich
               </span>
             </div>
 
@@ -483,10 +478,9 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                     <label
                       htmlFor={`file-${type}`}
                       className={`h-full w-full flex flex-col items-center justify-center cursor-pointer transition-all duration-300 border
-                        ${
-                          isUploaded
-                            ? "border-none bg-gray-100"
-                            : "border-dashed border-[#d4cec4] bg-[#faf8f4] hover:border-[#c8a882] hover:bg-white"
+                        ${isUploaded
+                          ? "border-none bg-gray-100"
+                          : "border-dashed border-[#d4cec4] bg-[#faf8f4] hover:border-[#c8a882] hover:bg-white"
                         }`}
                     >
                       {isUploaded && previewUrl ? (
@@ -498,7 +492,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                           />
                           <div className="absolute inset-0 bg-[#3a3735]/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center">
                             <span className="text-white font-serif text-lg mb-2">
-                              Change Image
+                              Bild ändern
                             </span>
                             <span className="text-[#c8a882] text-xs uppercase tracking-widest">
                               {type}
@@ -524,7 +518,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
                             {type}
                           </span>
                           <span className="text-[10px] text-[#5a524b] uppercase">
-                            Upload
+                            Hochladen
                           </span>
                         </div>
                       )}
@@ -543,7 +537,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
               className="flex-1 py-4 text-base tracking-wide"
               disabled={isSubmitting}
             >
-              Cancel Consignment
+              Einlieferung abbrechen
             </Button>
             <Button
               onClick={handleSubmit}
@@ -552,7 +546,7 @@ export const ListingForm: React.FC<ListingFormProps> = ({
               isLoading={isSubmitting}
               disabled={isSubmitting}
             >
-              {isEdit ? "Update Listing" : "Publish Listing"}
+              {isEdit ? "Inserat aktualisieren" : "Inserat veröffentlichen"}
             </Button>
           </div>
         </div>

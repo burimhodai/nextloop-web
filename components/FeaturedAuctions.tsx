@@ -63,7 +63,7 @@ export function FeaturedAuctions() {
     if (typeof listing.seller === "object" && listing.seller?.username) {
       return listing.seller.username;
     }
-    return "Seller";
+    return "Verkäufer";
   };
 
   if (loading) {
@@ -73,7 +73,7 @@ export function FeaturedAuctions() {
           <div className="flex flex-col justify-center items-center py-20">
             <Loader2 className="h-10 w-10 text-[#c8a882] animate-spin mb-4" />
             <p className="text-[#5a524b] font-serif italic">
-              Loading featured auctions...
+              Empfohlene Auktionen werden geladen …
             </p>
           </div>
         </div>
@@ -91,7 +91,7 @@ export function FeaturedAuctions() {
               onClick={fetchAuctions}
               className="text-red-700 text-sm underline hover:no-underline"
             >
-              Try Again
+              Erneut versuchen
             </button>
           </div>
         </div>
@@ -112,21 +112,21 @@ export function FeaturedAuctions() {
             <div className="mb-4 flex items-center gap-3">
               <div className="h-px w-12 bg-[#c8a882]"></div>
               <span className="text-[#c8a882] text-sm tracking-[0.2em] uppercase">
-                Current Offerings
+                Aktuelle Angebote
               </span>
             </div>
             <h2
               className="text-[#3a3735] text-4xl md:text-5xl"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Featured Auctions
+              Empfohlene Auktionen
             </h2>
           </div>
           <Link
             href="/search?type=AUCTION"
             className="hidden md:block text-[#3a3735] hover:text-[#c8a882] text-sm tracking-wide border-b border-[#3a3735] hover:border-[#c8a882] pb-1 transition-colors"
           >
-            View All Lots
+            Alle Lose ansehen
           </Link>
         </div>
 
@@ -156,7 +156,7 @@ export function FeaturedAuctions() {
                   <Heart className="w-4 h-4" strokeWidth={1.5} />
                 </button>
                 <div className="absolute bottom-4 left-4 bg-[#3a3735] text-[#faf8f4] px-4 py-2 text-sm tracking-wider">
-                  LOT {String(index + 1).padStart(3, "0")}
+                  Los {String(index + 1).padStart(3, "0")}
                 </div>
               </div>
 
@@ -183,7 +183,7 @@ export function FeaturedAuctions() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-[#c8a882] text-xs tracking-wider uppercase mb-1">
-                        {auction.currentPrice ? "Current Bid" : "Starting Bid"}
+                        {auction.currentPrice ? "Aktuelles Gebot" : "Startgebot"}
                       </p>
                       <p
                         className="text-[#3a3735] font-medium"
@@ -199,7 +199,7 @@ export function FeaturedAuctions() {
                       }}
                       className="text-[#3a3735] hover:text-[#c8a882] text-sm tracking-wide border border-[#3a3735] hover:border-[#c8a882] px-5 py-2.5 transition-colors"
                     >
-                      Place Bid
+                      Jetzt bieten
                     </button>
                   </div>
                 </div>
@@ -214,7 +214,7 @@ export function FeaturedAuctions() {
             href="/search?type=AUCTION"
             className="inline-block text-[#3a3735] hover:text-[#c8a882] text-sm tracking-wide border-b border-[#3a3735] hover:border-[#c8a882] pb-1 transition-colors"
           >
-            View All Lots
+            Alle Lose ansehen
           </Link>
         </div>
       </div>

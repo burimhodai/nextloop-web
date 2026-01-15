@@ -29,34 +29,33 @@ export function MessagesAndAnalytics() {
     <div className="space-y-12">
       {/* Messages & Support */}
       <div>
-        <h2 
+        <h2
           className="text-[#3a3735] mb-8"
           style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem' }}
         >
-          Messages & Support
+          Nachrichten & Support
         </h2>
 
         <div className="bg-white shadow-md border border-[#e8dfd0]">
           <div className="p-6 border-b border-[#e8dfd0] flex items-center justify-between">
             <div className="flex items-center gap-3">
               <MessageSquare className="w-5 h-5 text-[#c8a882]" strokeWidth={1.5} />
-              <h3 className="text-[#3a3735]">Admin Support Inbox</h3>
+              <h3 className="text-[#3a3735]">Admin-Support-Postfach</h3>
               <span className="px-3 py-1 bg-[#c8a882] text-[#3a3735] text-xs tracking-wider">
-                2 Unread
+                2 Ungelesen
               </span>
             </div>
             <button className="bg-[#3a3735] hover:bg-[#c8a882] text-[#faf8f4] hover:text-[#3a3735] px-4 py-2 text-sm transition-colors">
-              New Ticket
+              Neues Ticket
             </button>
           </div>
 
           <div className="divide-y divide-[#e8dfd0]">
             {messages.map((message) => (
-              <div 
+              <div
                 key={message.id}
-                className={`p-6 hover:bg-[#faf8f4] transition-colors cursor-pointer ${
-                  message.unread ? 'bg-[#f5f1ea]' : ''
-                }`}
+                className={`p-6 hover:bg-[#faf8f4] transition-colors cursor-pointer ${message.unread ? 'bg-[#f5f1ea]' : ''
+                  }`}
               >
                 <div className="flex items-start justify-between mb-2">
                   <h4 className={`text-[#3a3735] ${message.unread ? '' : 'opacity-75'}`}>
@@ -75,11 +74,11 @@ export function MessagesAndAnalytics() {
 
       {/* Analytics & Insights */}
       <div>
-        <h2 
+        <h2
           className="text-[#3a3735] mb-8"
           style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem' }}
         >
-          Analytics & Insights
+          Analysen & Einblicke
         </h2>
 
         {/* Performance Overview */}
@@ -89,9 +88,9 @@ export function MessagesAndAnalytics() {
               <div className="w-10 h-10 bg-[#f5f1ea] flex items-center justify-center">
                 <Eye className="w-5 h-5 text-[#c8a882]" strokeWidth={1.5} />
               </div>
-              <p className="text-[#5a524b] text-sm">Total Views</p>
+              <p className="text-[#5a524b] text-sm">Gesamtaufrufe</p>
             </div>
-            <p 
+            <p
               className="text-[#3a3735] mb-2"
               style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem' }}
             >
@@ -99,7 +98,7 @@ export function MessagesAndAnalytics() {
             </p>
             <div className="flex items-center gap-2 text-green-600 text-sm">
               <TrendingUp className="w-4 h-4" strokeWidth={1.5} />
-              <span>+23% from last month</span>
+              <span>+23% im Vergleich zum letzten Monat</span>
             </div>
           </div>
 
@@ -108,9 +107,9 @@ export function MessagesAndAnalytics() {
               <div className="w-10 h-10 bg-[#f5f1ea] flex items-center justify-center">
                 <Users className="w-5 h-5 text-[#c8a882]" strokeWidth={1.5} />
               </div>
-              <p className="text-[#5a524b] text-sm">Unique Visitors</p>
+              <p className="text-[#5a524b] text-sm">Einzigartige Besucher</p>
             </div>
-            <p 
+            <p
               className="text-[#3a3735] mb-2"
               style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem' }}
             >
@@ -118,7 +117,7 @@ export function MessagesAndAnalytics() {
             </p>
             <div className="flex items-center gap-2 text-green-600 text-sm">
               <TrendingUp className="w-4 h-4" strokeWidth={1.5} />
-              <span>+18% from last month</span>
+              <span>+18% im Vergleich zum letzten Monat</span>
             </div>
           </div>
 
@@ -127,9 +126,9 @@ export function MessagesAndAnalytics() {
               <div className="w-10 h-10 bg-[#f5f1ea] flex items-center justify-center">
                 <BarChart3 className="w-5 h-5 text-[#c8a882]" strokeWidth={1.5} />
               </div>
-              <p className="text-[#5a524b] text-sm">Conversion Rate</p>
+              <p className="text-[#5a524b] text-sm">Konversionsrate</p>
             </div>
-            <p 
+            <p
               className="text-[#3a3735] mb-2"
               style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem' }}
             >
@@ -137,22 +136,22 @@ export function MessagesAndAnalytics() {
             </p>
             <div className="flex items-center gap-2 text-green-600 text-sm">
               <TrendingUp className="w-4 h-4" strokeWidth={1.5} />
-              <span>+2.1% from last month</span>
+              <span>+2.1% im Vergleich zum letzten Monat</span>
             </div>
           </div>
         </div>
 
         {/* Views Over Time Graph Placeholder */}
         <div className="bg-white p-8 shadow-md border border-[#e8dfd0] mb-6">
-          <h3 
+          <h3
             className="text-[#3a3735] mb-6"
             style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.5rem' }}
           >
-            Views Over Time
+            Aufrufe im Zeitverlauf
           </h3>
           <div className="h-64 flex items-end justify-between gap-2">
             {[45, 62, 58, 71, 83, 76, 92, 88, 95, 103, 98, 112].map((height, index) => (
-              <div 
+              <div
                 key={index}
                 className="flex-1 bg-gradient-to-t from-[#c8a882] to-[#c8a882]/60 hover:from-[#3a3735] hover:to-[#5a524b] transition-all cursor-pointer"
                 style={{ height: `${height}%` }}
@@ -177,28 +176,28 @@ export function MessagesAndAnalytics() {
 
         {/* Best Performing Categories */}
         <div className="bg-white p-8 shadow-md border border-[#e8dfd0]">
-          <h3 
+          <h3
             className="text-[#3a3735] mb-6"
             style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.5rem' }}
           >
-            Best Performing Categories
+            Erfolgreichste Kategorien
           </h3>
           <div className="space-y-4">
             {[
-              { category: 'Watches & Timepieces', sales: 8, revenue: 342500, percentage: 85 },
-              { category: 'Fine Art', sales: 3, revenue: 892000, percentage: 72 },
-              { category: 'Jewelry & Gems', sales: 12, revenue: 186400, percentage: 68 },
-              { category: 'Furniture & Design', sales: 5, revenue: 48200, percentage: 45 }
+              { category: 'Uhren & Zeitmesser', sales: 8, revenue: 342500, percentage: 85 },
+              { category: 'Kunstwerke', sales: 3, revenue: 892000, percentage: 72 },
+              { category: 'Schmuck & Juwelen', sales: 12, revenue: 186400, percentage: 68 },
+              { category: 'Möbel & Design', sales: 5, revenue: 48200, percentage: 45 }
             ].map((item, index) => (
               <div key={index}>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
                       <span className="text-[#3a3735]">{item.category}</span>
-                      <span className="text-[#5a524b] text-sm">{item.sales} sales</span>
+                      <span className="text-[#5a524b] text-sm">{item.sales} Verkäufe</span>
                     </div>
                     <div className="w-full bg-[#e8dfd0] h-2">
-                      <div 
+                      <div
                         className="bg-[#c8a882] h-2 transition-all"
                         style={{ width: `${item.percentage}%` }}
                       ></div>

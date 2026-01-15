@@ -41,7 +41,7 @@ export const ListingCard = ({
       const end = new Date(listing.endTime).getTime();
       const diff = end - now;
 
-      if (diff <= 0) return "Ended";
+      if (diff <= 0) return "Beendet";
 
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor(
@@ -52,9 +52,9 @@ export const ListingCard = ({
 
       setIsLastMinute(diff < 60000);
 
-      if (days > 0) return `${days}d ${hours}h`;
-      if (hours > 0) return `${hours}h ${minutes}m`;
-      return `${minutes}m ${seconds}s`;
+      if (days > 0) return `${days}T ${hours}Std`;
+      if (hours > 0) return `${hours}Std ${minutes}Min`;
+      return `${minutes}Min ${seconds}Sek`;
     };
 
     setTimeLeft(calculateTime());
@@ -107,7 +107,7 @@ export const ListingCard = ({
   };
 
   const displayPrice = isAuction ? listing.currentPrice : listing.buyNowPrice;
-  const priceLabel = isAuction ? "Current Bid" : "Buy Now";
+  const priceLabel = isAuction ? "Aktuelles Gebot" : "Sofort-Kauf";
   const listingUrl = getListingUrl(listing);
 
   return (
@@ -118,7 +118,7 @@ export const ListingCard = ({
       <div className="relative aspect-square overflow-hidden bg-[#e8dfd0]">
         {listing.isBoosted && (
           <div className="absolute top-2 left-2 bg-[#c8a882] text-white px-2 py-1 text-xs z-10 font-medium rounded">
-            FEATURED
+            HERVORGEHOBEN
           </div>
         )}
         <img
@@ -129,11 +129,10 @@ export const ListingCard = ({
         <button
           onClick={handleWatchlistToggle}
           disabled={isTogglingWatchlist}
-          className={`absolute top-2 right-2 w-9 h-9 backdrop-blur-sm flex items-center justify-center transition-all rounded-full ${
-            isInWatchlist
+          className={`absolute top-2 right-2 w-9 h-9 backdrop-blur-sm flex items-center justify-center transition-all rounded-full ${isInWatchlist
               ? "bg-red-500 text-white hover:bg-red-600"
               : "bg-white/90 text-[#5a524b] hover:bg-[#c8a882] hover:text-white"
-          } ${isTogglingWatchlist ? "opacity-50 cursor-not-allowed" : ""}`}
+            } ${isTogglingWatchlist ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           <Heart
             className={`w-4 h-4 ${isInWatchlist ? "fill-current" : ""}`}
@@ -157,11 +156,10 @@ export const ListingCard = ({
 
           {isAuction && listing.endTime && (
             <div
-              className={`flex items-center gap-1 ${
-                isLastMinute
+              className={`flex items-center gap-1 ${isLastMinute
                   ? "text-red-600 font-bold animate-pulse"
                   : "text-[#5a524b]"
-              }`}
+                }`}
             >
               <Clock className="w-3 h-3" strokeWidth={1.5} />
               <span>{timeLeft}</span>
@@ -173,7 +171,7 @@ export const ListingCard = ({
           {isAuction && (
             <div className="flex items-center gap-1">
               <TrendingUp className="w-3 h-3" />
-              <span>{listing.totalBids} bids</span>
+              <span>{listing.totalBids} gebote</span>
             </div>
           )}
           <div className="flex items-center gap-1 ml-auto">

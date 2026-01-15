@@ -12,17 +12,17 @@ interface SearchFormProps {
 }
 
 const categories = [
-  "Watches & Timepieces",
-  "Fine Art",
-  "Electronics",
-  "Jewelry & Gems",
-  "Furniture & Design",
-  "Wine & Spirits",
-  "Collectibles",
-  "Musical Instruments",
+  "Uhren & Zeitmesser",
+  "Bildende Kunst",
+  "Elektronik",
+  "Schmuck & Edelsteine",
+  "Möbel & Design",
+  "Wein & Spirituosen",
+  "Sammlerstücke",
+  "Musikinstrumente",
 ];
 
-const popularSearches = ["Rolex", "Vintage Art", "Ferrari", "Hermès"];
+const popularSearches = ["Rolex", "Vintage Kunst", "Ferrari", "Hermès"];
 
 export function SearchForm({
   defaultQuery = "",
@@ -63,9 +63,8 @@ export function SearchForm({
       className={`bg-white p-6 shadow-lg w-full max-w-4xl mx-auto ${className}`}
     >
       <div
-        className={`flex flex-col md:flex-row gap-3 ${
-          showPopularSearches ? "mb-4" : ""
-        }`}
+        className={`flex flex-col md:flex-row gap-3 ${showPopularSearches ? "mb-4" : ""
+          }`}
       >
         {/* Search Input */}
         <div className="flex-1 relative">
@@ -78,7 +77,7 @@ export function SearchForm({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Search for items, brands, or keywords..."
+            placeholder="Suche nach Artikeln, Marken oder Stichworten..."
             className="w-full pl-12 pr-4 py-3.5 bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] placeholder:text-[#5a524b]/60 focus:outline-none focus:border-[#c8a882] focus:bg-white transition-all"
           />
         </div>
@@ -91,7 +90,7 @@ export function SearchForm({
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="w-full px-4 py-3.5 bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] focus:outline-none focus:border-[#c8a882] focus:bg-white transition-all appearance-none cursor-pointer"
             >
-              <option value="">All Categories</option>
+              <option value="">Alle Kategorien</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
@@ -111,14 +110,14 @@ export function SearchForm({
           className="group bg-[#3a3735] hover:bg-[#c8a882] text-[#faf8f4] hover:text-[#3a3735] px-8 py-3.5 flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg whitespace-nowrap"
         >
           <Search className="w-4 h-4" strokeWidth={1.5} />
-          <span className="tracking-wide">Search</span>
+          <span className="tracking-wide">Suchen</span>
         </button>
       </div>
 
       {/* Popular Searches */}
       {showPopularSearches && (
         <div className="flex items-center justify-center gap-4 text-xs text-[#5a524b] flex-wrap">
-          <span>Popular:</span>
+          <span>Beliebt:</span>
           {popularSearches.map((term) => (
             <button
               key={term}

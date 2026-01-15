@@ -66,14 +66,14 @@ export function Header() {
   const isHomePage = currentPath === "/" || currentPath.includes("/search");
 
   const categories = [
-    { name: "Watches", icon: "⌚" },
-    { name: "Art", icon: "🎨" },
-    { name: "Electronics", icon: "💻" },
+    { name: "Uhren", icon: "⌚" },
+    { name: "Kunst", icon: "🎨" },
+    { name: "Elektronik", icon: "💻" },
     { name: "Jewelry", icon: "💎" },
-    { name: "Furniture", icon: "🪑" },
+    { name: "Designermöbel", icon: "🪑" },
     { name: "Wine", icon: "🍷" },
-    { name: "Collectibles", icon: "📸" },
-    { name: "Instruments", icon: "🎵" },
+    { name: "Sammlerstücke", icon: "📸" },
+    { name: "Instrumente", icon: "🎵" },
   ];
 
   const handleLogoutClick = (
@@ -120,11 +120,10 @@ export function Header() {
                     onClick={() => setShowCategoriesMenu(!showCategoriesMenu)}
                     className="transition-colors py-1 hover:text-black/70 flex items-center gap-1"
                   >
-                    Categories
+                    Kategorien
                     <svg
-                      className={`w-4 h-4 transition-transform ${
-                        showCategoriesMenu ? "rotate-180" : ""
-                      }`}
+                      className={`w-4 h-4 transition-transform ${showCategoriesMenu ? "rotate-180" : ""
+                        }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -160,9 +159,8 @@ export function Header() {
           </div>
 
           <div
-            className={`hidden md:flex flex-1 justify-center absolute left-1/2 -translate-x-1/2 ${
-              showSearch ? "opacity-100" : "opacity-0 pointer-events-none"
-            } transition-opacity duration-300 max-w-xl w-full`}
+            className={`hidden md:flex flex-1 justify-center absolute left-1/2 -translate-x-1/2 ${showSearch ? "opacity-100" : "opacity-0 pointer-events-none"
+              } transition-opacity duration-300 max-w-xl w-full`}
           >
             <div className="flex w-full gap-3">
               <div className="flex-1 relative">
@@ -172,7 +170,7 @@ export function Header() {
                 />
                 <input
                   type="text"
-                  placeholder="Search for items..."
+                  placeholder="Angebote suchen…"
                   className="w-full pl-10 pr-3 py-2.5 bg-[#f5f1ea] rounded-md border border-[#d4cec4] text-[#3a3735] text-sm placeholder:text-[#5a524b]/60 focus:outline-none focus:border-[#c8a882] focus:bg-white transition-all"
                 />
               </div>
@@ -214,7 +212,7 @@ export function Header() {
                     {isAuthenticated ? (
                       <>
                         <div className="px-4 py-2.5 text-sm text-[#3a3735] border-b border-[#e8dfd0] font-semibold">
-                          Hello, {user?.fullName.split(" ")[0]}
+                          Hallo, {user?.fullName.split(" ")[0]}
                         </div>
                         <Link
                           href="/dashboard"
@@ -228,7 +226,7 @@ export function Header() {
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#3a3735] hover:bg-[#f5f1ea] transition-colors"
                           onClick={() => setShowUserMenu(false)}
                         >
-                          Profile Settings
+                          Profil Einstellungen
                         </Link>
                         <button
                           className="w-full text-left px-4 py-2.5 text-sm text-[#3a3735] hover:bg-[#f5f1ea] transition-colors flex items-center gap-3"
