@@ -99,12 +99,12 @@ export function Hero() {
             className="text-5xl md:text-6xl lg:text-7xl text-[#3a3735] mb-6 leading-[1.1]"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
-            Find Extraordinary Items
+            Find außergewöhnliche Sache
           </h1>
 
           <p className="text-lg text-[#5a524b] leading-relaxed max-w-2xl mx-auto mb-10">
-            Browse thousands of luxury auctions from verified sellers worldwide.
-            Discover rare timepieces, fine art, collectibles, and more.
+            Stöber dur tusigi Luxus-Auktione vo verifizierte Verkäufer i dr
+            Schwiiz. Entdeck seltni Uhre, edli Chunst, Sammlerstück und meh.
           </p>
 
           {/* Search Form Component */}

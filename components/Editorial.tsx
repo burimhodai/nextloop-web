@@ -1,6 +1,6 @@
 "use client";
-import { ArrowRight } from 'lucide-react';
-import Image from 'next/image';
+import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 export function Editorial() {
   return (
@@ -34,34 +34,44 @@ export function Editorial() {
 
             <h2
               className="text-[#3a3735] mb-6"
-              style={{ fontFamily: 'Playfair Display, serif' }}
+              style={{ fontFamily: "Playfair Display, serif" }}
             >
               Herkunft & Tradition
             </h2>
 
             <div className="space-y-6 text-[#5a524b] leading-relaxed mb-8">
               <p>
-                Bei Lumière glauben wir, dass jedes außergewöhnliche Objekt eine Geschichte in sich trägt –
-                eine Erzählung von Kunstfertigkeit, Innovation und dem Lauf der Zeit. Unsere Auktionen werden
-                mit größter Sorgfalt kuratiert, um nur die feinsten Beispiele menschlicher Errungenschaften
-                aus verschiedenen Jahrhunderten und Kulturen zu präsentieren.
+                Bei Lumière glauben wir, dass jedes außergewöhnliche Objekt eine
+                Geschichte in sich trägt – eine Erzählung von Kunstfertigkeit,
+                Innovation und dem Lauf der Zeit. Unsere Auktionen werden mit
+                größter Sorgfalt kuratiert, um nur die feinsten Beispiele
+                menschlicher Errungenschaften aus verschiedenen Jahrhunderten
+                und Kulturen zu präsentieren.
               </p>
 
               <p>
-                Von seltenen Zeitmessern, gefertigt von Meisteruhrmachern, bis hin zu Kunstwerken von Museumsqualität
-                und Antiquitäten – jedes Los in unserer Kollektion wurde von führenden Experten authentifiziert
-                und kommt mit umfassender Provenienz-Dokumentation.
+                Von seltenen Zeitmessern, gefertigt von Meisteruhrmachern, bis
+                hin zu Kunstwerken von Museumsqualität und Antiquitäten – jedes
+                Los in unserer Kollektion wurde von führenden Experten
+                authentifiziert und kommt mit umfassender
+                Provenienz-Dokumentation.
               </p>
 
               <p>
-                Wir laden anspruchsvolle Sammler ein, Stücke zu entdecken, die über bloßen Besitz hinausgehen –
-                Schätze, die Teil Ihres Vermächtnisses werden und ihre Reise durch die Zeit fortsetzen.
+                Wir laden anspruchsvolle Sammler ein, Stücke zu entdecken, die
+                über bloßen Besitz hinausgehen – Schätze, die Teil Ihres
+                Vermächtnisses werden und ihre Reise durch die Zeit fortsetzen.
               </p>
             </div>
 
             <button className="group flex items-center gap-3 text-[#3a3735] hover:text-[#c8a882] transition-colors">
-              <span className="tracking-wide">Mehr über unseren Prozess erfahren</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" strokeWidth={1.5} />
+              <span className="tracking-wide">
+                Mehr über unseren Prozess erfahren
+              </span>
+              <ArrowRight
+                className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                strokeWidth={1.5}
+              />
             </button>
 
             {/* Stats */}
@@ -69,7 +79,10 @@ export function Editorial() {
               <div>
                 <div
                   className="text-[#c8a882] mb-2"
-                  style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem' }}
+                  style={{
+                    fontFamily: "Playfair Display, serif",
+                    fontSize: "2rem",
+                  }}
                 >
                   25+
                 </div>
@@ -78,16 +91,10 @@ export function Editorial() {
               <div>
                 <div
                   className="text-[#c8a882] mb-2"
-                  style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem' }}
-                >
-                  $2.4B
-                </div>
-                <p className="text-[#5a524b] text-sm">Gesamtumsatz</p>
-              </div>
-              <div>
-                <div
-                  className="text-[#c8a882] mb-2"
-                  style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem' }}
+                  style={{
+                    fontFamily: "Playfair Display, serif",
+                    fontSize: "2rem",
+                  }}
                 >
                   98%
                 </div>
