@@ -63,7 +63,7 @@ export default function DashboardPage() {
       const userListingsResponse = await fetch(
         `${
           process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
-        }/listing/user/${user._id}`
+        }/listing/user/${user._id}`,
       );
       const userListings = await userListingsResponse.json();
 
@@ -72,7 +72,7 @@ export default function DashboardPage() {
 
       // Calculate stats from real data
       const activeListings = userListings.filter(
-        (l: any) => l.status === "ACTIVE"
+        (l: any) => l.status === "ACTIVE",
       ).length;
 
       const soldListings = userListings.filter((l: any) => l.status === "SOLD");
@@ -83,7 +83,7 @@ export default function DashboardPage() {
 
       // Count active bids (auctions where user has bid)
       const activeBids = userListings.filter(
-        (l: any) => l.type === "AUCTION" && l.bids && l.bids.length > 0
+        (l: any) => l.type === "AUCTION" && l.bids && l.bids.length > 0,
       ).length;
 
       setStats({
@@ -107,7 +107,7 @@ export default function DashboardPage() {
           activities.push({
             id: `bid-${listing._id}`,
             type: "bid",
-            title: `New bid on ${listing.name}`,
+            title: `Neues Gebot auf ${listing.name}`,
             time: formatTimeAgo(latestBid.timestamp || listing.updatedAt),
             amount: `$${latestBid.amount?.toLocaleString()}`,
             listing,
@@ -133,8 +133,8 @@ export default function DashboardPage() {
         activities.push({
           id: `watch-${listing._id}`,
           type: "watchlist",
-          title: `Watching ${listing.name}`,
-          time: "Recently added",
+          title: `Aufpassen ${listing.name}`,
+          time: "Kürzlich hinzugefügt",
           amount: `$${(
             listing.currentPrice || listing.buyNowPrice
           )?.toLocaleString()}`,
@@ -159,7 +159,7 @@ export default function DashboardPage() {
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return "Just now";
+    if (diffMins < 1) return "Soeben";
     if (diffMins < 60)
       return `${diffMins} ${diffMins === 1 ? "minute" : "minutes"} ago`;
     if (diffHours < 24)
@@ -171,7 +171,7 @@ export default function DashboardPage() {
 
   const statCards = [
     {
-      title: "Active Listings",
+      title: "Aktive Angebote",
       value: stats.activeListings,
       icon: Package,
       color: "bg-blue-50 text-blue-600",
@@ -179,14 +179,14 @@ export default function DashboardPage() {
       link: "/dashboard/listings",
     },
     {
-      title: "Total Revenue",
+      title: "Gesamtertrag",
       value: `CHF ${stats.revenue.toFixed(2)}`,
       icon: DollarSign,
       color: "bg-green-50 text-green-600",
       iconBg: "bg-green-100",
     },
     {
-      title: "Active Bids",
+      title: "Aktive Gebote",
       value: stats.activeBids,
       icon: Gavel,
       color: "bg-purple-50 text-purple-600",
@@ -207,9 +207,9 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#3a3735] mb-2">
-            Welcome back, {user?.fullName.split(" ")[0]}!
+            Willkommen zurück, {user?.fullName.split(" ")[0]}!
           </h1>
-          <p className="text-[#5a524b]">Loading your dashboard...</p>
+          <p className="text-[#5a524b]">Dashboard wird geladen...</p>
         </div>
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-12 h-12 text-[#c8a882] animate-spin" />
@@ -223,10 +223,10 @@ export default function DashboardPage() {
       {/* Welcome Section */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-[#3a3735] mb-2">
-          Welcome back, {user?.fullName.split(" ")[0]}!
+          Willkommen zurück, {user?.fullName.split(" ")[0]}!
         </h1>
         <p className="text-[#5a524b]">
-          Here's what's happening with your account today.
+          Hier ist, was mit Ihrem Konto heute passiert.
         </p>
       </div>
 
@@ -263,13 +263,13 @@ export default function DashboardPage() {
         <div className="lg:col-span-2 bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-[#3a3735]">
-              Recent Activity
+              Aktuelle Aktivitäten
             </h2>
             <button
               onClick={fetchDashboardData}
               className="text-sm text-[#c8a882] hover:text-[#3a3735] transition-colors"
             >
-              Refresh
+              Aktualisieren
             </button>
           </div>
 
@@ -327,9 +327,9 @@ export default function DashboardPage() {
                   className="w-12 h-12 text-[#d4cec4] mx-auto mb-4"
                   strokeWidth={1.5}
                 />
-                <p className="text-[#5a524b]">No recent activity</p>
+                <p className="text-[#5a524b]">Keine aktuellen Aktivitäten</p>
                 <p className="text-sm text-[#5a524b] mt-2">
-                  Start creating listings or bidding on auctions
+                  Erstellen Sie Angebote oder geben Sie Gebote bei Auktionen ab.
                 </p>
               </div>
             )}
@@ -341,7 +341,7 @@ export default function DashboardPage() {
           {/* Quick Actions */}
           <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-6">
             <h2 className="text-xl font-semibold text-[#3a3735] mb-4">
-              Quick Actions
+              Schnellaktionen
             </h2>
             <div className="space-y-3">
               <a
@@ -349,21 +349,21 @@ export default function DashboardPage() {
                 className="flex items-center gap-3 p-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all"
               >
                 <Package className="w-5 h-5" strokeWidth={1.5} />
-                <span className="font-medium">Create Listing</span>
+                <span className="font-medium">Anzeige erstellen</span>
               </a>
               <a
                 href="/dashboard/listings"
                 className="flex items-center gap-3 p-3 bg-[#f5f1ea] text-[#3a3735] rounded-lg hover:bg-[#e8dfd0] transition-colors"
               >
                 <Package className="w-5 h-5" strokeWidth={1.5} />
-                <span className="font-medium">My Listings</span>
+                <span className="font-medium">Meine Angebote</span>
               </a>
               <a
                 href="/dashboard/watchlist"
                 className="flex items-center gap-3 p-3 bg-[#f5f1ea] text-[#3a3735] rounded-lg hover:bg-[#e8dfd0] transition-colors"
               >
                 <Heart className="w-5 h-5" strokeWidth={1.5} />
-                <span className="font-medium">Watchlist</span>
+                <span className="font-medium">Merkliste</span>
               </a>
             </div>
           </div>
@@ -371,13 +371,13 @@ export default function DashboardPage() {
           {/* Account Stats */}
           <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-6">
             <h2 className="text-xl font-semibold text-[#3a3735] mb-4">
-              Account Stats
+              Kontostatistiken
             </h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Award className="w-5 h-5 text-[#c8a882]" strokeWidth={1.5} />
-                  <span className="text-sm text-[#5a524b]">Rating</span>
+                  <span className="text-sm text-[#5a524b]">Bewertung</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <svg
@@ -399,7 +399,7 @@ export default function DashboardPage() {
                     className="w-5 h-5 text-[#c8a882]"
                     strokeWidth={1.5}
                   />
-                  <span className="text-sm text-[#5a524b]">Total Sales</span>
+                  <span className="text-sm text-[#5a524b]">Gesamtumsatz</span>
                 </div>
                 <span className="font-semibold text-[#3a3735]">
                   {stats.totalSales}
@@ -412,7 +412,7 @@ export default function DashboardPage() {
                     className="w-5 h-5 text-[#c8a882]"
                     strokeWidth={1.5}
                   />
-                  <span className="text-sm text-[#5a524b]">Balance</span>
+                  <span className="text-sm text-[#5a524b]">Gleichgewicht</span>
                 </div>
                 <span className="font-semibold text-[#3a3735]">
                   CHF {user?.balance?.toFixed(2)}

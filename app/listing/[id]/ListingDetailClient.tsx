@@ -40,7 +40,7 @@ export default function ListingDetailClient({
   const router = useRouter();
   const [listing] = useState<IListing>(initialListing);
   const [activeImage, setActiveImage] = useState<string>(
-    getMainImage(initialListing)
+    getMainImage(initialListing),
   );
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const { user } = useAuthStore();
@@ -105,7 +105,7 @@ export default function ListingDetailClient({
 
   const showToast = (
     message: string,
-    type: "success" | "error" | "info" = "info"
+    type: "success" | "error" | "info" = "info",
   ) => {
     setToast({ message, type });
   };
@@ -166,7 +166,7 @@ export default function ListingDetailClient({
       setInWatchlist(response.isInWatchlist || !inWatchlist);
       showToast(
         inWatchlist ? "Removed from watchlist" : "Added to watchlist",
-        "success"
+        "success",
       );
     } catch (error) {
       console.error("Failed to toggle watchlist:", error);
@@ -241,8 +241,8 @@ export default function ListingDetailClient({
               toast.type === "success"
                 ? "bg-green-600 text-white"
                 : toast.type === "error"
-                ? "bg-red-600 text-white"
-                : "bg-blue-600 text-white"
+                  ? "bg-red-600 text-white"
+                  : "bg-blue-600 text-white"
             }`}
           >
             {toast.type === "success" && <CheckCircle2 className="w-5 h-5" />}
@@ -280,7 +280,9 @@ export default function ListingDetailClient({
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <p className="text-[#5a524b] mb-4">Link copied to clipboard!</p>
+            <p className="text-[#5a524b] mb-4">
+              Link in die Zwischenablage kopiert!
+            </p>
             <input
               type="text"
               value={typeof window !== "undefined" ? window.location.href : ""}
@@ -378,23 +380,25 @@ export default function ListingDetailClient({
               <div className="flex items-center gap-6 mb-6 text-sm text-[#5a524b]">
                 <div className="flex items-center gap-1">
                   <Eye className="w-4 h-4" />
-                  <span>{listing.views || 0} views</span>
+                  <span>{listing.views || 0} Ansichten</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 fill-[#c8a882] text-[#c8a882]" />
-                  <span>{seller?.rating?.toFixed(1) || "New"}</span>
+                  <span>{seller?.rating?.toFixed(1) || "Neu"}</span>
                 </div>
               </div>
 
               <div className="mb-6">
-                <div className="text-sm text-[#5a524b] mb-1">Buy Now Price</div>
+                <div className="text-sm text-[#5a524b] mb-1">
+                  Jetzt kaufen Preis
+                </div>
                 <div className="text-4xl font-serif text-[#c8a882]">
                   ${listing.buyNowPrice?.toLocaleString()}
                 </div>
               </div>
 
               <div className="mb-6">
-                <div className="text-sm text-[#5a524b] mb-2">Condition</div>
+                <div className="text-sm text-[#5a524b] mb-2">Zustand</div>
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#f5f1ea] text-[#3a3735]">
                   <CheckCircle2 className="w-4 h-4 text-[#c8a882]" />
                   <span className="font-medium">
@@ -409,7 +413,7 @@ export default function ListingDetailClient({
                   className="w-full py-4 bg-[#3a3735] text-white hover:bg-[#c8a882] hover:text-[#3a3735] transition-all flex items-center justify-center gap-2 text-lg font-medium"
                 >
                   <CreditCard className="w-5 h-5" />
-                  <span>Buy Now</span>
+                  <span>Jetzt kaufen</span>
                 </button>
 
                 <div className="grid grid-cols-2 gap-3">
@@ -425,30 +429,26 @@ export default function ListingDetailClient({
                     <Heart
                       className={`w-4 h-4 ${inWatchlist ? "fill-white" : ""}`}
                     />
-                    <span>{inWatchlist ? "Saved" : "Save"}</span>
+                    <span>{inWatchlist ? "Gespeichert" : "Speichern"}</span>
                   </button>
                   <button
                     onClick={handleShare}
                     className="py-3 border border-[#d4cec4] text-[#3a3735] hover:bg-[#f5f1ea] transition-colors flex items-center justify-center gap-2"
                   >
                     <Share2 className="w-4 h-4" />
-                    <span>Share</span>
+                    <span>Teilen</span>
                   </button>
                 </div>
               </div>
 
               <div className="space-y-3 pt-6 border-t border-[#d4cec4]">
                 <div className="flex items-center gap-3 text-sm text-[#5a524b]">
-                  <Truck className="w-5 h-5 text-[#c8a882]" />
-                  <span>Free shipping on orders over $500</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-[#5a524b]">
                   <Shield className="w-5 h-5 text-[#c8a882]" />
-                  <span>Authenticity guaranteed</span>
+                  <span>Echtheit garantiert</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-[#5a524b]">
                   <Package className="w-5 h-5 text-[#c8a882]" />
-                  <span>Secure packaging and handling</span>
+                  <span>Sichere Verpackung und Handhabung</span>
                 </div>
               </div>
             </div>
@@ -460,7 +460,7 @@ export default function ListingDetailClient({
           <div className="lg:col-span-2">
             <div className="bg-white p-6 mb-6">
               <h2 className="text-2xl font-serif text-[#3a3735] mb-4">
-                Description
+                Beschreibung
               </h2>
               <div className="text-[#5a524b] leading-relaxed whitespace-pre-line">
                 {listing.description}
@@ -470,7 +470,7 @@ export default function ListingDetailClient({
             {listing.shippingOptions && listing.shippingOptions.length > 0 && (
               <div className="bg-white p-6">
                 <h2 className="text-2xl font-serif text-[#3a3735] mb-4">
-                  Shipping Options
+                  Versandoptionen
                 </h2>
                 <div className="space-y-3">
                   {listing.shippingOptions.map((option, index) => (
@@ -484,7 +484,7 @@ export default function ListingDetailClient({
                         </div>
                         {option.estimatedDays && (
                           <div className="text-sm text-[#5a524b]">
-                            Estimated delivery: {option.estimatedDays} days
+                            Geschätzte Lieferung: {option.estimatedDays} Tage
                           </div>
                         )}
                       </div>
@@ -502,7 +502,7 @@ export default function ListingDetailClient({
           <div className="space-y-6">
             <div className="bg-white p-6">
               <h3 className="text-lg font-medium text-[#3a3735] mb-4">
-                Item Details
+                Artikeldetails
               </h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
@@ -512,21 +512,21 @@ export default function ListingDetailClient({
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Condition:</span>
+                  <span className="text-[#5a524b]">Zustand:</span>
                   <span className="text-[#3a3735] font-medium">
                     {formatCondition(listing.condition)}
                   </span>
                 </div>
                 {listing.shippingCost && (
                   <div className="flex justify-between">
-                    <span className="text-[#5a524b]">Base Shipping:</span>
+                    <span className="text-[#5a524b]">Basisversand:</span>
                     <span className="text-[#3a3735] font-medium">
                       ${listing.shippingCost.toFixed(2)}
                     </span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Listed:</span>
+                  <span className="text-[#5a524b]">Aufgeführt:</span>
                   <span className="text-[#3a3735] font-medium">
                     {listing.createdAt
                       ? new Date(listing.createdAt).toLocaleDateString()

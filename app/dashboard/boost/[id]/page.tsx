@@ -49,10 +49,10 @@ export default function BoostListingPage() {
   >(null);
 
   const [selectedPlanId, setSelectedPlanId] = useState<BoostTypes>(
-    BoostTypes.SEARCH_PRIORITY
+    BoostTypes.SEARCH_PRIORITY,
   );
   const [selectedDurationDays, setSelectedDurationDays] = useState<number>(
-    BASE_BOOST_DURATION_DAYS
+    BASE_BOOST_DURATION_DAYS,
   );
 
   // --- Dynamic Boost Plans Generation ---
@@ -66,44 +66,46 @@ export default function BoostListingPage() {
     return [
       {
         id: BoostTypes.FEATURED,
-        title: "Featured Listing",
+        title: "Hervorgehobener Eintrag",
         dailyRate: getDailyRate(BoostTypes.FEATURED),
-        description: "A cost-effective way to get slightly more exposure.",
+        description:
+          "Eine kostengünstige Möglichkeit, etwas mehr Aufmerksamkeit zu erlangen.",
         icon: ShieldCheck,
         features: [
-          "Standard Visibility",
-          `Daily Rate: CHF ${getBasePrice(BoostTypes.FEATURED)}`,
-          "Basic Support",
-          "One-time Listing Refresh",
+          "Standardsichtbarkeit",
+          `Tagespreis: CHF ${getBasePrice(BoostTypes.FEATURED)}`,
+          "Grundlegende Unterstützung",
+          "Einmalige Aktualisierung des Eintrags",
         ],
       },
       {
         id: BoostTypes.CATEGORY_TOP,
-        title: "Category Bump",
+        title: "Kategorie-Upgrade",
         dailyRate: getDailyRate(BoostTypes.CATEGORY_TOP),
         description:
-          "Get noticed by people specifically looking in this category.",
+          "Werden Sie von Personen wahrgenommen, die gezielt in dieser Kategorie suchen.",
         icon: TrendingUp,
         features: [
-          "Top of Category Search",
-          `Daily Rate: CHF ${getBasePrice(BoostTypes.CATEGORY_TOP)}`,
-          "Standard Support",
-          "Basic Analytics",
+          "Top-Suche der Kategorie",
+          `Tagespreis: CHF ${getBasePrice(BoostTypes.CATEGORY_TOP)}`,
+          "Standardunterstützung",
+          "Grundlegende Analysen",
         ],
       },
       {
         id: BoostTypes.SEARCH_PRIORITY,
-        title: "Search Spotlight",
+        title: "Spotlight-Suche",
         dailyRate: getDailyRate(BoostTypes.SEARCH_PRIORITY),
-        description: "Appear in search results before standard listings.",
+        description:
+          "Erscheinen Sie in Suchergebnissen vor Standard-Einträgen.",
         recommended: true,
         icon: Zap,
         features: [
-          "Priority Search Ranking",
-          `Daily Rate: CHF ${getBasePrice(BoostTypes.SEARCH_PRIORITY)}`,
-          "Highlighted Badge",
-          "2x View Potential",
-          "Detailed Analytics",
+          "Prioritätssuche",
+          `Tagespreis: CHF ${getBasePrice(BoostTypes.SEARCH_PRIORITY)}`,
+          "Hervorgehobenes Abzeichen",
+          "2x Sichtpotenzial",
+          "Detaillierte Analysen",
         ],
       },
       {
@@ -111,13 +113,13 @@ export default function BoostListingPage() {
         title: "Homepage Hero",
         dailyRate: getDailyRate(BoostTypes.HOMEPAGE),
         description:
-          "Maximum exposure on the homepage and across the platform.",
+          "Maximale Präsenz auf der Startseite und auf der gesamten Plattform.",
         icon: Award,
         features: [
-          "Homepage Feature",
-          "Top of Search Results",
-          `Daily Rate: CHF ${getBasePrice(BoostTypes.HOMEPAGE)}`,
-          "Gold Border Styling",
+          "Auf der Startseite",
+          "Top-Suche der Kategorie",
+          `Tagespreis: CHF ${getBasePrice(BoostTypes.HOMEPAGE)}`,
+          "Goldener Rand-Styling",
           "Premium Support",
         ],
       },
@@ -127,7 +129,7 @@ export default function BoostListingPage() {
   // --- Dynamic Price Calculation ---
   const selectedPlan = useMemo(
     () => BOOST_PLANS.find((p) => p.id === selectedPlanId),
-    [selectedPlanId, BOOST_PLANS]
+    [selectedPlanId, BOOST_PLANS],
   );
 
   const calculateTotalPrice = useCallback(
@@ -136,7 +138,7 @@ export default function BoostListingPage() {
       const total = selectedPlan.dailyRate * duration;
       return total.toFixed(2);
     },
-    [selectedPlan]
+    [selectedPlan],
   );
 
   const currentTotalPrice = calculateTotalPrice(selectedDurationDays);
@@ -173,7 +175,7 @@ export default function BoostListingPage() {
             throw e;
           }
           await new Promise((resolve) =>
-            setTimeout(resolve, delay * Math.pow(2, i))
+            setTimeout(resolve, delay * Math.pow(2, i)),
           );
         }
       }
@@ -207,7 +209,7 @@ export default function BoostListingPage() {
         await Promise.all([fetchListing(), fetchPricing()]);
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Failed to load all data"
+          err instanceof Error ? err.message : "Failed to load all data",
         );
       } finally {
         setIsLoading(false);
@@ -247,7 +249,7 @@ export default function BoostListingPage() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       const result = await response.json();
@@ -264,7 +266,9 @@ export default function BoostListingPage() {
     } catch (err) {
       console.error("Checkout Error:", err);
       setError(
-        err instanceof Error ? err.message : "Payment failed. Please try again."
+        err instanceof Error
+          ? err.message
+          : "Payment failed. Please try again.",
       );
     } finally {
       setIsProcessing(false);
@@ -276,7 +280,7 @@ export default function BoostListingPage() {
     return (
       <div className="min-h-screen bg-[#faf8f4] flex flex-col items-center justify-center">
         <Loader2 className="h-10 w-10 text-[#c8a882] animate-spin mb-4" />
-        <p className="text-[#3a3735] font-serif">Loading boost options...</p>
+        <p className="text-[#3a3735] font-serif">Lade Boost-Optionen...</p>
       </div>
     );
   }
@@ -290,13 +294,13 @@ export default function BoostListingPage() {
             <ShieldCheck className="w-6 h-6 text-red-500" />
           </div>
           <h2 className="text-xl font-semibold text-[#3a3735] mb-2">
-            Access Denied
+            Zugriff verweigert
           </h2>
           <p className="text-[#5a524b] mb-6">
             {error || "Listing not found or failed to load data."}
           </p>
           <Button onClick={() => router.push("/dashboard")} variant="outline">
-            Return to Dashboard
+            Zurück zum Dashboard
           </Button>
         </div>
       </div>
@@ -314,15 +318,15 @@ export default function BoostListingPage() {
             className="flex items-center text-xs uppercase tracking-widest text-[#5a524b] hover:text-[#c8a882] mb-4 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Cancel & Go Back
+            Abbrechen und zurück
           </button>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-serif text-[#3a3735]">
-                Boost Your Listing
+                Heben Sie Ihren Eintrag hervor
               </h1>
               <p className="text-[#5a524b] mt-1">
-                Get more visibility and sell faster.
+                Mehr Sichtbarkeit erlangen und schneller verkaufen.
               </p>
             </div>
 
@@ -342,7 +346,7 @@ export default function BoostListingPage() {
                   {listing.name}
                 </p>
                 <p className="text-xs text-[#5a524b]">
-                  Current Status:{" "}
+                  Aktueller Status:{" "}
                   <span className="uppercase">{listing.status}</span>
                 </p>
               </div>
@@ -360,7 +364,7 @@ export default function BoostListingPage() {
               htmlFor="duration-slider"
               className="block text-lg font-bold text-[#3a3735] mb-2"
             >
-              Select Boost Duration ({selectedDurationDays} Days)
+              Boost-Dauer auswählen ({selectedDurationDays} Tage)
             </label>
             <input
               id="duration-slider"
@@ -382,7 +386,7 @@ export default function BoostListingPage() {
               onChange={(e) => {
                 const val = Math.min(
                   MAX_DAYS,
-                  Math.max(MIN_DAYS, Number(e.target.value) || MIN_DAYS)
+                  Math.max(MIN_DAYS, Number(e.target.value) || MIN_DAYS),
                 );
                 setSelectedDurationDays(val);
               }}
@@ -410,7 +414,7 @@ export default function BoostListingPage() {
               >
                 {plan.recommended && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#3a3735] text-white text-[10px] uppercase tracking-widest px-3 py-1 rounded-full font-medium shadow-md">
-                    Most Popular
+                    Am beliebtesten
                   </div>
                 )}
 
@@ -438,11 +442,11 @@ export default function BoostListingPage() {
                         CHF {(plan.dailyRate * selectedDurationDays).toFixed(2)}
                       </span>
                       <span className="text-[#5a524b] text-sm ml-2">
-                        / {selectedDurationDays} days
+                        / {selectedDurationDays} tage
                       </span>
                     </div>
                     <p className="text-xs text-[#5a524b] mt-1 opacity-70">
-                      ({plan.dailyRate.toFixed(2)} CHF per day)
+                      ({plan.dailyRate.toFixed(2)} CHF pro Tag)
                     </p>
                   </div>
 
@@ -474,8 +478,8 @@ export default function BoostListingPage() {
         {/* Action Bar */}
         <div className="mt-12 flex flex-col items-center justify-center space-y-4">
           <p className="text-sm text-[#5a524b]">
-            Secure payment processed by Stripe. Your boost activates immediately
-            after payment for {selectedDurationDays} days.
+            Sichere Zahlung über Stripe. Dein Boost wird unmittelbar nach der
+            Zahlung für {selectedDurationDays} Tage aktiviert.
           </p>
           <Button
             onClick={handleCheckout}
@@ -485,11 +489,11 @@ export default function BoostListingPage() {
           >
             {isProcessing ? (
               <span className="flex items-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin" /> Processing to
-                Checkout...
+                <Loader2 className="w-4 h-4 animate-spin" /> Verarbeite zur
+                Kasse...
               </span>
             ) : (
-              `Pay CHF ${currentTotalPrice} & Activate Boost`
+              `Zahle CHF ${currentTotalPrice} & Aktiviere Boost`
             )}
           </Button>
           {error && <p className="text-red-600 text-sm font-medium">{error}</p>}

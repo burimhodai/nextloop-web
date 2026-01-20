@@ -40,7 +40,7 @@ export default function VerifyPage() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       const result = await response.json();
@@ -61,7 +61,7 @@ export default function VerifyPage() {
       });
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Failed to submit verification"
+        err instanceof Error ? err.message : "Failed to submit verification",
       );
     } finally {
       setIsSubmitting(false);
@@ -301,10 +301,11 @@ export default function VerifyPage() {
           className="text-3xl font-bold text-[#3a3735] mb-2"
           style={{ fontFamily: "Playfair Display, serif" }}
         >
-          ID Verification
+          Identitätsprüfung
         </h1>
         <p className="text-[#5a524b]">
-          Verify your Swiss ID to unlock full marketplace access
+          Verifizieren Sie Ihren Schweizer Ausweis, um vollen Zugriff auf den
+          Marktplatz zu erhalten.
         </p>
       </div>
 
@@ -328,29 +329,34 @@ export default function VerifyPage() {
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-blue-900 mb-2">
-              Why ID Verification?
+              Warum Identitätsprüfung?
             </h3>
             <p className="text-sm text-blue-800 mb-3">
-              To ensure the safety and security of all NextLoop users, we
-              require Swiss ID verification for:
+              Um die Sicherheit aller NextLoop-Nutzer zu gewährleisten,
+              benötigen wir für folgende Zwecke einen Schweizer Ausweis:
             </p>
             <ul className="text-sm text-blue-800 space-y-1">
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Creating and managing listings on the marketplace</span>
+                <span>
+                  Erstellung und Verwaltung von Angeboten auf dem Marktplatz
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Participating in auctions and placing bids</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-blue-600 mt-0.5">•</span>
-                <span>Making purchases and ensuring secure transactions</span>
+                <span>Teilnahme an Auktionen und Platzierung von Geboten</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
                 <span>
-                  Preventing fraud and maintaining marketplace integrity
+                  Käufe tätigen und sichere Transaktionen gewährleisten
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-blue-600 mt-0.5">•</span>
+                <span>
+                  Vorbeugung von Betrug und Aufrechterhaltung der
+                  Marktplatzintegrität
                 </span>
               </li>
             </ul>
@@ -368,8 +374,9 @@ export default function VerifyPage() {
                   d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                 />
               </svg>
-              Your ID images will be securely stored until reviewed by our admin
-              team, then automatically deleted.
+              Ihre Ausweisbilder werden sicher gespeichert, bis sie von unserem
+              Verwaltungsteam geprüft wurden, und anschließend automatisch
+              gelöscht.
             </p>
           </div>
         </div>
@@ -382,7 +389,7 @@ export default function VerifyPage() {
             <AlertCircle className="w-5 h-5 text-red-600 mr-3 mt-0.5" />
             <div>
               <h4 className="text-sm font-medium text-red-800">
-                Submission Failed
+                Einreichung fehlgeschlagen
               </h4>
               <p className="text-sm text-red-600 mt-1">{error}</p>
             </div>
@@ -411,15 +418,14 @@ export default function VerifyPage() {
           </svg>
           <div className="text-sm text-[#5a524b]">
             <p className="font-semibold mb-2 text-[#3a3735]">
-              Your Data is Protected
+              Ihre Daten sind geschützt
             </p>
             <p className="leading-relaxed">
-              We use bank-level encryption to protect your personal information.
-              Your ID images are securely stored and will be reviewed by our
-              trained verification team within 24-48 hours. Once the
-              verification is complete (approved or rejected), all images are
-              automatically deleted from our servers in compliance with data
-              protection regulations.
+              Wir schützen Ihre persönlichen Daten. Ihre Ausweisbilder werden
+              sicher gespeichert und von unserem geschulten Prüfteam innerhalb
+              von 24–48 Stunden geprüft. Nach Abschluss der Prüfung (Genehmigung
+              oder Ablehnung) werden alle Bilder gemäß den
+              Datenschutzbestimmungen automatisch von unseren Servern gelöscht.
             </p>
           </div>
         </div>

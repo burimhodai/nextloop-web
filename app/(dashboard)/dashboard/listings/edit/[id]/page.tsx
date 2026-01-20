@@ -81,8 +81,8 @@ export default function EditListingPage() {
 
       const API_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const response = await fetch(`${API_URL}/listing/${listingId}`, {
-        method: "PUT",
+      const response = await fetch(`${API_URL}/listing/edit/${listingId}`, {
+        method: "POST",
         headers: {
           ...(token && { Authorization: `Bearer ${token}` }),
         },
@@ -227,7 +227,7 @@ export default function EditListingPage() {
               onClick={() => router.push("/dashboard/listings")}
               className="flex-1 px-6 py-3 bg-[#f5f1ea] text-[#3a3735] rounded-lg hover:bg-[#e8dfd0] transition-all font-medium"
             >
-              My Listings
+              Meine Angebote
             </button>
           </div>
         </div>

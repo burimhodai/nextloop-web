@@ -17,9 +17,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "NextLoop - Luxury Auction Marketplace",
+  title: "NextLoop - Marktplatz für Luxusauktionen",
   description:
-    "Browse thousands of luxury auctions from verified sellers worldwide",
+    "Durchstöbern Sie Tausende von Luxusauktionen von verifizierten Verkäufern weltweit.",
 };
 
 export default function RootLayout({

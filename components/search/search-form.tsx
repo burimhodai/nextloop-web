@@ -22,7 +22,7 @@ const categories = [
   "Musikinstrumente",
 ];
 
-const popularSearches = ["Rolex", "Vintage Kunst", "Ferrari", "Hermès"];
+// const popularSearches = ["Rolex", "Vintage Kunst", "Ferrari", "Hermès"];
 
 export function SearchForm({
   defaultQuery = "",
@@ -63,8 +63,9 @@ export function SearchForm({
       className={`bg-white p-6 shadow-lg w-full max-w-4xl mx-auto ${className}`}
     >
       <div
-        className={`flex flex-col md:flex-row gap-3 ${showPopularSearches ? "mb-4" : ""
-          }`}
+        className={`flex flex-col md:flex-row gap-3 ${
+          showPopularSearches ? "mb-4" : ""
+        }`}
       >
         {/* Search Input */}
         <div className="flex-1 relative">
@@ -115,7 +116,7 @@ export function SearchForm({
       </div>
 
       {/* Popular Searches */}
-      {showPopularSearches && (
+      {/* {showPopularSearches && (
         <div className="flex items-center justify-center gap-4 text-xs text-[#5a524b] flex-wrap">
           <span>Beliebt:</span>
           {popularSearches.map((term) => (
@@ -128,7 +129,7 @@ export function SearchForm({
             </button>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

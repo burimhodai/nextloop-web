@@ -1,6 +1,7 @@
 "use client";
 import { useAuthStore } from "@/lib/stores/authStore";
 import { Search, User, Heart, Menu, LogOut } from "lucide-react";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 
 // Link component definition remains the same
@@ -77,7 +78,9 @@ export function Header() {
   ];
 
   const handleLogoutClick = (
-    e: React.MouseEvent<HTMLButtonElement> | React.MouseEvent<HTMLAnchorElement>
+    e:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.MouseEvent<HTMLAnchorElement>,
   ) => {
     e.preventDefault();
     logout();
@@ -85,29 +88,22 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 bg-[#faf8f4] border-b border-black/10`}
+      className={`sticky top-0 z-50 bg-[#faf8f4] ${["/dashboard", "/profile"].some((path) => currentPath.includes(path)) && "hidden"} border-b border-black/10`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between gap-6">
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[#3a3735] flex items-center justify-center rounded-sm">
-                <span
-                  className="text-[#c8a882] text-xl font-bold"
-                  style={{ fontFamily: "Playfair Display, serif" }}
-                >
-                  N
-                </span>
-              </div>
-              <span
-                style={{ fontFamily: "Playfair Display, serif" }}
-                className="text-[#3a3735] tracking-tight text-lg font-bold"
-              >
-                NextLoop
-              </span>
+              <Image
+                src="/nextloop_logo.svg"
+                alt="NextLoop"
+                width={120}
+                height={40}
+                className="h-10"
+              />
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-8 text-sm text-[#5a524b]">
+            {/* <nav className="hidden lg:flex items-center gap-8 text-sm text-[#5a524b]">
               <>
                 <Link
                   href="/"
@@ -122,8 +118,9 @@ export function Header() {
                   >
                     Kategorien
                     <svg
-                      className={`w-4 h-4 transition-transform ${showCategoriesMenu ? "rotate-180" : ""
-                        }`}
+                      className={`w-4 h-4 transition-transform ${
+                        showCategoriesMenu ? "rotate-180" : ""
+                      }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -155,12 +152,13 @@ export function Header() {
                   )}
                 </div>
               </>
-            </nav>
+            </nav> */}
           </div>
 
           <div
-            className={`hidden md:flex flex-1 justify-center absolute left-1/2 -translate-x-1/2 ${showSearch ? "opacity-100" : "opacity-0 pointer-events-none"
-              } transition-opacity duration-300 max-w-xl w-full`}
+            className={`hidden md:flex flex-1 justify-center absolute left-1/2 -translate-x-1/2 ${
+              showSearch ? "opacity-100" : "opacity-0 pointer-events-none"
+            } transition-opacity duration-300 max-w-xl w-full`}
           >
             <div className="flex w-full gap-3">
               <div className="flex-1 relative">
@@ -183,7 +181,7 @@ export function Header() {
                 onClick={handleLogoutClick}
                 className="px-4 py-2 text-sm border border-black/20 text-[#3a3735] hover:bg-black hover:text-white transition-all rounded-md shadow-sm"
               >
-                Logout
+                Abmelden
               </button>
             )}
 
@@ -232,7 +230,7 @@ export function Header() {
                           className="w-full text-left px-4 py-2.5 text-sm text-[#3a3735] hover:bg-[#f5f1ea] transition-colors flex items-center gap-3"
                           onClick={handleLogoutClick}
                         >
-                          Logout
+                          Abmelden
                         </button>
                       </>
                     ) : (

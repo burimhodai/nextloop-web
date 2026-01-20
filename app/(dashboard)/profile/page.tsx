@@ -38,7 +38,7 @@ export default function ProfilePage() {
       city: "",
       canton: "",
       postalCode: "",
-      country: "Switzerland",
+      country: "Schweiz",
     },
   });
 
@@ -52,7 +52,7 @@ export default function ProfilePage() {
           city: user.address?.city || "",
           canton: user.address?.canton || "",
           postalCode: user.address?.postalCode || "",
-          country: user.address?.country || "Switzerland",
+          country: user.address?.country || "Schweiz",
         },
       });
     }
@@ -149,7 +149,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-[#c8a882] animate-spin mx-auto mb-4" />
-          <p className="text-[#5a524b]">Loading profile...</p>
+          <p className="text-[#5a524b]">Profil wird geladen...</p>
         </div>
       </div>
     );
@@ -159,9 +159,9 @@ export default function ProfilePage() {
     <div className="max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#3a3735] mb-2">My Profile</h1>
+        <h1 className="text-3xl font-bold text-[#3a3735] mb-2">Mein Profil</h1>
         <p className="text-[#5a524b]">
-          Manage your personal information and account settings
+          Verwalten Sie Ihre persönlichen Daten und Kontoeinstellungen
         </p>
       </div>
 
@@ -215,14 +215,14 @@ export default function ProfilePage() {
               {user.emailVerified && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
                   <CheckCircle className="w-3 h-3" />
-                  Email Verified
+                  E-Mail verifiziert
                 </span>
               )}
 
               {user?.idVerification?.success ? (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
                   <ShieldCheck className="w-3 h-3" />
-                  ID Verified
+                  Identität verifiziert
                 </span>
               ) : (
                 <button
@@ -230,14 +230,14 @@ export default function ProfilePage() {
                   className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 border border-yellow-200 hover:bg-yellow-200 transition-colors"
                 >
                   <ShieldCheck className="w-3 h-3" />
-                  Verify ID
+                  Identität überprüfen
                 </button>
               )}
 
               {user?.isSeller && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-[#3a3735] text-[#c8a882] border border-[#3a3735]">
                   <Building className="w-3 h-3" />
-                  Seller Account
+                  Verkäuferkonto
                 </span>
               )}
             </div>
@@ -247,7 +247,7 @@ export default function ProfilePage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-[#5a524b]">
                   <CreditCard className="w-4 h-4 text-[#c8a882]" />
-                  <span className="text-sm">Balance</span>
+                  <span className="text-sm">Kontostand</span>
                 </div>
                 <span className="font-bold text-[#3a3735]">
                   CHF {user?.balance?.toFixed(2) || "0.00"}
@@ -257,7 +257,7 @@ export default function ProfilePage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-[#5a524b]">
                   <Star className="w-4 h-4 text-[#c8a882]" />
-                  <span className="text-sm">Rating</span>
+                  <span className="text-sm">Bewertung</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="font-bold text-[#3a3735]">
@@ -269,20 +269,20 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-[#5a524b]">
                   <Calendar className="w-4 h-4 text-[#c8a882]" />
                   <span className="text-sm">Joined</span>
                 </div>
-                {/* <span className="text-sm font-medium text-[#3a3735]">
+                <span className="text-sm font-medium text-[#3a3735]">
                   {new Date(
                     user?.createdAt && user.createdAt
                   ).toLocaleDateString("en-US", {
                     month: "short",
                     year: "numeric",
                   })}
-                </span> */}
-              </div>
+                </span>
+              </div> */}
             </div>
           </div>
         </div>
@@ -293,10 +293,10 @@ export default function ProfilePage() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-xl font-bold text-[#3a3735]">
-                  Profile Information
+                  Profilinformationen
                 </h2>
                 <p className="text-sm text-[#5a524b] mt-1">
-                  Update your account details and physical address
+                  Aktualisieren Sie Ihre Kontodaten und Ihre Anschrift.
                 </p>
               </div>
 
@@ -306,7 +306,7 @@ export default function ProfilePage() {
                   className="flex items-center gap-2 px-4 py-2 bg-[#f5f1ea] text-[#3a3735] rounded-lg hover:bg-[#e8dfd0] transition-colors text-sm font-medium"
                 >
                   <Edit2 className="w-4 h-4" />
-                  Edit Profile
+                  Profil bearbeiten
                 </button>
               )}
             </div>
@@ -315,12 +315,12 @@ export default function ProfilePage() {
               {/* Personal Information */}
               <div>
                 <h3 className="text-sm font-bold text-[#c8a882] uppercase tracking-wide mb-4 flex items-center gap-2">
-                  <User className="w-4 h-4" /> Personal Details
+                  <User className="w-4 h-4" /> Persönliche Daten
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <ProfileInput
-                    label="Full Name"
+                    label="Vollständiger Name"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
@@ -329,7 +329,7 @@ export default function ProfilePage() {
                   />
 
                   <ProfileInput
-                    label="Email Address"
+                    label="E-Mail-Adresse"
                     value={user.email}
                     disabled={true}
                     icon={Mail}
@@ -338,7 +338,7 @@ export default function ProfilePage() {
 
                 <div className="mt-5">
                   <ProfileInput
-                    label="Phone Number"
+                    label="Telefonnummer"
                     name="phone"
                     type="tel"
                     placeholder="+41 79 123 45 67"
@@ -355,12 +355,12 @@ export default function ProfilePage() {
               {/* Address */}
               <div>
                 <h3 className="text-sm font-bold text-[#c8a882] uppercase tracking-wide mb-4 flex items-center gap-2">
-                  <MapPin className="w-4 h-4" /> Address
+                  <MapPin className="w-4 h-4" /> Adresse
                 </h3>
 
                 <div className="space-y-5">
                   <ProfileInput
-                    label="Street Address"
+                    label="Straßenadresse"
                     name="address.street"
                     placeholder="Bahnhofstrasse 123"
                     value={formData.address.street}
@@ -370,7 +370,7 @@ export default function ProfilePage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <ProfileInput
-                      label="City"
+                      label="Stadt"
                       name="address.city"
                       placeholder="Zürich"
                       value={formData.address.city}
@@ -379,7 +379,7 @@ export default function ProfilePage() {
                     />
 
                     <ProfileInput
-                      label="Canton"
+                      label="Kanton"
                       name="address.canton"
                       placeholder="ZH"
                       value={formData.address.canton}
@@ -390,7 +390,7 @@ export default function ProfilePage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <ProfileInput
-                      label="Postal Code"
+                      label="Postleitzahl"
                       name="address.postalCode"
                       placeholder="8001"
                       value={formData.address.postalCode}
@@ -399,7 +399,7 @@ export default function ProfilePage() {
                     />
 
                     <ProfileInput
-                      label="Country"
+                      label="Land"
                       name="address.country"
                       value={formData.address.country}
                       onChange={handleChange}
@@ -415,19 +415,19 @@ export default function ProfilePage() {
                   <hr className="border-[#d4cec4]" />
                   <div>
                     <h3 className="text-sm font-bold text-[#c8a882] uppercase tracking-wide mb-4 flex items-center gap-2">
-                      <Building className="w-4 h-4" /> Business Information
+                      <Building className="w-4 h-4" /> Geschäftsinformationen
                     </h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <ProfileInput
-                        label="Business Name"
-                        value={user.businessName || "Not set"}
+                        label="Firmenname"
+                        value={user.businessName || "Nicht festgelegt"}
                         disabled={true}
                       />
 
                       <ProfileInput
-                        label="VAT Number"
-                        value={user.vatNumber || "Not set"}
+                        label="Umsatzsteuer-Identifikationsnummer"
+                        value={user.vatNumber || "Nicht festgelegt"}
                         disabled={true}
                       />
                     </div>
@@ -444,7 +444,7 @@ export default function ProfilePage() {
                     className="px-6 py-2.5 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium disabled:opacity-50 flex items-center gap-2"
                   >
                     {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-                    Save Changes
+                    Änderungen speichern
                   </button>
 
                   <button
@@ -461,14 +461,14 @@ export default function ProfilePage() {
                           city: user.address?.city || "",
                           canton: user.address?.canton || "",
                           postalCode: user.address?.postalCode || "",
-                          country: user.address?.country || "Switzerland",
+                          country: user.address?.country || "Schweiz",
                         },
                       });
                     }}
                     disabled={isLoading}
                     className="px-6 py-2.5 bg-[#f5f1ea] text-[#5a524b] rounded-lg hover:bg-[#e8dfd0] transition-colors font-medium"
                   >
-                    Cancel
+                    Stornieren
                   </button>
                 </div>
               )}

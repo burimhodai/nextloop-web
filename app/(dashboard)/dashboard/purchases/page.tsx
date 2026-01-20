@@ -55,10 +55,10 @@ export default function PurchasesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"all" | "auctions" | "direct">(
-    "all"
+    "all",
   );
   const [statusFilter, setStatusFilter] = useState<"all" | PurchaseStatus>(
-    "all"
+    "all",
   );
 
   useEffect(() => {
@@ -181,9 +181,9 @@ export default function PurchasesPage() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#3a3735] mb-2">
-            My Purchases
+            Meine Einkäufe
           </h1>
-          <p className="text-[#5a524b]">Loading your purchase history...</p>
+          <p className="text-[#5a524b]">Ihre Kaufhistorie wird geladen...</p>
         </div>
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-12 h-12 text-[#c8a882] animate-spin" />
@@ -197,7 +197,7 @@ export default function PurchasesPage() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#3a3735] mb-2">
-            My Purchases
+            Meine Einkäufe
           </h1>
         </div>
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
@@ -206,7 +206,7 @@ export default function PurchasesPage() {
             onClick={fetchPurchases}
             className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
           >
-            Try Again
+            Versuchen Sie es erneut
           </button>
         </div>
       </div>
@@ -222,10 +222,12 @@ export default function PurchasesPage() {
             <ShoppingBag className="w-5 h-5 text-blue-600" strokeWidth={1.5} />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-[#3a3735]">My Purchases</h1>
+            <h1 className="text-3xl font-bold text-[#3a3735]">
+              Meine Einkäufe
+            </h1>
             <p className="text-[#5a524b]">
               {purchases.length}{" "}
-              {purchases.length === 1 ? "purchase" : "purchases"}
+              {purchases.length === 1 ? "Einkauf" : "Einkäufe"}
             </p>
           </div>
         </div>
@@ -235,7 +237,7 @@ export default function PurchasesPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-[#5a524b]">Total</span>
+            <span className="text-sm text-[#5a524b]">Gesamt</span>
             <span className="text-2xl font-bold text-[#3a3735]">
               {stats.total}
             </span>
@@ -243,7 +245,7 @@ export default function PurchasesPage() {
         </div>
         <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-[#5a524b]">Auctions Won</span>
+            <span className="text-sm text-[#5a524b]">Gewonnene Auktionen</span>
             <span className="text-2xl font-bold text-purple-600">
               {stats.auctions}
             </span>
@@ -251,7 +253,7 @@ export default function PurchasesPage() {
         </div>
         <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-[#5a524b]">Direct Buys</span>
+            <span className="text-sm text-[#5a524b]">Direktkäufe</span>
             <span className="text-2xl font-bold text-blue-600">
               {stats.direct}
             </span>
@@ -259,7 +261,7 @@ export default function PurchasesPage() {
         </div>
         <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-[#5a524b]">Pending</span>
+            <span className="text-sm text-[#5a524b]">Ausstehend</span>
             <span className="text-2xl font-bold text-yellow-600">
               {stats.pending}
             </span>
@@ -280,7 +282,7 @@ export default function PurchasesPage() {
                   : "bg-[#f5f1ea] text-[#5a524b] hover:bg-[#e8dfd0]"
               }`}
             >
-              All Purchases
+              Alle Einkäufe
             </button>
             <button
               onClick={() => setActiveTab("auctions")}
@@ -291,7 +293,7 @@ export default function PurchasesPage() {
               }`}
             >
               <Gavel className="w-4 h-4" strokeWidth={1.5} />
-              Auctions
+              Auktionen
             </button>
             <button
               onClick={() => setActiveTab("direct")}
@@ -302,7 +304,7 @@ export default function PurchasesPage() {
               }`}
             >
               <ShoppingBag className="w-4 h-4" strokeWidth={1.5} />
-              Direct Buys
+              Direktkäufe
             </button>
           </div>
 
@@ -313,12 +315,12 @@ export default function PurchasesPage() {
               onChange={(e) => setStatusFilter(e.target.value as any)}
               className="px-4 py-2 bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] rounded-lg text-sm focus:outline-none focus:border-[#c8a882]"
             >
-              <option value="all">All Status</option>
-              <option value="PENDING">Pending</option>
-              <option value="PAID">Paid</option>
-              <option value="SHIPPED">Shipped</option>
-              <option value="DELIVERED">Delivered</option>
-              <option value="CANCELLED">Cancelled</option>
+              <option value="all">Alle Status</option>
+              <option value="PENDING">Ausstehend</option>
+              <option value="PAID">Bezahlt</option>
+              <option value="SHIPPED">Versendet</option>
+              <option value="DELIVERED">Geliefert</option>
+              <option value="CANCELLED">Abgesagt</option>
             </select>
           </div>
         </div>
@@ -335,7 +337,7 @@ export default function PurchasesPage() {
               />
             </div>
             <h2 className="text-2xl font-semibold text-[#3a3735] mb-3">
-              No Purchases Yet
+              Noch keine Käufe
             </h2>
             <p className="text-[#5a524b] mb-6">
               {activeTab === "all"
@@ -351,7 +353,7 @@ export default function PurchasesPage() {
               className="inline-flex items-center gap-2 px-6 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
             >
               <Package className="w-5 h-5" strokeWidth={1.5} />
-              Browse Listings
+              Angebote durchsuchen
             </a>
           </div>
         </div>
@@ -387,14 +389,8 @@ export default function PurchasesPage() {
                             : "Direct Buy"}
                         </span>
                       </div>
-                      <p className="text-sm text-[#5a524b] mb-2">
-                        Seller:{" "}
-                        <span className="font-medium">
-                          {purchase.seller.fullName}
-                        </span>
-                      </p>
                       <p className="text-xs text-[#5a524b]">
-                        Purchased on {formatDate(purchase.createdAt)}
+                        Gekauft am {formatDate(purchase.createdAt)}
                       </p>
                     </div>
                   </div>
@@ -403,7 +399,7 @@ export default function PurchasesPage() {
                   <div className="flex items-center gap-6 mb-4">
                     <div>
                       <span className="text-xs text-[#5a524b] block mb-1">
-                        Final Price
+                        Endpreis
                       </span>
                       <span className="text-lg font-semibold text-[#c8a882]">
                         CHF {purchase.finalPrice.toLocaleString()}
@@ -429,18 +425,18 @@ export default function PurchasesPage() {
                       className="px-4 py-2 text-sm bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all flex items-center gap-2"
                     >
                       <Eye className="w-4 h-4" strokeWidth={1.5} />
-                      View Item
+                      Artikel ansehen
                     </a>
 
                     {purchase.status === "PENDING" && (
                       <button className="px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                        Complete Payment
+                        Zahlung vollständig
                       </button>
                     )}
 
                     {purchase.status === "SHIPPED" && (
                       <button className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        Track Shipment
+                        Sendung verfolgen
                       </button>
                     )}
                   </div>

@@ -18,6 +18,8 @@ import {
   ShieldAlert,
   DollarSign,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -49,22 +51,22 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: LayoutDashboard,
     },
     {
-      name: "Profile",
+      name: "Profil",
       href: "/profile",
       icon: User,
     },
     {
-      name: "My Listings",
+      name: "Meine Anzeigen",
       href: "/dashboard/listings",
       icon: Package,
     },
     {
-      name: "Watchlist",
+      name: "Merkliste",
       href: "/dashboard/watchlist",
       icon: Heart,
     },
     {
-      name: "Purchases",
+      name: "Käufe",
       href: "/dashboard/purchases",
       icon: DollarSign,
     },
@@ -80,7 +82,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3a3735] mx-auto mb-4"></div>
-          <p className="text-[#5a524b]">Loading...</p>
+          <p className="text-[#5a524b]">Laden...</p>
         </div>
       </div>
     );
@@ -92,32 +94,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <header className="sticky top-0 z-50 bg-[#faf8f4] border-b border-black/10">
         <div className="flex items-center justify-between px-6 py-4">
           {/* Logo and Menu Toggle */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden text-[#3a3735] hover:text-[#c8a882] transition-colors"
-            >
-              <Menu className="w-6 h-6" strokeWidth={1.5} />
-            </button>
-
-            <a href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[#3a3735] flex items-center justify-center rounded-sm">
-                <span
-                  className="text-[#c8a882] text-xl font-bold"
-                  style={{ fontFamily: "Playfair Display, serif" }}
-                >
-                  N
-                </span>
-              </div>
-              <span
-                style={{ fontFamily: "Playfair Display, serif" }}
-                className="text-[#3a3735] tracking-tight text-lg font-bold"
-              >
-                NextLoop
-              </span>
-            </a>
-          </div>
-
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/nextloop_logo.svg"
+              alt="NextLoop"
+              width={120}
+              height={40}
+              className="h-10"
+            />
+          </Link>
           {/* Right Side - User Info */}
           <div className="flex items-center gap-4">
             <button className="relative text-[#3a3735] hover:text-[#c8a882] transition-colors">
@@ -152,11 +137,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 />
                 <div>
                   <p className="text-sm font-semibold text-amber-900">
-                    ID Verification Required
+                    Identitätsprüfung erforderlich
                   </p>
                   <p className="text-xs text-amber-700">
-                    Complete ID verification to create listings and participate
-                    in auctions
+                    Schließen Sie die Identitätsprüfung ab, um Angebote zu
+                    erstellen und an Auktionen teilzunehmen.
                   </p>
                 </div>
               </div>
@@ -164,7 +149,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 href="/profile/verify"
                 className="px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 transition-colors"
               >
-                Verify Now
+                Jetzt überprüfen
               </a>
             </div>
           </div>
@@ -199,7 +184,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               className="flex items-center gap-3 px-4 py-3 rounded-md text-[#5a524b] hover:bg-red-50 hover:text-red-600 transition-all w-full mt-4"
             >
               <LogOut className="w-5 h-5" strokeWidth={1.5} />
-              <span className="tracking-wide">Logout</span>
+              <span className="tracking-wide">Abmelden</span>
             </button>
           </nav>
 
@@ -213,10 +198,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 />
                 <div>
                   <p className="text-sm font-semibold text-amber-900 mb-1">
-                    Verification Needed
+                    Nachweis erforderlich
                   </p>
                   <p className="text-xs text-amber-700 leading-relaxed">
-                    Verify your ID to unlock full marketplace access
+                    Verifizieren Sie Ihre Identität, um vollen Zugriff auf den
+                    Marktplatz zu erhalten.
                   </p>
                 </div>
               </div>
@@ -224,7 +210,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 href="/profile/verify"
                 className="block w-full text-center px-3 py-2 bg-amber-600 text-white text-xs font-medium rounded hover:bg-amber-700 transition-colors"
               >
-                Verify ID
+                Identität überprüfen
               </a>
             </div>
           )}
@@ -233,13 +219,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="mx-6 mt-6 p-4 bg-[#f5f1ea] rounded-lg border border-[#d4cec4]">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#5a524b]">Balance</span>
+                <span className="text-xs text-[#5a524b]">Kontostand</span>
                 <span className="text-sm font-bold text-[#3a3735]">
                   CHF {user?.balance?.toFixed(2) || "0.00"}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#5a524b]">Rating</span>
+                <span className="text-xs text-[#5a524b]">Bewertung</span>
                 <div className="flex items-center">
                   <svg
                     className="w-3 h-3 text-[#c8a882] mr-1"
@@ -267,7 +253,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         clipRule="evenodd"
                       />
                     </svg>
-                    Verified Account
+                    Verifiziertes Konto
                   </span>
                 </div>
               )}
@@ -286,22 +272,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <aside className="fixed top-0 left-0 w-64 h-full bg-[#faf8f4] shadow-2xl z-50 lg:hidden transform transition-transform overflow-y-auto">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-[#3a3735] flex items-center justify-center rounded-sm">
-                      <span
-                        className="text-[#c8a882] text-xl font-bold"
-                        style={{ fontFamily: "Playfair Display, serif" }}
-                      >
-                        N
-                      </span>
-                    </div>
-                    <span
-                      style={{ fontFamily: "Playfair Display, serif" }}
-                      className="text-[#3a3735] tracking-tight text-lg font-bold"
-                    >
-                      NextLoop
-                    </span>
-                  </div>
+                  <Link href="/" className="flex items-center gap-2">
+                    <Image
+                      src="/nextloop_logo.svg"
+                      alt="NextLoop"
+                      width={120}
+                      height={40}
+                      className="h-10"
+                    />
+                  </Link>
                   <button
                     onClick={() => setSidebarOpen(false)}
                     className="text-[#3a3735] hover:text-[#c8a882]"
@@ -320,10 +299,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                       />
                       <div>
                         <p className="text-sm font-semibold text-amber-900 mb-1">
-                          Verification Needed
+                          Nachweis erforderlich
                         </p>
                         <p className="text-xs text-amber-700 leading-relaxed">
-                          Verify your ID to create listings
+                          Bestätigen Sie Ihre Identität, um Einträge zu
+                          erstellen.
                         </p>
                       </div>
                     </div>
@@ -331,7 +311,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                       href="/profile/verify"
                       className="block w-full text-center px-3 py-2 bg-amber-600 text-white text-xs font-medium rounded hover:bg-amber-700 transition-colors"
                     >
-                      Verify ID
+                      Identität überprüfen
                     </a>
                   </div>
                 )}
@@ -362,7 +342,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     className="flex items-center gap-3 px-4 py-3 rounded-md text-[#5a524b] hover:bg-red-50 hover:text-red-600 transition-all w-full mt-4"
                   >
                     <LogOut className="w-5 h-5" strokeWidth={1.5} />
-                    <span className="tracking-wide">Logout</span>
+                    <span className="tracking-wide">Abmelden</span>
                   </button>
                 </nav>
               </div>

@@ -670,7 +670,7 @@ export default function AuctionDetailClient({
           <div className="lg:col-span-2">
             <div className="bg-white p-6 mb-6">
               <h2 className="text-2xl font-serif text-[#3a3735] mb-4">
-                Description
+                Beschreibung
               </h2>
               <div className="text-[#5a524b] leading-relaxed whitespace-pre-line">
                 {listing.description}
@@ -679,7 +679,7 @@ export default function AuctionDetailClient({
 
             <div className="bg-white p-6">
               <h2 className="text-2xl font-serif text-[#3a3735] mb-4">
-                Bid History ({bidHistory.length})
+                Gebotsverlauf ({bidHistory.length})
               </h2>
               {bidHistory.length > 0 ? (
                 <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -727,7 +727,7 @@ export default function AuctionDetailClient({
               ) : (
                 <div className="text-center py-8 text-[#5a524b]">
                   <User className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                  <p>No bids yet. Be the first to bid!</p>
+                  <p>Noch keine Gebote. Geben Sie als Erster ein Gebot ab!</p>
                 </div>
               )}
             </div>
@@ -736,17 +736,17 @@ export default function AuctionDetailClient({
           <div className="space-y-6">
             <div className="bg-white p-6">
               <h3 className="text-lg font-medium text-[#3a3735] mb-4">
-                Auction Details
+                Auktionsdetails
               </h3>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Starting Bid:</span>
+                  <span className="text-[#5a524b]">Startgebot:</span>
                   <span className="text-[#3a3735] font-medium">
                     ${listing.startingPrice?.toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Bid Increment:</span>
+                  <span className="text-[#5a524b]">Gebotserhöhung:</span>
                   <span className="text-[#3a3735] font-medium">
                     ${listing.bidIncrement?.toLocaleString()}
                   </span>
@@ -758,7 +758,7 @@ export default function AuctionDetailClient({
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Status:</span>
+                  <span className="text-[#5a524b]">Zustand:</span>
                   <span className="text-[#3a3735] font-medium capitalize">
                     {listing.status}
                   </span>
@@ -772,7 +772,7 @@ export default function AuctionDetailClient({
                   </span>
                 </div> */}
                 <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Ends:</span>
+                  <span className="text-[#5a524b]">Ende:</span>
                   <span className="text-[#3a3735] font-medium">
                     {listing.endTime
                       ? new Date(listing.endTime).toLocaleDateString()

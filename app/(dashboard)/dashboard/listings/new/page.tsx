@@ -89,35 +89,43 @@ export default function CreateListingPage() {
               className="text-3xl font-bold text-[#3a3735] mb-4"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              ID Verification Required
+              Identitätsprüfung erforderlich
             </h1>
 
             <p className="text-[#5a524b] mb-8 leading-relaxed max-w-lg mx-auto">
-              To maintain the quality and authenticity of our marketplace, all
-              sellers must complete ID verification before creating listings.
-              This helps protect both buyers and sellers.
+              Um die Qualität und Authentizität unseres Marktplatzes zu
+              gewährleisten, müssen alle Verkäufer vor dem Erstellen von
+              Angeboten eine Identitätsprüfung durchführen. Dies dient dem
+              Schutz von Käufern und Verkäufern.
             </p>
 
             <div className="bg-[#f5f1ea] border border-[#d4cec4] rounded-lg p-6 mb-8 text-left">
               <h3 className="text-sm font-semibold text-[#3a3735] mb-3 uppercase tracking-wider">
-                Why We Verify
+                Warum wir überprüfen
               </h3>
               <ul className="space-y-2 text-sm text-[#5a524b]">
                 <li className="flex items-start gap-2">
                   <span className="text-[#c8a882] mt-0.5">•</span>
-                  <span>Prevents fraud and ensures marketplace safety</span>
+                  <span>
+                    Verhindert Betrug und gewährleistet die Sicherheit des
+                    Marktplatzes
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#c8a882] mt-0.5">•</span>
-                  <span>Builds trust between buyers and sellers</span>
+                  <span>
+                    Schafft Vertrauen zwischen Käufern und Verkäufern.
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#c8a882] mt-0.5">•</span>
-                  <span>Complies with legal requirements</span>
+                  <span>Entspricht den gesetzlichen Anforderungen</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#c8a882] mt-0.5">•</span>
-                  <span>Quick and secure process (takes 2-3 minutes)</span>
+                  <span>
+                    Schneller und sicherer Vorgang (dauert 2-3 Minuten)
+                  </span>
                 </li>
               </ul>
             </div>
@@ -128,13 +136,13 @@ export default function CreateListingPage() {
                 className="px-6 py-3 bg-[#f5f1ea] text-[#3a3735] rounded-lg hover:bg-[#e8dfd0] transition-colors font-medium flex items-center justify-center gap-2"
               >
                 <ArrowLeft className="w-5 h-5" strokeWidth={1.5} />
-                Back to Dashboard
+                Zurück zum Dashboard
               </button>
               <a
                 href="/profile/verify"
                 className="px-8 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
               >
-                Verify ID Now
+                Jetzt Identität bestätigen
               </a>
             </div>
           </div>

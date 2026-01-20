@@ -38,12 +38,12 @@ export default function WatchlistPage() {
 
   const handleWatchlistChange = async (
     listingId: string,
-    isInWatchlist: boolean
+    isInWatchlist: boolean,
   ) => {
     // Optimistically update UI
     if (!isInWatchlist) {
       setListings((prev) =>
-        prev.filter((listing) => listing._id !== listingId)
+        prev.filter((listing) => listing._id !== listingId),
       );
     }
   };
@@ -52,7 +52,7 @@ export default function WatchlistPage() {
     if (!user?._id || !token) return;
 
     const confirmed = window.confirm(
-      "Are you sure you want to remove all items from your watchlist?"
+      "Are you sure you want to remove all items from your watchlist?",
     );
 
     if (!confirmed) return;
@@ -73,8 +73,10 @@ export default function WatchlistPage() {
     return (
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#3a3735] mb-2">Watchlist</h1>
-          <p className="text-[#5a524b]">Loading your saved items...</p>
+          <h1 className="text-3xl font-bold text-[#3a3735] mb-2">Merkliste</h1>
+          <p className="text-[#5a524b]">
+            Ihre gespeicherten Elemente werden geladen...
+          </p>
         </div>
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-12 h-12 text-[#c8a882] animate-spin" />
@@ -87,8 +89,8 @@ export default function WatchlistPage() {
     return (
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#3a3735] mb-2">Watchlist</h1>
-          <p className="text-[#5a524b]">Your saved items</p>
+          <h1 className="text-3xl font-bold text-[#3a3735] mb-2">Merkliste</h1>
+          <p className="text-[#5a524b]">Ihre gespeicherten Elemente</p>
         </div>
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
           <p className="text-red-800 mb-4">{error}</p>
@@ -96,7 +98,7 @@ export default function WatchlistPage() {
             onClick={fetchWatchlist}
             className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
           >
-            Try Again
+            Erneut versuchen
           </button>
         </div>
       </div>
@@ -116,10 +118,10 @@ export default function WatchlistPage() {
               />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-[#3a3735]">Watchlist</h1>
+              <h1 className="text-3xl font-bold text-[#3a3735]">Merkliste</h1>
               <p className="text-[#5a524b]">
-                {listings.length} {listings.length === 1 ? "item" : "items"}{" "}
-                saved
+                {listings.length}{" "}
+                {listings.length === 1 ? "Artikel" : "Artikel"} gespeichert
               </p>
             </div>
           </div>
@@ -129,7 +131,7 @@ export default function WatchlistPage() {
               onClick={handleRemoveAll}
               className="px-4 py-2 text-sm border border-red-300 text-red-600 hover:bg-red-50 transition-colors rounded-lg"
             >
-              Clear All
+              Alles löschen
             </button>
           )}
         </div>
@@ -143,18 +145,18 @@ export default function WatchlistPage() {
               <Heart className="w-10 h-10 text-[#d4cec4]" strokeWidth={1.5} />
             </div>
             <h2 className="text-2xl font-semibold text-[#3a3735] mb-3">
-              Your Watchlist is Empty
+              Ihre Watchlist ist leer
             </h2>
             <p className="text-[#5a524b] mb-6">
-              Start adding items to your watchlist to keep track of listings
-              you're interested in.
+              Fügen Sie Artikel zu Ihrer Merkliste hinzu, um Angebote im Blick
+              zu behalten, die Sie interessieren.
             </p>
             <a
               href="/search"
               className="inline-flex items-center gap-2 px-6 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
             >
               <Package className="w-5 h-5" strokeWidth={1.5} />
-              Browse Listings
+              Angebote durchsuchen
             </a>
           </div>
         </div>
@@ -164,7 +166,9 @@ export default function WatchlistPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-[#5a524b]">Total Items</span>
+                <span className="text-sm text-[#5a524b]">
+                  Gesamtanzahl Artikel
+                </span>
                 <span className="text-2xl font-bold text-[#3a3735]">
                   {listings.length}
                 </span>
@@ -173,7 +177,7 @@ export default function WatchlistPage() {
 
             <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-[#5a524b]">Auctions</span>
+                <span className="text-sm text-[#5a524b]">Auktionen</span>
                 <span className="text-2xl font-bold text-[#3a3735]">
                   {listings.filter((l) => l.type === "AUCTION").length}
                 </span>
@@ -182,7 +186,7 @@ export default function WatchlistPage() {
 
             <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-[#5a524b]">Buy Now</span>
+                <span className="text-sm text-[#5a524b]">Jetzt kaufen</span>
                 <span className="text-2xl font-bold text-[#3a3735]">
                   {listings.filter((l) => l.type === "BUY_NOW").length}
                 </span>
@@ -208,26 +212,28 @@ export default function WatchlistPage() {
       {listings.length > 0 && (
         <div className="mt-8 bg-[#f5f1ea] border border-[#d4cec4] rounded-lg p-6">
           <h3 className="text-lg font-semibold text-[#3a3735] mb-3">
-            Watchlist Tips
+            Watchlist-Tipps
           </h3>
           <ul className="space-y-2 text-sm text-[#5a524b]">
             <li className="flex items-start gap-2">
               <span className="text-[#c8a882] mt-0.5">•</span>
               <span>
-                You'll receive notifications when prices change on items in your
-                watchlist
+                Sie erhalten Benachrichtigungen, wenn sich die Preise von
+                Artikeln auf Ihrer Beobachtungsliste ändern.
               </span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-[#c8a882] mt-0.5">•</span>
               <span>
-                For auctions, we'll alert you when bidding is about to end
+                Bei Auktionen benachrichtigen wir Sie, wenn das Bieten bald
+                endet.
               </span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-[#c8a882] mt-0.5">•</span>
               <span>
-                Click the heart icon on any listing to add it to your watchlist
+                Klicken Sie auf das Herzsymbol bei einem beliebigen Eintrag, um
+                ihn Ihrer Beobachtungsliste hinzuzufügen.
               </span>
             </li>
           </ul>

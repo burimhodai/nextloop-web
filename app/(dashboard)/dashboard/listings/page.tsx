@@ -122,7 +122,7 @@ export default function MyListingsPage() {
   const handleDeleteListing = async (listingId: string) => {
     if (
       !confirm(
-        "Are you sure you want to delete this listing? This action cannot be undone."
+        "Are you sure you want to delete this listing? This action cannot be undone.",
       )
     )
       return;
@@ -229,7 +229,7 @@ export default function MyListingsPage() {
       <div className="max-w-7xl  mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#3a3735] mb-2">
-            My Listings
+            Meine Angebote
           </h1>
           <p className="text-[#5a524b]">Loading your listings...</p>
         </div>
@@ -271,10 +271,12 @@ export default function MyListingsPage() {
               <Package className="w-5 h-5 text-blue-600" strokeWidth={1.5} />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-[#3a3735]">My Listings</h1>
+              <h1 className="text-3xl font-bold text-[#3a3735]">
+                Meine Angebote
+              </h1>
               <p className="text-[#5a524b]">
-                Manage your {listings.length}{" "}
-                {listings.length === 1 ? "listing" : "listings"}
+                Verwalte deine {listings.length}{" "}
+                {listings.length === 1 ? "Anzeige" : "Anzeigen"}
               </p>
             </div>
           </div>
@@ -283,7 +285,7 @@ export default function MyListingsPage() {
             href="/dashboard/listings/new"
             className="px-6 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
           >
-            + Create Listing
+            + Eintrag erstellen
           </Link>
         </div>
       </div>
@@ -292,7 +294,7 @@ export default function MyListingsPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-[#5a524b]">Total</span>
+            <span className="text-sm text-[#5a524b]">Gesamt</span>
             <span className="text-2xl font-bold text-[#3a3735]">
               {stats.total}
             </span>
@@ -300,7 +302,7 @@ export default function MyListingsPage() {
         </div>
         <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-[#5a524b]">Active</span>
+            <span className="text-sm text-[#5a524b]">Aktiv</span>
             <span className="text-2xl font-bold text-green-600">
               {stats.active}
             </span>
@@ -308,7 +310,7 @@ export default function MyListingsPage() {
         </div>
         <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-[#5a524b]">Sold</span>
+            <span className="text-sm text-[#5a524b]">Verkauft</span>
             <span className="text-2xl font-bold text-blue-600">
               {stats.sold}
             </span>
@@ -316,7 +318,7 @@ export default function MyListingsPage() {
         </div>
         <div className="bg-[#faf8f4] border border-[#d4cec4] rounded-lg p-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-[#5a524b]">Draft</span>
+            <span className="text-sm text-[#5a524b]">Entwurf</span>
             <span className="text-2xl font-bold text-yellow-600">
               {stats.draft}
             </span>
@@ -354,7 +356,7 @@ export default function MyListingsPage() {
                   : "bg-[#f5f1ea] text-[#5a524b] hover:bg-[#e8dfd0]"
               }`}
             >
-              All Types
+              Alle Typen
             </button>
             <button
               onClick={() => setSelectedType("auction")}
@@ -364,7 +366,7 @@ export default function MyListingsPage() {
                   : "bg-[#f5f1ea] text-[#5a524b] hover:bg-[#e8dfd0]"
               }`}
             >
-              Auctions
+              Auktionen
             </button>
             <button
               onClick={() => setSelectedType("buyNow")}
@@ -374,7 +376,7 @@ export default function MyListingsPage() {
                   : "bg-[#f5f1ea] text-[#5a524b] hover:bg-[#e8dfd0]"
               }`}
             >
-              Buy Now
+              Jetzt kaufen
             </button>
           </div>
         </div>
@@ -388,7 +390,7 @@ export default function MyListingsPage() {
               <Package className="w-10 h-10 text-[#d4cec4]" strokeWidth={1.5} />
             </div>
             <h2 className="text-2xl font-semibold text-[#3a3735] mb-3">
-              No Listings Found
+              Keine Einträge gefunden
             </h2>
             <p className="text-[#5a524b] mb-6">
               {activeTab !== "all"
@@ -400,7 +402,7 @@ export default function MyListingsPage() {
               className="inline-flex items-center gap-2 px-6 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
             >
               <Package className="w-5 h-5" strokeWidth={1.5} />
-              Create Your First Listing
+              Erstellen Sie Ihren ersten Eintrag
             </Link>
           </div>
         </div>
@@ -461,8 +463,8 @@ export default function MyListingsPage() {
                         <div>
                           <span className="text-xs text-[#5a524b] block">
                             {listing.type === "AUCTION"
-                              ? "Current Bid"
-                              : "Price"}
+                              ? "Aktuelles Gebot"
+                              : "Preis"}
                           </span>
                           <span className="text-sm font-semibold text-[#3a3735]">
                             {formatPrice(listing)}
@@ -479,7 +481,7 @@ export default function MyListingsPage() {
                           />
                           <div>
                             <span className="text-xs text-[#5a524b] block">
-                              Bids
+                              Gebote
                             </span>
                             <span className="text-sm font-semibold text-[#3a3735]">
                               {listing.totalBids || listing.bids?.length || 0}
@@ -496,7 +498,7 @@ export default function MyListingsPage() {
                         />
                         <div>
                           <span className="text-xs text-[#5a524b] block">
-                            Views
+                            Ansichten
                           </span>
                           <span className="text-sm font-semibold text-[#3a3735]">
                             {listing.views}
@@ -514,7 +516,7 @@ export default function MyListingsPage() {
                             />
                             <div>
                               <span className="text-xs text-[#5a524b] block">
-                                Time Left
+                                Zeit übrig
                               </span>
                               <span className="text-sm font-semibold text-[#3a3735]">
                                 {getTimeRemaining(listing.endTime)}
@@ -531,7 +533,7 @@ export default function MyListingsPage() {
                       href={`/listing/${listing._id}`}
                       className="flex items-center gap-1 text-sm font-medium text-[#3a3735] hover:text-[#c8a882] transition-colors"
                     >
-                      <ExternalLink className="w-4 h-4" /> View Public
+                      <ExternalLink className="w-4 h-4" /> Öffentlich anzeigen
                     </Link>
 
                     <div className="flex-1"></div>
@@ -540,14 +542,14 @@ export default function MyListingsPage() {
                       href={`/dashboard/listings/edit/${listing._id}`}
                       className="flex items-center gap-1 px-3 py-1.5 bg-[#f5f1ea] text-[#3a3735] rounded hover:bg-[#e8dfd0] transition-colors text-sm font-medium"
                     >
-                      <Edit className="w-4 h-4" /> Edit
+                      <Edit className="w-4 h-4" /> Bearbeiten
                     </Link>
 
                     <button
                       onClick={() => handleDeleteListing(listing._id)}
                       className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors text-sm font-medium"
                     >
-                      <Trash2 className="w-4 h-4" /> Delete
+                      <Trash2 className="w-4 h-4" /> Löschen
                     </button>
                   </div>
                 </div>
