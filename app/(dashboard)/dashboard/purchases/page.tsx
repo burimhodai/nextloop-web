@@ -80,7 +80,7 @@ export default function PurchasesPage() {
     try {
       const API_URL =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const response = await fetch(`${API_URL}/purchase/user/${user._id}`, {
+      const response = await fetch(`${API_URL}/sales/purchases/${user._id}`, {
         headers: {
           ...(token && { Authorization: `Bearer ${token}` }),
         },

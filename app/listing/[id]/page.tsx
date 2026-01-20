@@ -57,12 +57,9 @@ export async function generateMetadata({
 
   const description = listing.description
     ? `${listing.description.slice(0, 155)}...`
-    : `Buy ${listing.name} for $${price.toLocaleString()}. ${formatCondition(
-        listing.condition
-      )} condition. ${listing.views || 0} views. Shop now!`;
+    : `Kaufen Sie ${listing.name} für CHF${price.toLocaleString()}. ${formatCondition(listing.condition)} Zustand. ${listing.views || 0} Aufrufe. Jetzt kaufen!`;
 
-  const title = `${listing.name} - $${price.toLocaleString()} | Buy Now`;
-
+  const title = `${listing.name} - CHF${price.toLocaleString()} | Jetzt kaufen`;
   return {
     title,
     description,
@@ -81,7 +78,7 @@ export async function generateMetadata({
             },
           ]
         : [],
-      siteName: "GoBusly Marketplace",
+      siteName: "Nextloop",
     },
     twitter: {
       card: "summary_large_image",
@@ -91,7 +88,7 @@ export async function generateMetadata({
     },
     other: {
       "product:price:amount": price.toString(),
-      "product:price:currency": "USD",
+      "product:price:currency": "CHF",
       "product:condition": listing.condition?.replace(/_/g, " ") || "Used",
       "product:availability":
         listing.status === "ACTIVE" ? "in stock" : "out of stock",
@@ -135,14 +132,14 @@ function generateStructuredData(listing: any) {
     offers: {
       "@type": "Offer",
       url: `${process.env.NEXT_PUBLIC_BASE_URL || ""}/listing/${listing._id}`,
-      priceCurrency: "USD",
+      priceCurrency: "CHF",
       price: price,
       itemCondition: `https://schema.org/${
         listing.condition === "NEW"
           ? "NewCondition"
           : listing.condition === "LIKE_NEW"
-          ? "RefurbishedCondition"
-          : "UsedCondition"
+            ? "RefurbishedCondition"
+            : "UsedCondition"
       }`,
       availability:
         listing.status === "ACTIVE"
@@ -158,7 +155,7 @@ function generateStructuredData(listing: any) {
             shippingRate: {
               "@type": "MonetaryAmount",
               value: listing.shippingCost,
-              currency: "USD",
+              currency: "CHF",
             },
           }
         : undefined,

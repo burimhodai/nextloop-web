@@ -45,7 +45,7 @@ export const ListingCard = ({
 
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor(
-        (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
       );
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
@@ -85,7 +85,7 @@ export const ListingCard = ({
       const response = await toggleWatchlist(
         listing._id,
         user._id,
-        token || undefined
+        token || undefined,
       );
       const newIsInWatchlist = response.isInWatchlist ?? !isInWatchlist;
 
@@ -129,10 +129,11 @@ export const ListingCard = ({
         <button
           onClick={handleWatchlistToggle}
           disabled={isTogglingWatchlist}
-          className={`absolute top-2 right-2 w-9 h-9 backdrop-blur-sm flex items-center justify-center transition-all rounded-full ${isInWatchlist
+          className={`absolute top-2 right-2 w-9 h-9 backdrop-blur-sm flex items-center justify-center transition-all rounded-full ${
+            isInWatchlist
               ? "bg-red-500 text-white hover:bg-red-600"
               : "bg-white/90 text-[#5a524b] hover:bg-[#c8a882] hover:text-white"
-            } ${isTogglingWatchlist ? "opacity-50 cursor-not-allowed" : ""}`}
+          } ${isTogglingWatchlist ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           <Heart
             className={`w-4 h-4 ${isInWatchlist ? "fill-current" : ""}`}
@@ -150,16 +151,17 @@ export const ListingCard = ({
           <div className="flex flex-col">
             <span className="text-[#5a524b]/60 text-[10px]">{priceLabel}</span>
             <span className="text-[#c8a882] font-semibold text-base">
-              ${displayPrice?.toLocaleString()}
+              CHF {displayPrice?.toLocaleString()}
             </span>
           </div>
 
           {isAuction && listing.endTime && (
             <div
-              className={`flex items-center gap-1 ${isLastMinute
+              className={`flex items-center gap-1 ${
+                isLastMinute
                   ? "text-red-600 font-bold animate-pulse"
                   : "text-[#5a524b]"
-                }`}
+              }`}
             >
               <Clock className="w-3 h-3" strokeWidth={1.5} />
               <span>{timeLeft}</span>
