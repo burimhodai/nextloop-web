@@ -121,7 +121,7 @@ export default function DashboardPage() {
           type: "sale",
           title: `${listing.name} sold`,
           time: formatTimeAgo(listing.updatedAt),
-          amount: `$${(
+          amount: `CHF ${(
             listing.currentPrice || listing.buyNowPrice
           )?.toLocaleString()}`,
           listing,
@@ -135,7 +135,7 @@ export default function DashboardPage() {
           type: "watchlist",
           title: `Aufpassen ${listing.name}`,
           time: "Kürzlich hinzugefügt",
-          amount: `$${(
+          amount: `CHF ${(
             listing.currentPrice || listing.buyNowPrice
           )?.toLocaleString()}`,
           listing,

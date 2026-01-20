@@ -194,9 +194,9 @@ export default function MyListingsPage() {
   const formatPrice = (listing: Listing) => {
     if (listing.type === "AUCTION") {
       const price = listing.currentPrice || listing.startingPrice || 0;
-      return `$${price.toLocaleString()}`;
+      return `CHF ${price.toLocaleString()}`;
     }
-    return `$${(listing.buyNowPrice || 0).toLocaleString()}`;
+    return `CHF ${(listing.buyNowPrice || 0).toLocaleString()}`;
   };
 
   const getTimeRemaining = (endTime?: string) => {

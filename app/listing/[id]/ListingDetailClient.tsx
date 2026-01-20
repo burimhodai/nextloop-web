@@ -393,7 +393,7 @@ export default function ListingDetailClient({
                   Jetzt kaufen Preis
                 </div>
                 <div className="text-4xl font-serif text-[#c8a882]">
-                  ${listing.buyNowPrice?.toLocaleString()}
+                  CHF {listing.buyNowPrice?.toLocaleString()}
                 </div>
               </div>
 
