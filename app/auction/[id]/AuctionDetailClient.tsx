@@ -48,14 +48,14 @@ export default function AuctionDetailClient({
   const router = useRouter();
   const [listing, setListing] = useState<IListing>(initialListing);
   const [activeImage, setActiveImage] = useState<string>(
-    getMainImage(initialListing)
+    getMainImage(initialListing),
   );
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const { user } = useAuthStore();
 
   // Bidding state
   const [bidAmount, setBidAmount] = useState<string>(
-    getMinimumBid(initialListing).toString()
+    getMinimumBid(initialListing).toString(),
   );
   const [bidding, setBidding] = useState(false);
   const [bidError, setBidError] = useState<string | null>(null);
@@ -63,7 +63,7 @@ export default function AuctionDetailClient({
 
   // Timer state
   const [timeRemaining, setTimeRemaining] = useState<string | null>(
-    getTimeRemaining(initialListing.endTime)
+    getTimeRemaining(initialListing.endTime),
   );
 
   // Watchlist state
@@ -147,7 +147,7 @@ export default function AuctionDetailClient({
 
   const showToast = (
     message: string,
-    type: "success" | "error" | "info" = "info"
+    type: "success" | "error" | "info" = "info",
   ) => {
     setToast({ message, type });
   };
@@ -177,7 +177,7 @@ export default function AuctionDetailClient({
       const highestBidData =
         bidUpdates.bids && bidUpdates.bids.length > 0
           ? bidUpdates.bids.reduce((prev, current) =>
-              current.amount > prev.amount ? current : prev
+              current.amount > prev.amount ? current : prev,
             )
           : null;
 
@@ -188,7 +188,7 @@ export default function AuctionDetailClient({
         highestBidder: highestBidData?.bidder || prev.highestBidder,
         totalBids: bidUpdates.bids?.length || prev.totalBids,
         bids: bidUpdates.bids || prev.bids,
-        endTime: bidUpdates.endTime ?? prev.endTime,
+        endTime: bidUpdates.endTime || prev.endTime,
       }));
 
       // Update minimum bid if needed
@@ -239,7 +239,7 @@ export default function AuctionDetailClient({
       setInWatchlist(response.isInWatchlist || !inWatchlist);
       showToast(
         inWatchlist ? "Removed from watchlist" : "Added to watchlist",
-        "success"
+        "success",
       );
     } catch (error) {
       console.error("Failed to toggle watchlist:", error);
@@ -322,7 +322,7 @@ export default function AuctionDetailClient({
           `Auction extended! ${
             response.extensionsRemaining || 0
           } extensions remaining.`,
-          "info"
+          "info",
         );
       }
     } catch (error: any) {
@@ -354,8 +354,8 @@ export default function AuctionDetailClient({
               toast.type === "success"
                 ? "bg-green-600 text-white"
                 : toast.type === "error"
-                ? "bg-red-600 text-white"
-                : "bg-blue-600 text-white"
+                  ? "bg-red-600 text-white"
+                  : "bg-blue-600 text-white"
             }`}
           >
             {toast.type === "success" && <CheckCircle2 className="w-5 h-5" />}
@@ -520,8 +520,8 @@ export default function AuctionDetailClient({
                     {auctionEnded
                       ? "Auction Ended"
                       : auctionStarted
-                      ? "Time Remaining"
-                      : "Starts In"}
+                        ? "Time Remaining"
+                        : "Starts In"}
                   </span>
                 </div>
                 <div

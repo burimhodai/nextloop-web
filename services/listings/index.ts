@@ -15,7 +15,7 @@ export const fetchLatestAuctions = async (limit: number = 15): Promise<any> => {
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     const data = await response.json();
@@ -32,7 +32,7 @@ export const fetchLatestAuctions = async (limit: number = 15): Promise<any> => {
 };
 
 export const fetchListingStatus = async (
-  id: string
+  id: string,
 ): Promise<ListingStatusUpdate> => {
   try {
     const response = await fetch(`${API_URL}/listing/${id}?fields=status`);
@@ -53,11 +53,11 @@ export interface AuctionBidUpdate {
   highestBidder?: string;
   totalBids?: number;
   bids: IBid[];
-  endTime?: string;
+  endTime?: Date;
 }
 
 export const fetchAuctionBidUpdates = async (
-  id: string
+  id: string,
 ): Promise<AuctionBidUpdate> => {
   try {
     const response = await fetch(`${API_URL}/listing/${id}?fields=bids`);
@@ -126,7 +126,7 @@ export interface CheckoutResponse {
 }
 
 export const createCheckoutSession = async (
-  params: CreateCheckoutParams
+  params: CreateCheckoutParams,
 ): Promise<CheckoutResponse> => {
   try {
     const response = await fetch(`${API_URL}/payment/create-checkout-session`, {
@@ -194,7 +194,7 @@ export interface PlaceBidResponse {
 }
 
 export const placeBid = async (
-  params: PlaceBidParams
+  params: PlaceBidParams,
 ): Promise<PlaceBidResponse> => {
   try {
     const response = await fetch(`${API_URL}/listing/${params.listingId}/bid`, {
@@ -249,7 +249,7 @@ export interface SearchResponse {
 }
 
 export const searchListings = async (
-  params: SearchParams
+  params: SearchParams,
 ): Promise<SearchResponse> => {
   try {
     const queryParams = new URLSearchParams();
@@ -388,7 +388,7 @@ export interface WishlistResponse {
 export const toggleWatchlist = async (
   listingId: string,
   userId: string,
-  token?: string
+  token?: string,
 ): Promise<WishlistResponse> => {
   try {
     const response = await fetch(`${API_URL}/watchlist/toggle/${listingId}`, {
@@ -419,7 +419,7 @@ export const toggleWatchlist = async (
 export const addToWatchlist = async (
   listingId: string,
   userId: string,
-  token?: string
+  token?: string,
 ): Promise<WishlistResponse> => {
   try {
     const response = await fetch(`${API_URL}/watchlist/${listingId}`, {
@@ -450,7 +450,7 @@ export const addToWatchlist = async (
 export const removeFromWatchlist = async (
   listingId: string,
   userId: string,
-  token?: string
+  token?: string,
 ): Promise<WishlistResponse> => {
   try {
     const response = await fetch(`${API_URL}/watchlist/${listingId}`, {
@@ -480,7 +480,7 @@ export const removeFromWatchlist = async (
  */
 export const getWatchlist = async (
   userId: string,
-  token?: string
+  token?: string,
 ): Promise<any[]> => {
   try {
     const response = await fetch(`${API_URL}/watchlist/${userId}`, {
@@ -510,7 +510,7 @@ export const getWatchlist = async (
 export const isInWatchlist = async (
   listingId: string,
   userId: string,
-  token?: string
+  token?: string,
 ): Promise<boolean> => {
   try {
     const response = await fetch(`${API_URL}/watchlist/check/${listingId}`, {
@@ -542,7 +542,7 @@ export const fetchBoostedListings = async (
     type?: string;
     category?: string;
     search?: string;
-  } = {}
+  } = {},
 ): Promise<any> => {
   try {
     const queryParams = new URLSearchParams();
@@ -554,7 +554,7 @@ export const fetchBoostedListings = async (
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     const data = await response.json();
