@@ -1,11 +1,22 @@
-import { User, Camera, Mail, Phone, Globe, Building, Shield, MapPin, Plus, Trash2 } from 'lucide-react';
+import {
+  User,
+  Camera,
+  Mail,
+  Phone,
+  Globe,
+  Building,
+  Shield,
+  MapPin,
+  Plus,
+  Trash2,
+} from "lucide-react";
 
 export function AccountSettings() {
   return (
     <div className="mb-12">
       <h2
         className="text-[#3a3735] mb-8"
-        style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem' }}
+        style={{ fontFamily: "Playfair Display, serif", fontSize: "2rem" }}
       >
         Kontoeinstellungen
       </h2>
@@ -14,7 +25,7 @@ export function AccountSettings() {
       <div className="bg-white p-8 shadow-md border border-[#e8dfd0] mb-6">
         <h3
           className="text-[#3a3735] mb-6"
-          style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.5rem' }}
+          style={{ fontFamily: "Playfair Display, serif", fontSize: "1.5rem" }}
         >
           Profilinformationen
         </h3>
@@ -34,7 +45,9 @@ export function AccountSettings() {
 
           <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-[#5a524b] text-sm mb-2">Vollständiger Name</label>
+              <label className="block text-[#5a524b] text-sm mb-2">
+                Vollständiger Name
+              </label>
               <input
                 type="text"
                 defaultValue="Alexandra Sterling"
@@ -42,7 +55,9 @@ export function AccountSettings() {
               />
             </div>
             <div>
-              <label className="block text-[#5a524b] text-sm mb-2">Benutzername</label>
+              <label className="block text-[#5a524b] text-sm mb-2">
+                Benutzername
+              </label>
               <input
                 type="text"
                 defaultValue="@alex.sterling"
@@ -50,7 +65,9 @@ export function AccountSettings() {
               />
             </div>
             <div>
-              <label className="block text-[#5a524b] text-sm mb-2">E-Mail-Adresse</label>
+              <label className="block text-[#5a524b] text-sm mb-2">
+                E-Mail-Adresse
+              </label>
               <input
                 type="email"
                 defaultValue="alex.sterling@example.com"
@@ -58,7 +75,9 @@ export function AccountSettings() {
               />
             </div>
             <div>
-              <label className="block text-[#5a524b] text-sm mb-2">Telefonnummer</label>
+              <label className="block text-[#5a524b] text-sm mb-2">
+                Telefonnummer
+              </label>
               <input
                 type="tel"
                 defaultValue="+41 22 123 4567"
@@ -66,7 +85,9 @@ export function AccountSettings() {
               />
             </div>
             <div>
-              <label className="block text-[#5a524b] text-sm mb-2">Bevorzugte Sprache</label>
+              <label className="block text-[#5a524b] text-sm mb-2">
+                Bevorzugte Sprache
+              </label>
               <select className="w-full px-4 py-3 bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] focus:outline-none focus:border-[#c8a882] transition-all">
                 <option>English</option>
                 <option>Französisch</option>
@@ -82,14 +103,16 @@ export function AccountSettings() {
       <div className="bg-white p-8 shadow-md border border-[#e8dfd0] mb-6">
         <h3
           className="text-[#3a3735] mb-6"
-          style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.5rem' }}
+          style={{ fontFamily: "Playfair Display, serif", fontSize: "1.5rem" }}
         >
           Unternehmensinformationen
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
-            <label className="block text-[#5a524b] text-sm mb-2">Firmenname</label>
+            <label className="block text-[#5a524b] text-sm mb-2">
+              Firmenname
+            </label>
             <input
               type="text"
               defaultValue="Sterling Collectibles Ltd."
@@ -97,7 +120,9 @@ export function AccountSettings() {
             />
           </div>
           <div>
-            <label className="block text-[#5a524b] text-sm mb-2">MwSt.-Nummer</label>
+            <label className="block text-[#5a524b] text-sm mb-2">
+              MwSt.-Nummer
+            </label>
             <input
               type="text"
               defaultValue="CHE-123.456.789"
@@ -111,7 +136,9 @@ export function AccountSettings() {
             <Shield className="w-5 h-5 text-green-600" strokeWidth={1.5} />
             <div>
               <p className="text-green-700">Verifizierter Verkäufer</p>
-              <p className="text-green-600 text-sm">Bewertung: 4,9/5,0 aus 234 Bewertungen</p>
+              <p className="text-green-600 text-sm">
+                Bewertung: 4,9/5,0 aus 234 Bewertungen
+              </p>
             </div>
           </div>
           <button className="text-green-600 hover:text-green-700 text-sm">
@@ -125,7 +152,10 @@ export function AccountSettings() {
         <div className="flex items-center justify-between mb-6">
           <h3
             className="text-[#3a3735]"
-            style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.5rem' }}
+            style={{
+              fontFamily: "Playfair Display, serif",
+              fontSize: "1.5rem",
+            }}
           >
             Adressverwaltung
           </h3>
@@ -140,10 +170,14 @@ export function AccountSettings() {
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-[#c8a882]" strokeWidth={1.5} />
-                <span className="text-[#c8a882] text-sm tracking-wider">Hauptadresse</span>
+                <span className="text-[#c8a882] text-sm tracking-wider">
+                  Hauptadresse
+                </span>
               </div>
               <div className="flex items-center gap-2">
-                <button className="text-[#3a3735] hover:text-[#c8a882] text-sm">Bearbeiten</button>
+                <button className="text-[#3a3735] hover:text-[#c8a882] text-sm">
+                  Bearbeiten
+                </button>
                 <button className="text-red-600 hover:text-red-700 text-sm">
                   <Trash2 className="w-4 h-4" strokeWidth={1.5} />
                 </button>
@@ -159,7 +193,9 @@ export function AccountSettings() {
             <div className="flex items-start justify-between mb-3">
               <span className="text-[#5a524b] text-sm">Rechnungsadresse</span>
               <div className="flex items-center gap-2">
-                <button className="text-[#3a3735] hover:text-[#c8a882] text-sm">Bearbeiten</button>
+                <button className="text-[#3a3735] hover:text-[#c8a882] text-sm">
+                  Bearbeiten
+                </button>
                 <button className="text-red-600 hover:text-red-700 text-sm">
                   <Trash2 className="w-4 h-4" strokeWidth={1.5} />
                 </button>
@@ -176,7 +212,7 @@ export function AccountSettings() {
       <div className="bg-white p-8 shadow-md border border-[#e8dfd0]">
         <h3
           className="text-[#3a3735] mb-6"
-          style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.5rem' }}
+          style={{ fontFamily: "Playfair Display, serif", fontSize: "1.5rem" }}
         >
           Sicherheitseinstellungen
         </h3>
@@ -185,7 +221,9 @@ export function AccountSettings() {
           <div className="flex items-center justify-between pb-6 border-b border-[#e8dfd0]">
             <div>
               <p className="text-[#3a3735] mb-1">Passwort</p>
-              <p className="text-[#5a524b] text-sm">Zuletzt vor 3 Monaten geändert</p>
+              <p className="text-[#5a524b] text-sm">
+                Zuletzt vor 3 Monaten geändert
+              </p>
             </div>
             <button className="text-[#3a3735] hover:text-[#c8a882] border border-[#3a3735] hover:border-[#c8a882] px-4 py-2 text-sm transition-colors">
               Passwort ändern
@@ -194,8 +232,12 @@ export function AccountSettings() {
 
           <div className="flex items-center justify-between pb-6 border-b border-[#e8dfd0]">
             <div>
-              <p className="text-[#3a3735] mb-1">Zwei-Faktor-Authentifizierung</p>
-              <p className="text-[#5a524b] text-sm">Zusätzliche Sicherheitsebene hinzufügen</p>
+              <p className="text-[#3a3735] mb-1">
+                Zwei-Faktor-Authentifizierung
+              </p>
+              <p className="text-[#5a524b] text-sm">
+                Zusätzliche Sicherheitsebene hinzufügen
+              </p>
             </div>
             <button className="bg-[#3a3735] hover:bg-[#c8a882] text-[#faf8f4] hover:text-[#3a3735] px-4 py-2 text-sm transition-colors">
               2FA aktivieren
@@ -213,16 +255,24 @@ export function AccountSettings() {
               <div className="flex items-center justify-between p-4 bg-[#f5f1ea]">
                 <div>
                   <p className="text-[#3a3735] text-sm mb-1">Chrome on MacOS</p>
-                  <p className="text-[#5a524b] text-xs">Geneva, Switzerland • Current session</p>
+                  <p className="text-[#5a524b] text-xs">
+                    Geneva, Switzerland • Current session
+                  </p>
                 </div>
-                <span className="px-3 py-1 bg-green-50 text-green-700 text-xs">Aktiv</span>
+                <span className="px-3 py-1 bg-green-50 text-green-700 text-xs">
+                  Aktiv
+                </span>
               </div>
               <div className="flex items-center justify-between p-4 bg-[#f5f1ea]">
                 <div>
-                  <p className="text-[#3a3735] text-sm mb-1">Safari on iPhone</p>
-                  <p className="text-[#5a524b] text-xs">Zurich, Switzerland • 2 days ago</p>
+                  <p className="text-[#3a3735] text-sm mb-1">
+                    Safari on iPhone
+                  </p>
+                  {/* <p className="text-[#5a524b] text-xs">Zurich, Switzerland • 2 days ago</p> */}
                 </div>
-                <button className="text-red-600 hover:text-red-700 text-xs">Abmelden</button>
+                <button className="text-red-600 hover:text-red-700 text-xs">
+                  Abmelden
+                </button>
               </div>
             </div>
           </div>

@@ -44,6 +44,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const isIdVerified = user?.idVerification?.success || false;
 
+  console.log(isIdVerified);
+
   const navItems = [
     {
       name: "Dashboard",

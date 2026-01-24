@@ -8,7 +8,7 @@ import { ListingCard } from "@/components/search/listing-card";
 import { SearchFilters } from "@/components/search/search-filters";
 
 // Types (Keep these or move to a separate types file)
-interface Category {
+export interface Category {
   _id: string;
   name: string;
   slug: string;
@@ -41,11 +41,11 @@ interface SearchResponse {
 }
 
 const SORT_OPTIONS = [
-  { value: "relevance", label: "Most Relevant" },
-  { value: "price_asc", label: "Price: Low to High" },
-  { value: "price_desc", label: "Price: High to Low" },
-  { value: "ending_soon", label: "Ending Soon" },
-  { value: "newest", label: "Newly Listed" },
+  { value: "relevance", label: "Am relevantesten" },
+  { value: "price_asc", label: "Preis: Niedrig bis Hoch" },
+  { value: "price_desc", label: "Preis: Hoch bis Niedrig" },
+  { value: "ending_soon", label: "Bald endet" },
+  { value: "newest", label: "Neu gelistet" },
 ];
 
 function SearchPageContent() {
@@ -66,18 +66,18 @@ function SearchPageContent() {
   // Filter State
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [selectedCategoryId, setSelectedCategoryId] = useState(
-    searchParams.get("category") || ""
+    searchParams.get("category") || "",
   );
   const [selectedConditions, setSelectedConditions] = useState<string[]>(
-    searchParams.get("condition")?.split(",").filter(Boolean) || []
+    searchParams.get("condition")?.split(",").filter(Boolean) || [],
   );
   const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
   const [sortBy, setSortBy] = useState(
-    searchParams.get("sortBy") || "relevance"
+    searchParams.get("sortBy") || "relevance",
   );
   const [listingType, setListingType] = useState(
-    searchParams.get("type") || ""
+    searchParams.get("type") || "",
   );
 
   // --- API CALLS ---
@@ -87,10 +87,11 @@ function SearchPageContent() {
     const fetchCategories = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/category`
+          `${process.env.NEXT_PUBLIC_API_URL}/category`,
         );
         const data = await response.json();
         setCategories(data.data || []);
+        console.log(data.data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
       }
@@ -103,7 +104,7 @@ function SearchPageContent() {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/search?${params.toString()}`
+        `${process.env.NEXT_PUBLIC_API_URL}/search?${params.toString()}`,
       );
       const data: SearchResponse = await response.json();
 
@@ -121,7 +122,7 @@ function SearchPageContent() {
   // 3. Debounced Search Logic
   const debouncedFetch = useMemo(
     () => _.debounce((params: URLSearchParams) => fetchListings(params), 300),
-    [fetchListings]
+    [fetchListings],
   );
 
   const buildQueryParams = useCallback(() => {
@@ -225,7 +226,7 @@ function SearchPageContent() {
                 setSearchQuery(e.target.value);
                 setPagination((prev) => ({ ...prev, page: 1 }));
               }}
-              placeholder="Search for luxury items..."
+              placeholder="Suche nach Luxusartikeln..."
               className="w-full pl-12 pr-4 py-3 bg-[#f5f1ea] border border-[#d4cec4] text-[#3a3735] placeholder:text-[#5a524b]/60 focus:outline-none focus:border-[#c8a882] focus:bg-white transition-all rounded-sm"
             />
           </div>
@@ -272,9 +273,9 @@ function SearchPageContent() {
             <div className="flex items-center justify-between mb-6">
               <p className="text-[#5a524b] text-lg font-serif italic">
                 {loading
-                  ? "Searching..."
+                  ? "Suche..."
                   : `${pagination.total.toLocaleString()} ${
-                      pagination.total === 1 ? "result" : "results"
+                      pagination.total === 1 ? "Ergebnis" : "Ergebnisse"
                     }`}
               </p>
             </div>
@@ -300,16 +301,16 @@ function SearchPageContent() {
                   strokeWidth={1}
                 />
                 <h3 className="text-[#3a3735] text-xl mb-2 font-serif">
-                  No results found
+                  Keine Ergebnisse gefunden
                 </h3>
                 <p className="text-[#5a524b] mb-6">
-                  Try adjusting your filters or search terms
+                  Versuchen Sie, Ihre Filter oder Suchbegriffe anzupassen.
                 </p>
                 <button
                   onClick={resetFilters}
                   className="px-6 py-3 bg-[#3a3735] hover:bg-[#c8a882] text-white hover:text-[#3a3735] transition-all uppercase tracking-wider text-xs font-medium"
                 >
-                  Clear All Filters
+                  Alle Filter löschen
                 </button>
               </div>
             )}
@@ -327,11 +328,12 @@ function SearchPageContent() {
                   disabled={pagination.page === 1}
                   className="px-4 py-2 bg-white border border-[#d4cec4] text-[#3a3735] disabled:opacity-50 hover:bg-[#f5f1ea] transition-colors rounded-sm text-sm"
                 >
-                  Previous
+                  Vorherige
                 </button>
                 <span className="text-[#5a524b] text-sm px-2">
-                  Page {pagination.page} of {pagination.pages}
+                  Seite {pagination.page} von {pagination.pages}
                 </span>
+
                 <button
                   onClick={() =>
                     setPagination((prev) => ({
@@ -342,7 +344,7 @@ function SearchPageContent() {
                   disabled={pagination.page === pagination.pages}
                   className="px-4 py-2 bg-white border border-[#d4cec4] text-[#3a3735] disabled:opacity-50 hover:bg-[#f5f1ea] transition-colors rounded-sm text-sm"
                 >
-                  Next
+                  Nächste
                 </button>
               </div>
             )}
@@ -360,7 +362,7 @@ export default function SearchPage() {
         <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center">
           <div className="text-center">
             <Loader2 className="w-8 h-8 animate-spin text-[#c8a882] mx-auto mb-4" />
-            <p className="text-[#5a524b] text-lg">Loading search...</p>
+            <p className="text-[#5a524b] text-lg">Suche wird geladen...</p>
           </div>
         </div>
       }

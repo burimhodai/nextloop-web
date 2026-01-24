@@ -20,22 +20,23 @@ export function Footer() {
               />
             </Link>
             <p className="text-[#5a524b] text-sm leading-relaxed mb-6">
-              Außergewöhnliche Auktionen für anspruchsvolle Sammler weltweit –
-              seit 2026.
+              Außergewöhnliche Auktionen für anspruchsvolle Sammler weltweit.
             </p>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-[#5a524b] text-sm">
                 <Phone className="w-4 h-4" strokeWidth={1.5} />
-                <span>+41 22 123 4567</span>
+                <span>+41 76 707 17 80</span>
               </div>
               <div className="flex items-center gap-3 text-[#5a524b] text-sm">
                 <Mail className="w-4 h-4" strokeWidth={1.5} />
                 <span>info@nextloop.ch</span>
               </div>
-              <div className="flex items-center gap-3 text-[#5a524b] text-sm">
+              {/* E KOM HEK KET MOMENTALLNO SE SNA KAN SHKRUJ XHI TI VIM */}
+
+              {/* <div className="flex items-center gap-3 text-[#5a524b] text-sm">
                 <MapPin className="w-4 h-4" strokeWidth={1.5} />
                 <span>Zurich, Switzerland</span>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -61,7 +62,7 @@ export function Footer() {
                   href="#"
                   className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors"
                 >
-                  Upcoming Events
+                  Kommende Veranstaltungen
                 </a>
               </li>
               <li>
@@ -89,12 +90,12 @@ export function Footer() {
               className="text-[#3a3735] mb-6"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              About
+              Über uns
             </h6>
             <ul className="space-y-3">
               <li>
                 <a
-                  href="#"
+                  href="/about"
                   className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors"
                 >
                   Unsere Geschichte
@@ -149,7 +150,7 @@ export function Footer() {
                   href="#"
                   className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors"
                 >
-                  Seller's Guide
+                  Leitfaden für Verkäufer
                 </a>
               </li>
               <li>
@@ -157,17 +158,17 @@ export function Footer() {
                   href="#"
                   className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors"
                 >
-                  Authentication
+                  Authentifizierung
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a
                   href="#"
                   className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors"
                 >
                   Kontakt
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
@@ -178,27 +179,29 @@ export function Footer() {
         {/* Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[#5a524b] text-sm">
-            ©2025 NextLoop. Sämtliche Rechte vorbehalten.
+            ©2026 NextLoop. Sämtliche Rechte vorbehalten.
           </p>
           <div className="flex items-center gap-6">
             <a
-              href="#"
+              href="/privacy"
               className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors"
             >
               Datenschutzerklärung
             </a>
             <a
-              href="#"
+              href="/terms"
               className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors"
             >
               Allgemeine Geschäftsbedingungen (AGB)
             </a>
             <a
-              href="#"
+              href="/impressum"
               className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors"
             >
-              Cookie-Richtlinien
+              Impressum
             </a>
+
+            {/* DA VIM TE DATENSHUTZ COOKIES */}
           </div>
         </div>
       </div>

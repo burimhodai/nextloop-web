@@ -1,95 +1,80 @@
 "use client";
-import { useAuthStore } from "@/lib/stores/authStore";
-import { Search, User, Heart, Menu, LogOut } from "lucide-react";
+
+import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-
-// Link component definition remains the same
-interface LinkProps {
-  href: string;
-  children: React.ReactNode;
-  className?: string;
-  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-}
-
-const Link: React.FC<LinkProps> = ({ href, children, className, onClick }) => (
-  <a href={href} className={className} onClick={onClick}>
-    {children}
-  </a>
-);
+import { usePathname, useRouter } from "next/navigation";
+import { useAuthStore } from "@/lib/stores/authStore";
+import { Search, User, Menu } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 export function Header() {
-  const [showSearch, setShowSearch] = useState<boolean>(false);
-  const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
-  const [showCategoriesMenu, setShowCategoriesMenu] = useState<boolean>(false);
-  const [currentPath, setCurrentPath] = useState<string>("/");
+  const pathname = usePathname();
+  const router = useRouter();
 
-  // Use the state and action from the real Zustand store
+  const [showSearch, setShowSearch] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showCategoriesMenu, setShowCategoriesMenu] = useState(false);
+
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  useEffect(() => {
-    setCurrentPath(window.location.pathname);
+  const hideHeader = useMemo(() => {
+    if (!pathname) return false;
+    return (
+      pathname === "/profile" ||
+      pathname.startsWith("/profile/") ||
+      pathname === "/dashboard" ||
+      pathname.startsWith("/dashboard/")
+    );
+  }, [pathname]);
 
+  useEffect(() => {
     const handleScroll = () => {
       const categoriesElement = document.getElementById("hero-categories");
-      if (categoriesElement) {
-        const rect = categoriesElement.getBoundingClientRect();
-        const isOutOfView = rect.bottom < 0;
-        setShowSearch(isOutOfView);
-      }
+      if (!categoriesElement) return;
+
+      const rect = categoriesElement.getBoundingClientRect();
+      setShowSearch(rect.bottom < 0);
     };
 
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (!target.closest(".user-menu-container")) {
-        setShowUserMenu(false);
-      }
-      if (!target.closest(".categories-menu-container")) {
+
+      if (!target.closest(".user-menu-container")) setShowUserMenu(false);
+      if (!target.closest(".categories-menu-container"))
         setShowCategoriesMenu(false);
-      }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     document.addEventListener("mousedown", handleClickOutside);
+
+    // run once on mount in case user loads mid-scroll
+    handleScroll();
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  const userLinkHref: string = isAuthenticated ? "/profile" : "/auth/login";
-  const firstLetter: string = user?.fullName
+  const userLinkHref = isAuthenticated ? "/profile" : "/auth/login";
+  const firstLetter = user?.fullName
     ? user.fullName.charAt(0).toUpperCase()
     : "U";
 
-  const isHomePage = currentPath === "/" || currentPath.includes("/search");
-
-  const categories = [
-    { name: "Uhren", icon: "⌚" },
-    { name: "Kunst", icon: "🎨" },
-    { name: "Elektronik", icon: "💻" },
-    { name: "Jewelry", icon: "💎" },
-    { name: "Designermöbel", icon: "🪑" },
-    { name: "Wine", icon: "🍷" },
-    { name: "Sammlerstücke", icon: "📸" },
-    { name: "Instrumente", icon: "🎵" },
-  ];
-
-  const handleLogoutClick = (
-    e:
-      | React.MouseEvent<HTMLButtonElement>
-      | React.MouseEvent<HTMLAnchorElement>,
-  ) => {
+  const handleLogoutClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     logout();
+    setShowUserMenu(false);
+    // optional: redirect after logout
+    router.push("/");
   };
 
+  if (hideHeader) return null;
+
   return (
-    <header
-      className={`sticky top-0 z-50 bg-[#faf8f4] ${["/dashboard", "/profile"].some((path) => currentPath.includes(path)) && "hidden"} border-b border-black/10`}
-    >
+    <header className="sticky top-0 z-50 bg-[#faf8f4] border-b border-black/10">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between gap-6">
           <div className="flex items-center gap-10">
@@ -99,60 +84,12 @@ export function Header() {
                 alt="NextLoop"
                 width={120}
                 height={40}
-                className="h-10"
+                className="h-10 w-auto"
+                priority
               />
             </Link>
-
-            {/* <nav className="hidden lg:flex items-center gap-8 text-sm text-[#5a524b]">
-              <>
-                <Link
-                  href="/"
-                  className="transition-colors py-1 hover:text-black/70"
-                >
-                  Home
-                </Link>
-                <div className="relative categories-menu-container">
-                  <button
-                    onClick={() => setShowCategoriesMenu(!showCategoriesMenu)}
-                    className="transition-colors py-1 hover:text-black/70 flex items-center gap-1"
-                  >
-                    Kategorien
-                    <svg
-                      className={`w-4 h-4 transition-transform ${
-                        showCategoriesMenu ? "rotate-180" : ""
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </button>
-                  {showCategoriesMenu && (
-                    <div className="absolute left-0 mt-2 w-56 bg-[#faf8f4] rounded-md border border-[#e8dfd0] shadow-xl animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden z-50">
-                      <div className="py-2">
-                        {categories.map((category) => (
-                          <Link
-                            key={category.name}
-                            href={`/category/${category.name.toLowerCase()}`}
-                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#3a3735] hover:bg-[#f5f1ea] transition-colors"
-                            onClick={() => setShowCategoriesMenu(false)}
-                          >
-                            <span>{category.icon}</span>
-                            <span>{category.name}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </>
-            </nav> */}
+            {/* keep your categories nav here if you want */}
+            {/* <nav className="hidden lg:flex items-center gap-8 text-sm text-[#5a524b]">...</nav> */}
           </div>
 
           <div
@@ -176,22 +113,22 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-4">
-            {isAuthenticated && (
+            {/* {isAuthenticated && (
               <button
                 onClick={handleLogoutClick}
                 className="px-4 py-2 text-sm border border-black/20 text-[#3a3735] hover:bg-black hover:text-white transition-all rounded-md shadow-sm"
               >
                 Abmelden
               </button>
-            )}
+            )} */}
 
             <div className="relative user-menu-container flex items-center">
-              <Link
-                href={userLinkHref}
-                onClick={(e) => {
-                  setShowUserMenu(!showUserMenu);
-                }}
-                className={`flex items-center text-[#3a3735] hover:text-[#c8a882] transition-colors p-1.5 rounded-full hover:bg-[#e8dfd0]`}
+              <button
+                type="button"
+                onClick={() => setShowUserMenu((v) => !v)}
+                className="flex items-center text-[#3a3735] hover:text-[#c8a882] transition-colors p-1.5 rounded-full hover:bg-[#e8dfd0]"
+                aria-haspopup="menu"
+                aria-expanded={showUserMenu}
               >
                 {user ? (
                   <div className="w-7 h-7 rounded-full bg-[#c8a882] flex items-center justify-center border border-[#3a3735]/10 shadow-inner">
@@ -202,7 +139,7 @@ export function Header() {
                 ) : (
                   <User className="w-5 h-5" strokeWidth={1.5} />
                 )}
-              </Link>
+              </button>
 
               {showUserMenu && (
                 <div className="absolute right-0 mt-3 top-full w-48 bg-[#faf8f4] rounded-md border border-[#e8dfd0] shadow-xl animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden">
@@ -212,6 +149,7 @@ export function Header() {
                         <div className="px-4 py-2.5 text-sm text-[#3a3735] border-b border-[#e8dfd0] font-semibold">
                           Hallo, {user?.fullName.split(" ")[0]}
                         </div>
+
                         <Link
                           href="/dashboard"
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#3a3735] hover:bg-[#f5f1ea] transition-colors"
@@ -219,6 +157,7 @@ export function Header() {
                         >
                           Dashboard
                         </Link>
+
                         <Link
                           href="/profile"
                           className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#3a3735] hover:bg-[#f5f1ea] transition-colors"
@@ -226,6 +165,7 @@ export function Header() {
                         >
                           Profil Einstellungen
                         </Link>
+
                         <button
                           className="w-full text-left px-4 py-2.5 text-sm text-[#3a3735] hover:bg-[#f5f1ea] transition-colors flex items-center gap-3"
                           onClick={handleLogoutClick}
@@ -255,10 +195,6 @@ export function Header() {
                 </div>
               )}
             </div>
-
-            <button className="lg:hidden text-[#3a3735] hover:text-[#c8a882] transition-colors">
-              <Menu className="w-5 h-5" strokeWidth={1.5} />
-            </button>
           </div>
         </div>
       </div>

@@ -8,6 +8,13 @@ import {
   Wine,
   Camera,
   Music,
+  Wrench,
+  Sparkles,
+  WashingMachine,
+  BookOpen,
+  Shirt,
+  Smartphone,
+  Car,
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -15,44 +22,44 @@ import { SearchForm } from "./search/search-form";
 
 const quickCategories = [
   {
-    name: "Uhren",
-    value: "Watches & Timepieces",
-    icon: <Watch className="w-5 h-5" strokeWidth={1.5} />,
+    name: "Büecher",
+    value: "68efbca6338bab05c44f7421",
+    icon: <BookOpen className="w-5 h-5" strokeWidth={1.5} />,
   },
   {
-    name: "Kunst",
-    value: "Fine Art",
-    icon: <Palette className="w-5 h-5" strokeWidth={1.5} />,
+    name: "Chleider",
+    value: "68efbca3338bab05c44f741f",
+    icon: <Shirt className="w-5 h-5" strokeWidth={1.5} />,
   },
   {
     name: "Elektronik",
-    value: "Electronics",
-    icon: <Laptop className="w-5 h-5" strokeWidth={1.5} />,
+    value: "68efbc8f338bab05c44f741b",
+    icon: <Smartphone className="w-5 h-5" strokeWidth={1.5} />,
   },
   {
-    name: "Jewelry",
-    value: "Jewelry & Gems",
-    icon: <Gem className="w-5 h-5" strokeWidth={1.5} />,
+    name: "Fahrzüg",
+    value: "68ef91c7749f9676f3206477",
+    icon: <Car className="w-5 h-5" strokeWidth={1.5} />,
   },
   {
-    name: "Designermöbel",
-    value: "Furniture & Design",
+    name: "Huushaltsgrät",
+    value: "68efbcc3338bab05c44f7429",
+    icon: <WashingMachine className="w-5 h-5" strokeWidth={1.5} />,
+  },
+  {
+    name: "Schönheit",
+    value: "68efbccb338bab05c44f742d",
+    icon: <Sparkles className="w-5 h-5" strokeWidth={1.5} />,
+  },
+  {
+    name: "Möbel",
+    value: "68efbc9e338bab05c44f741d",
     icon: <Armchair className="w-5 h-5" strokeWidth={1.5} />,
   },
   {
-    name: "Wine",
-    value: "Wine & Spirits",
-    icon: <Wine className="w-5 h-5" strokeWidth={1.5} />,
-  },
-  {
-    name: "Sammlerstücke",
-    value: "Collectibles",
-    icon: <Camera className="w-5 h-5" strokeWidth={1.5} />,
-  },
-  {
-    name: "Instrumente",
-    value: "Musical Instruments",
-    icon: <Music className="w-5 h-5" strokeWidth={1.5} />,
+    name: "Wärchzüg",
+    value: "68efbcab338bab05c44f7423",
+    icon: <Wrench className="w-5 h-5" strokeWidth={1.5} />,
   },
 ];
 
@@ -99,12 +106,11 @@ export function Hero() {
             className="text-5xl md:text-6xl lg:text-7xl text-[#3a3735] mb-6 leading-[1.1]"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
-            Find außergewöhnliche Sache
+            Für Dinge, die bleiben.
           </h1>
 
           <p className="text-lg text-[#5a524b] leading-relaxed max-w-2xl mx-auto mb-10">
-            Stöber dur tusigi Luxus-Auktione vo verifizierte Verkäufer i dr
-            Schwiiz. Entdeck seltni Uhre, edli Chunst, Sammlerstück und meh.
+            Kaufen oder bieten. Verifizierte Verkäufer. Kuratierte Auswahl.
           </p>
 
           {/* Search Form Component */}

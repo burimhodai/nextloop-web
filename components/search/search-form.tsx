@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Category } from "@/app/search/page";
 
 interface SearchFormProps {
   defaultQuery?: string;
@@ -10,17 +11,6 @@ interface SearchFormProps {
   compact?: boolean;
   className?: string;
 }
-
-const categories = [
-  "Uhren & Zeitmesser",
-  "Bildende Kunst",
-  "Elektronik",
-  "Schmuck & Edelsteine",
-  "Möbel & Design",
-  "Wein & Spirituosen",
-  "Sammlerstücke",
-  "Musikinstrumente",
-];
 
 // const popularSearches = ["Rolex", "Vintage Kunst", "Ferrari", "Hermès"];
 
@@ -34,6 +24,23 @@ export function SearchForm({
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState(defaultQuery);
   const [selectedCategory, setSelectedCategory] = useState(defaultCategory);
+
+  const [categories, setCategories] = useState<Category[]>([]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/category`,
+        );
+        const data = await response.json();
+        setCategories(data.data || []);
+        console.log(data.data);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -93,8 +100,8 @@ export function SearchForm({
             >
               <option value="">Alle Kategorien</option>
               {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
                 </option>
               ))}
             </select>

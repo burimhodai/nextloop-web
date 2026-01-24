@@ -1,81 +1,76 @@
 "use client";
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
+import Link from "next/link";
 
 export function Editorial() {
   return (
     <section className="py-32 bg-[#faf8f4]">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Image */}
-          <div className="order-2 lg:order-1">
-            <div className="relative">
-              <div className="aspect-3/4 overflow-hidden shadow-2xl">
-                <Image
-                  fill
-                  src="https://images.unsplash.com/photo-1758887263106-48f9934c1cdb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBoZXJpdGFnZSUyMGNyYWZ0c21hbnNoaXB8ZW58MXx8fHwxNzYzMTIyNzQ3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                  alt="Heritage craftsmanship"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              {/* Decorative element */}
-              <div className="absolute -bottom-8 -right-8 w-48 h-48 border border-[#c8a882] -z-10"></div>
-            </div>
-          </div>
-
+        <div className="max-w-4xl mx-auto">
           {/* Content */}
-          <div className="order-1 lg:order-2">
+          <div>
             <div className="mb-6 flex items-center gap-3">
               <div className="h-px w-12 bg-[#c8a882]"></div>
               <span className="text-[#c8a882] text-sm tracking-[0.2em] uppercase">
-                Unsere Geschichte
+                Über uns
               </span>
             </div>
 
             <h2
-              className="text-[#3a3735] mb-6"
+              className="text-[#3a3735] mb-8 text-4xl lg:text-5xl"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Herkunft & Tradition
+              Willkommen bei NextLoop – Wo Luxus eine zweite Chance bekommt
             </h2>
 
             <div className="space-y-6 text-[#5a524b] leading-relaxed mb-8">
               <p>
-                Bei Lumière glauben wir, dass jedes außergewöhnliche Objekt eine
-                Geschichte in sich trägt – eine Erzählung von Kunstfertigkeit,
-                Innovation und dem Lauf der Zeit. Unsere Auktionen werden mit
-                größter Sorgfalt kuratiert, um nur die feinsten Beispiele
-                menschlicher Errungenschaften aus verschiedenen Jahrhunderten
-                und Kulturen zu präsentieren.
+                Seit März 2025 verfolgen wir bei NextLoop eine einfache, aber
+                kraftvolle Mission: Wir geben wertvollen Gegenständen ein neues
+                Zuhause. Unser Name steht für den nächsten Kreislauf – den
+                nächsten Loop – den wir für deine Schätze schaffen. Wir sind
+                nicht einfach ein Second-Hand-Marktplatz, sondern eine
+                Gemeinschaft von Liebhabern, die verstehen, dass echte Qualität
+                zeitlos ist.
               </p>
 
               <p>
-                Von seltenen Zeitmessern, gefertigt von Meisteruhrmachern, bis
-                hin zu Kunstwerken von Museumsqualität und Antiquitäten – jedes
-                Los in unserer Kollektion wurde von führenden Experten
-                authentifiziert und kommt mit umfassender
-                Provenienz-Dokumentation.
+                Gegründet aus einer tiefen Leidenschaft für Design, Handwerk und
+                Nachhaltigkeit, bieten wir dir ein vollkommen neues Erlebnis im
+                Handel mit Second-Hand-Luxusgütern. Bei NextLoop konzentrieren
+                wir uns bewusst auf die Segmente, in denen echte Expertise
+                zählt:{" "}
+                <strong>
+                  Designermöbel, exklusive Uhren, edlen Schmuck und einzigartige
+                  Kunstwerke
+                </strong>
+                .
               </p>
 
               <p>
-                Wir laden anspruchsvolle Sammler ein, Stücke zu entdecken, die
-                über bloßen Besitz hinausgehen – Schätze, die Teil Ihres
-                Vermächtnisses werden und ihre Reise durch die Zeit fortsetzen.
+                Bewusst verzichten wir auf den Handel mit Kleidung – das
+                ermöglicht uns, uns vollständig auf die Qualität und
+                Authentizität in diesen Premium-Kategorien zu konzentrieren. Ob
+                du verkaufen oder kaufen möchtest: Bei uns bist du genau
+                richtig.
               </p>
             </div>
 
-            <button className="group flex items-center gap-3 text-[#3a3735] hover:text-[#c8a882] transition-colors">
+            <Link
+              href="/about"
+              className="group flex items-center gap-3 text-[#3a3735] hover:text-[#c8a882] transition-colors"
+            >
               <span className="tracking-wide">
-                Mehr über unseren Prozess erfahren
+                Mehr über unsere Services erfahren
               </span>
               <ArrowRight
                 className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                 strokeWidth={1.5}
               />
-            </button>
+            </Link>
 
             {/* Stats */}
-            <div className="mt-12 pt-12 border-t border-[#d4cec4] grid grid-cols-3 gap-8">
+            <div className="mt-12 pt-12 border-t border-[#d4cec4] grid grid-cols-2 gap-8">
               <div>
                 <div
                   className="text-[#c8a882] mb-2"
@@ -84,9 +79,11 @@ export function Editorial() {
                     fontSize: "2rem",
                   }}
                 >
-                  25+
+                  2025
                 </div>
-                <p className="text-[#5a524b] text-sm">Jahre der Exzellenz</p>
+                <p className="text-[#5a524b] text-sm">
+                  Gegründet aus Leidenschaft
+                </p>
               </div>
               <div>
                 <div
@@ -96,9 +93,11 @@ export function Editorial() {
                     fontSize: "2rem",
                   }}
                 >
-                  98%
+                  100%
                 </div>
-                <p className="text-[#5a524b] text-sm">Kundenzufriedenheit</p>
+                <p className="text-[#5a524b] text-sm">
+                  Authentizität garantiert
+                </p>
               </div>
             </div>
           </div>
