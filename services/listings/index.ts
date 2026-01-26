@@ -1,6 +1,12 @@
 // services/listings/index.ts
 
-import { IListing, ImageTypes, IBid } from "@/lib/types/listing.types";
+import {
+  IListing,
+  ImageTypes,
+  IBid,
+  ListingConditions,
+} from "@/lib/types/listing.types";
+import { ListingTypes } from "@/lib/types/user.types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 export interface ListingStatusUpdate {
@@ -350,8 +356,19 @@ export const isAuctionStarted = (startTime?: string | Date): boolean => {
 /**
  * Format condition for display
  */
-export const formatCondition = (condition: string): string => {
-  return condition.replace(/_/g, " ");
+export const formatCondition = (condition: string) => {
+  const conditionMapping = {
+    NEW: "Neu",
+    LIKE_NEW: "Wie neu",
+    GOOD: "Gut",
+    VERY_GOOD: "Sehr gut",
+    FAIR: "Akzeptabel",
+    POOR: "Schlecht",
+  };
+
+  return (
+    conditionMapping[condition as keyof typeof conditionMapping] || condition
+  );
 };
 
 /**

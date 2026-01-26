@@ -538,10 +538,11 @@ export default function AuctionDetailClient({
                   <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="font-medium text-green-900">
-                      You're the highest bidder!
+                      Sie haben das Höchstgebot abgegeben!
                     </div>
                     <div className="text-sm text-green-700">
-                      Keep monitoring to stay ahead.
+                      Behalten Sie die Lage im Auge, um immer einen Schritt
+                      voraus zu sein.
                     </div>
                   </div>
                 </div>
@@ -551,7 +552,7 @@ export default function AuctionDetailClient({
                 <div className="mb-6 p-4 bg-blue-50 border border-blue-200 flex items-start gap-3">
                   <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                   <div className="text-sm text-blue-900">
-                    You're the seller of this auction.
+                    Sie sind der Verkäufer dieser Auktion.
                   </div>
                 </div>
               )}
@@ -569,9 +570,9 @@ export default function AuctionDetailClient({
               {!auctionEnded && auctionStarted && !isSeller && (
                 <div className="mb-6 p-4 bg-[#f5f1ea]">
                   <div className="text-sm text-[#5a524b] mb-3">
-                    Minimum bid:{" "}
+                    Mindestgebot:
                     <span className="font-medium text-[#3a3735]">
-                      ${minBid.toLocaleString()}
+                      CHF {minBid.toLocaleString()}
                     </span>
                   </div>
 
@@ -591,7 +592,7 @@ export default function AuctionDetailClient({
                       className="px-8 py-3 bg-[#3a3735] text-white hover:bg-[#c8a882] hover:text-[#3a3735] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
                     >
                       <Gavel className="w-5 h-5" />
-                      {bidding ? "Placing..." : "Place Bid"}
+                      {bidding ? "Biete..." : "Gebot abgeben"}
                     </button>
                   </div>
 
@@ -605,7 +606,7 @@ export default function AuctionDetailClient({
                   {bidSuccess && (
                     <div className="text-sm text-green-600 flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4" />
-                      Bid placed successfully!
+                      Gebot erfolgreich abgegeben!
                     </div>
                   )}
                 </div>
@@ -614,7 +615,7 @@ export default function AuctionDetailClient({
               {auctionEnded && (
                 <div className="mb-6 p-4 bg-red-50 border border-red-200">
                   <div className="font-medium text-red-900 mb-1">
-                    Auction Ended
+                    Auktion beendet
                   </div>
                   <div className="text-sm text-red-700">
                     {listing.highestBidder
@@ -644,22 +645,22 @@ export default function AuctionDetailClient({
                   className="py-3 border border-[#d4cec4] text-[#3a3735] hover:bg-[#f5f1ea] transition-colors flex items-center justify-center gap-2"
                 >
                   <Share2 className="w-4 h-4" />
-                  <span>Share</span>
+                  <span>Aktie</span>
                 </button>
               </div>
 
               <div className="space-y-3 pt-6 border-t border-[#d4cec4]">
                 <div className="flex items-center gap-3 text-sm text-[#5a524b]">
                   <Truck className="w-5 h-5 text-[#c8a882]" />
-                  <span>Shipping available after auction</span>
+                  <span>Versand nach Auktionsende möglich</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-[#5a524b]">
                   <Shield className="w-5 h-5 text-[#c8a882]" />
-                  <span>Authenticity guaranteed</span>
+                  <span>Echtheit garantiert</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-[#5a524b]">
                   <Package className="w-5 h-5 text-[#c8a882]" />
-                  <span>Secure packaging and handling</span>
+                  <span>Sichere Verpackung und Handhabung</span>
                 </div>
               </div>
             </div>

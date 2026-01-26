@@ -39,14 +39,7 @@ export default function ListingDetailClient({
 }: ListingDetailClientProps) {
   const router = useRouter();
   const [listing] = useState<IListing>(initialListing);
-  const conditionMapping = {
-    NEW: "Neu",
-    LIKE_NEW: "Wie neu",
-    GOOD: "Gut",
-    VERY_GOOD: "Sehr gut",
-    FAIR: "Akzeptabel",
-    POOR: "Schlecht",
-  };
+
   const [activeImage, setActiveImage] = useState<string>(
     getMainImage(initialListing),
   );
@@ -522,10 +515,10 @@ export default function ListingDetailClient({
                 <div className="flex justify-between">
                   <span className="text-[#5a524b]">Zustand:</span>
                   <span className="text-[#3a3735] font-medium">
-                    {conditionMapping[listing.condition] || listing.condition}
+                    {formatCondition(listing.condition)} bitte
                   </span>
                 </div>
-                {listing.shippingCost && (
+                {listing.shippingCost && listing.shippingCost > 0 && (
                   <div className="flex justify-between">
                     <span className="text-[#5a524b]">Basisversand:</span>
                     <span className="text-[#3a3735] font-medium">
