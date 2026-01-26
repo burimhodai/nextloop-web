@@ -114,7 +114,7 @@ export default function EditListingPage() {
       <div className="min-h-screen bg-[#faf8f4] flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-[#c8a882] animate-spin mx-auto mb-4" />
-          <p className="text-[#5a524b]">Loading listing...</p>
+          <p className="text-[#5a524b]">Liste wird geladen...</p>
         </div>
       </div>
     );
@@ -132,14 +132,14 @@ export default function EditListingPage() {
             className="text-2xl font-semibold text-[#3a3735] mb-3"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
-            Unable to Edit Listing
+            Eintrag kann nicht bearbeitet werden
           </h2>
           <p className="text-[#5a524b] mb-6">{error}</p>
           <button
             onClick={() => router.push("/dashboard/listings")}
             className="px-6 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
           >
-            Back to My Listings
+            Zurück zu meinen Angeboten
           </button>
         </div>
       </div>
@@ -159,59 +159,69 @@ export default function EditListingPage() {
               className="text-2xl font-semibold text-[#3a3735] mb-3"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Auctions Cannot Be Edited
+              Auktionen können nicht bearbeitet werden.
             </h2>
             <p className="text-[#5a524b] leading-relaxed">
-              Once an auction is live, it cannot be edited to maintain fairness
-              for all bidders. Any changes to auction details could affect
-              ongoing bids and bidding strategies.
+              Sobald eine Auktion live ist, kann sie nicht mehr bearbeitet
+              werden, um die Fairness für alle Bieter zu gewährleisten. Jegliche
+              Änderungen an den Auktionsdetails können sich auf laufende Gebote
+              und Bietstrategien auswirken.
             </p>
           </div>
 
           <div className="bg-[#f5f1ea] border border-[#d4cec4] rounded-lg p-6 mb-6">
             <h3 className="text-sm font-semibold text-[#3a3735] mb-3 uppercase tracking-wider">
-              Why Can't I Edit?
+              Warum kann ich nicht bearbeiten?
             </h3>
             <ul className="space-y-2 text-sm text-[#5a524b]">
               <li className="flex items-start gap-2">
                 <span className="text-[#c8a882] mt-0.5">•</span>
-                <span>
-                  Ensures fairness for all participants in the auction
-                </span>
+                <span>Gewährleistet Fairness für alle Auktionsteilnehmer.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-[#c8a882] mt-0.5">•</span>
                 <span>
-                  Prevents manipulation of auction terms after bids are placed
+                  Verhindert die Manipulation von Auktionsbedingungen nach
+                  Abgabe von Geboten.
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-[#c8a882] mt-0.5">•</span>
-                <span>Maintains trust and integrity in the marketplace</span>
+                <span>Bewahrt Vertrauen und Integrität auf dem Markt</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-[#c8a882] mt-0.5">•</span>
-                <span>Protects both sellers and bidders from disputes</span>
+                <span>
+                  Schützt sowohl Verkäufer als auch Bieter vor Streitigkeiten
+                </span>
               </li>
             </ul>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <h4 className="text-sm font-semibold text-blue-900 mb-2">
-              What You Can Do
+              Was Sie tun können
             </h4>
             <ul className="text-sm text-blue-800 space-y-1">
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>View your auction details and current bids</span>
+                <span>
+                  Sehen Sie sich Ihre Auktionsdetails und aktuellen Gebote an.
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Wait for the auction to end and complete the sale</span>
+                <span>
+                  Warten Sie, bis die Auktion endet und die Verkäufe
+                  abgeschlossen werden
+                </span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Contact support if you need to cancel the auction</span>
+                <span>
+                  Kontaktieren Sie den Support, wenn Sie die Auktion stornieren
+                  müssen
+                </span>
               </li>
             </ul>
           </div>
@@ -221,7 +231,7 @@ export default function EditListingPage() {
               onClick={() => router.push(`/listing/${listingId}`)}
               className="flex-1 px-6 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
             >
-              View Auction
+              Auktion ansehen
             </button>
             <button
               onClick={() => router.push("/dashboard/listings")}

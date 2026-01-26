@@ -122,7 +122,7 @@ export default function MyListingsPage() {
   const handleDeleteListing = async (listingId: string) => {
     if (
       !confirm(
-        "Are you sure you want to delete this listing? This action cannot be undone.",
+        "Sind Sie sicher, dass Sie diesen Eintrag löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
       )
     )
       return;
@@ -231,7 +231,7 @@ export default function MyListingsPage() {
           <h1 className="text-3xl font-bold text-[#3a3735] mb-2">
             Meine Angebote
           </h1>
-          <p className="text-[#5a524b]">Loading your listings...</p>
+          <p className="text-[#5a524b]">Ihre Angebote werden geladen...</p>
         </div>
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-12 h-12 text-[#c8a882] animate-spin" />
@@ -245,7 +245,7 @@ export default function MyListingsPage() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#3a3735] mb-2">
-            My Listings
+            Meine Angebote
           </h1>
         </div>
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
@@ -254,7 +254,7 @@ export default function MyListingsPage() {
             onClick={fetchMyListings}
             className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
           >
-            Try Again
+            Versuchen Sie es erneut
           </button>
         </div>
       </div>
