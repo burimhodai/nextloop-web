@@ -106,7 +106,9 @@ export const ListingCard = ({
     }
   };
 
-  const displayPrice = isAuction ? listing.currentPrice : listing.buyNowPrice;
+  const displayPrice = isAuction
+    ? listing.currentPrice || listing.startingPrice
+    : listing.buyNowPrice;
   const priceLabel = isAuction ? "Aktuelles Gebot" : "Sofort-Kauf";
   const listingUrl = getListingUrl(listing);
 
@@ -151,7 +153,7 @@ export const ListingCard = ({
           <div className="flex flex-col">
             <span className="text-[#5a524b]/60 text-[10px]">{priceLabel}</span>
             <span className="text-[#c8a882] font-semibold text-base">
-              CHF {displayPrice?.toLocaleString()}
+              {displayPrice?.toLocaleString("de-CH")}.-
             </span>
           </div>
 

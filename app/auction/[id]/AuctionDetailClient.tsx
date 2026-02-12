@@ -489,7 +489,7 @@ export default function AuctionDetailClient({
               <div className="flex items-center gap-6 mb-6 text-sm text-[#5a524b]">
                 <div className="flex items-center gap-1">
                   <TrendingUp className="w-4 h-4" />
-                  <span>{listing.totalBids || 0} bids</span>
+                  <span>{listing.totalBids || 0} gebote</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Eye className="w-4 h-4" />
@@ -503,13 +503,13 @@ export default function AuctionDetailClient({
 
               <div className="mb-6">
                 <div className="text-sm text-[#5a524b] mb-1">
-                  {listing.currentPrice ? "Current Bid" : "Starting Bid"}
+                  {listing.currentPrice ? "Aktuelles Gebot" : "Startgebot"}
                 </div>
                 <div className="text-4xl font-serif text-[#c8a882]">
-                  $
                   {(
                     listing.currentPrice || listing.startingPrice
-                  )?.toLocaleString()}
+                  )?.toLocaleString("de-CH")}
+                  .-
                 </div>
               </div>
 
@@ -518,10 +518,10 @@ export default function AuctionDetailClient({
                   <Clock className="w-5 h-5 text-[#5a524b]" />
                   <span className="text-sm text-[#5a524b]">
                     {auctionEnded
-                      ? "Auction Ended"
+                      ? "Auktion Beendet"
                       : auctionStarted
-                        ? "Time Remaining"
-                        : "Starts In"}
+                        ? "Verbleibende Zeit"
+                        : "Startet In"}
                   </span>
                 </div>
                 <div
@@ -558,7 +558,7 @@ export default function AuctionDetailClient({
               )}
 
               <div className="mb-6">
-                <div className="text-sm text-[#5a524b] mb-2">Condition</div>
+                <div className="text-sm text-[#5a524b] mb-2">Zustand</div>
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#f5f1ea] text-[#3a3735]">
                   <CheckCircle2 className="w-4 h-4 text-[#c8a882]" />
                   <span className="font-medium">
@@ -584,7 +584,7 @@ export default function AuctionDetailClient({
                       step={listing.bidIncrement || 1}
                       min={minBid}
                       className="flex-1 px-4 py-3 bg-white border border-[#d4cec4] text-[#3a3735] focus:outline-none focus:border-[#c8a882]"
-                      placeholder={`Enter bid amount (min $${minBid})`}
+                      placeholder={`Enter bid amount (min ${minBid}.-)`}
                     />
                     <button
                       onClick={handlePlaceBid}
@@ -619,8 +619,8 @@ export default function AuctionDetailClient({
                   </div>
                   <div className="text-sm text-red-700">
                     {listing.highestBidder
-                      ? "Winner will be contacted by seller."
-                      : "No bids were placed."}
+                      ? "Der Gewinner wird vom Verkäufer kontaktiert"
+                      : "Es wurden keine Gebote abgegeben."}
                   </div>
                 </div>
               )}
@@ -638,14 +638,14 @@ export default function AuctionDetailClient({
                   <Heart
                     className={`w-4 h-4 ${inWatchlist ? "fill-white" : ""}`}
                   />
-                  <span>{inWatchlist ? "Saved" : "Save"}</span>
+                  <span>{inWatchlist ? "Gespeichert" : "Speichern"}</span>
                 </button>
                 <button
                   onClick={handleShare}
                   className="py-3 border border-[#d4cec4] text-[#3a3735] hover:bg-[#f5f1ea] transition-colors flex items-center justify-center gap-2"
                 >
                   <Share2 className="w-4 h-4" />
-                  <span>Aktie</span>
+                  <span>Teilen</span>
                 </button>
               </div>
 
@@ -728,7 +728,7 @@ export default function AuctionDetailClient({
               ) : (
                 <div className="text-center py-8 text-[#5a524b]">
                   <User className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                  <p>Noch keine Gebote. Geben Sie als Erster ein Gebot ab!</p>
+                  <p>Noch keine Gebote. Gib als Erster ein Gebot ab.</p>
                 </div>
               )}
             </div>
@@ -753,17 +753,17 @@ export default function AuctionDetailClient({
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Condition:</span>
+                  <span className="text-[#5a524b]">Zustand:</span>
                   <span className="text-[#3a3735] font-medium">
                     {formatCondition(listing.condition)}
                   </span>
                 </div>
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <span className="text-[#5a524b]">Zustand:</span>
                   <span className="text-[#3a3735] font-medium capitalize">
                     {listing.status}
                   </span>
-                </div>
+                </div> */}
                 {/* <div className="flex justify-between">
                   <span className="text-[#5a524b]">Started:</span>
                   <span className="text-[#3a3735] font-medium">

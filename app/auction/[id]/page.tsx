@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import AuctionDetailClient from "./AuctionDetailClient";
+import { Footer } from "@/components/Footer";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -160,8 +161,8 @@ function generateStructuredData(listing: any) {
         listing.condition === "NEW"
           ? "NewCondition"
           : listing.condition === "LIKE_NEW"
-          ? "RefurbishedCondition"
-          : "UsedCondition"
+            ? "RefurbishedCondition"
+            : "UsedCondition"
       }`,
       availability:
         listing.status === "ACTIVE"
@@ -224,9 +225,8 @@ export default async function AuctionPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-
       {/* Client Component */}
-      <AuctionDetailClient initialListing={listing} />
+      <AuctionDetailClient initialListing={listing} /> <Footer />
     </>
   );
 }

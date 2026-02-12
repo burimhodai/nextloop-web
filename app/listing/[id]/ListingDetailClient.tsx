@@ -5,7 +5,6 @@ import Image from "next/image";
 import {
   Heart,
   Share2,
-  Truck,
   Shield,
   Eye,
   ChevronLeft,
@@ -17,6 +16,7 @@ import {
   ArrowLeft,
   X,
   AlertCircle,
+  User, // Added User icon for fallback
 } from "lucide-react";
 import { IListing } from "@/lib/types/listing.types";
 import {
@@ -45,7 +45,6 @@ export default function ListingDetailClient({
   );
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const { user } = useAuthStore();
-
   // Watchlist state
   const [inWatchlist, setInWatchlist] = useState(false);
   const [watchlistLoading, setWatchlistLoading] = useState(false);
@@ -228,9 +227,11 @@ export default function ListingDetailClient({
     }
   };
 
-  const seller = typeof listing.seller === "object" ? listing.seller : null;
+  const seller: any =
+    typeof listing.seller === "object" ? listing.seller : null;
   const category =
     typeof listing.category === "object" ? listing.category : null;
+  console.log({ listing, seller });
 
   return (
     <div className="min-h-screen bg-[#faf8f4]">
@@ -394,7 +395,7 @@ export default function ListingDetailClient({
                   Jetzt kaufen Preis
                 </div>
                 <div className="text-4xl font-serif text-[#c8a882]">
-                  CHF {listing.buyNowPrice?.toLocaleString()}
+                  {listing.buyNowPrice?.toLocaleString("de-CH")}.-
                 </div>
               </div>
 
@@ -456,7 +457,7 @@ export default function ListingDetailClient({
           </div>
         </div>
 
-        {/* Description & Details */}
+        {/* Description & Details & SELLER */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="bg-white p-6 mb-6">
@@ -501,33 +502,65 @@ export default function ListingDetailClient({
 
           {/* Additional Info Sidebar */}
           <div className="space-y-6">
+            {/* --- SELLER SECTION START --- */}
+            {seller && (
+              <div className="bg-white p-6">
+                <h3 className="text-lg font-medium text-[#3a3735] mb-4">
+                  Verkäufer
+                </h3>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="relative w-12 h-12 rounded-full overflow-hidden bg-[#f5f1ea] flex items-center justify-center border border-[#d4cec4]">
+                    {seller.image ? (
+                      <Image
+                        src={seller.image}
+                        alt={seller.name || "Verkäufer"}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <User className="w-6 h-6 text-[#c8a882]" />
+                    )}
+                  </div>
+                  <div>
+                    <div className="font-medium text-[#3a3735]">
+                      {seller.name || "Unbekannt"}
+                    </div>
+                    <div className="flex items-center gap-1 text-sm text-[#5a524b]">
+                      <Star className="w-3 h-3 fill-[#c8a882] text-[#c8a882]" />
+                      <span>
+                        {seller.rating ? seller.rating.toFixed(1) : "Neu"}
+                      </span>
+                      {seller.reviewCount !== undefined && (
+                        <>
+                          <span className="mx-1">•</span>
+                          <span>{seller.reviewCount} Bewertungen</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {seller.createdAt && (
+                  <div className="text-sm text-[#5a524b] pt-4 border-t border-[#d4cec4]">
+                    Mitglied seit {new Date(seller.createdAt).getFullYear()}
+                  </div>
+                )}
+              </div>
+            )}
+            {/* --- SELLER SECTION END --- */}
+
             <div className="bg-white p-6">
               <h3 className="text-lg font-medium text-[#3a3735] mb-4">
                 Artikeldetails
               </h3>
               <div className="space-y-3 text-sm">
-                {/* <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Status:</span>
-                  <span className="text-[#3a3735] font-medium capitalize">
-                    {listing.status}
-                  </span>
-                </div> */}
                 <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Zustand:</span>
+                  <span className="text-[#5a524b]">Zustand :</span>
                   <span className="text-[#3a3735] font-medium">
-                    {formatCondition(listing.condition)} bitte
+                    {formatCondition(listing.condition)}
                   </span>
                 </div>
-                {listing.shippingCost && listing.shippingCost > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-[#5a524b]">Basisversand:</span>
-                    <span className="text-[#3a3735] font-medium">
-                      CHF {listing.shippingCost.toFixed(2)}
-                    </span>
-                  </div>
-                )}
                 <div className="flex justify-between">
-                  <span className="text-[#5a524b]">Aufgeführt:</span>
+                  <span className="text-[#5a524b]"> Inseriert seit :</span>
                   <span className="text-[#3a3735] font-medium">
                     {listing.createdAt
                       ? new Date(listing.createdAt).toLocaleDateString()

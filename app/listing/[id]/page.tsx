@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import ListingDetailClient from "./ListingDetailClient";
+import { Footer } from "@/components/Footer";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -200,6 +201,7 @@ export default async function ListingPage({
 
       {/* Client Component */}
       <ListingDetailClient initialListing={listing} />
+      <Footer />
     </>
   );
 }
