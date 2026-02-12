@@ -83,7 +83,7 @@ export const BoostModal: React.FC<BoostModalProps> = ({
 
     try {
       const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
       const response = await fetch(`${API_URL}/boosts`, {
         method: "POST",
@@ -159,8 +159,8 @@ export const BoostModal: React.FC<BoostModalProps> = ({
                   key={boost.type}
                   onClick={() => setSelectedType(boost.type)}
                   className={`p-4 rounded-lg border-2 text-left transition-all ${selectedType === boost.type
-                      ? "border-purple-500 bg-purple-50"
-                      : "border-gray-200 hover:border-gray-300"
+                    ? "border-purple-500 bg-purple-50"
+                    : "border-gray-200 hover:border-gray-300"
                     }`}
                 >
                   <div className="flex items-start justify-between mb-2">
@@ -216,8 +216,8 @@ export const BoostModal: React.FC<BoostModalProps> = ({
                   key={days}
                   onClick={() => setDuration(days)}
                   className={`p-4 rounded-lg border-2 transition-all ${duration === days
-                      ? "border-purple-500 bg-purple-50"
-                      : "border-gray-200 hover:border-gray-300"
+                    ? "border-purple-500 bg-purple-50"
+                    : "border-gray-200 hover:border-gray-300"
                     }`}
                 >
                   <div className="text-2xl font-bold text-gray-900">{days}</div>
