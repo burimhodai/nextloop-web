@@ -46,7 +46,10 @@ export default function VerifyPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || "Verification submission failed");
+        throw new Error(
+          result.message ||
+            "D'Übermittlig vo de Verifizierig isch fählgschlage",
+        );
       }
 
       // Update local user state to IN_REVIEW
@@ -61,14 +64,16 @@ export default function VerifyPage() {
       });
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Failed to submit verification",
+        err instanceof Error
+          ? err.message
+          : "D'Verifizierig hät nöd chönne gschickt werde",
       );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // State: APPROVED - Already verified, redirect to profile
+  // State: APPROVED - Already verified
   if (verificationState === "APPROVED") {
     return (
       <div className="max-w-7xl mx-auto">
@@ -84,17 +89,17 @@ export default function VerifyPage() {
               className="text-2xl font-semibold text-[#3a3735] mb-2"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Already Verified!
+              Schon verifiziert!
             </h2>
             <p className="text-[#5a524b] mb-6">
-              Your ID has been successfully verified. You have full access to
-              all marketplace features.
+              Deine Identität wurde erfolgreich geprüft. Du hast nun vollen
+              Zugang auf alle Funktionen auf der Plattform von Nextloop
             </p>
             <button
               onClick={() => router.push("/profile")}
               className="px-6 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
             >
-              Go to Profile
+              Zurück zum Profil
             </button>
           </div>
         </div>
@@ -111,9 +116,9 @@ export default function VerifyPage() {
             className="text-3xl font-bold text-[#3a3735] mb-2"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
-            ID Verification
+            Identitätsprüfig
           </h1>
-          <p className="text-[#5a524b]">Your verification is being reviewed</p>
+          <p className="text-[#5a524b]">Dini Verifizierig wird grad prüeft</p>
         </div>
 
         <div className="max-w-2xl mx-auto">
@@ -127,46 +132,42 @@ export default function VerifyPage() {
               className="text-2xl font-semibold text-[#3a3735] mb-3"
               style={{ fontFamily: "Playfair Display, serif" }}
             >
-              Verification In Review
+              Verifizierig in Bearbeitig
             </h2>
 
             <p className="text-[#5a524b] mb-6 leading-relaxed">
-              Thank you for submitting your ID verification! Our admin team is
-              currently reviewing your documents. This process typically takes{" "}
-              <strong>24-48 hours</strong>.
+              Merci vielmal für d'Ireichig vo dinere ID! Üses Team prüeft dini
+              Dokumänt jetzt grad. Das duuret normalerwiis{" "}
+              <strong>24 bis 48 Schtund</strong>.
             </p>
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-left mb-6">
               <h3 className="text-sm font-semibold text-blue-900 mb-3">
-                What happens next?
+                Was passiert als nächschts?
               </h3>
               <ul className="space-y-2 text-sm text-blue-800">
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 mt-1">1.</span>
-                  <span>
-                    Our admin team will carefully review your submitted
-                    documents
-                  </span>
+                  <span>Üses Admin-Team lueget dini Dokument gnau aa.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 mt-1">2.</span>
                   <span>
-                    You'll receive an email notification once the review is
-                    complete
+                    Du bechunnsch es Mail, sobald d'Prüfig fertig isch.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 mt-1">3.</span>
                   <span>
-                    If approved, you'll have immediate access to all marketplace
-                    features
+                    Wänn alles passt, häsch sofort Zuegang zu allne
+                    Marktplatz-Funktione.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 mt-1">4.</span>
                   <span>
-                    Your ID images will be automatically deleted after the
-                    review
+                    Dini ID-Bilder werdet nach de Prüfig automatisch wieder
+                    glöscht.
                   </span>
                 </li>
               </ul>
@@ -177,7 +178,7 @@ export default function VerifyPage() {
                 onClick={() => router.push("/dashboard")}
                 className="px-6 py-3 bg-[#3a3735] text-[#c8a882] rounded-lg hover:bg-[#c8a882] hover:text-[#3a3735] transition-all font-medium"
               >
-                Back to Dashboard
+                Zrugg zum Dashboard
               </button>
             </div>
           </div>
@@ -195,10 +196,10 @@ export default function VerifyPage() {
             className="text-3xl font-bold text-[#3a3735] mb-2"
             style={{ fontFamily: "Playfair Display, serif" }}
           >
-            ID Verification
+            Identitätsprüfig
           </h1>
           <p className="text-[#5a524b]">
-            Your previous verification was not successful
+            Dini letschti Verifizierig hät leider nöd klappet.
           </p>
         </div>
 
@@ -210,16 +211,16 @@ export default function VerifyPage() {
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-red-900 mb-2">
-                Verification Not Approved
+                Verifizierig nöd agnoo
               </h3>
               <p className="text-sm text-red-800 mb-3">
-                Unfortunately, we were unable to verify your ID. Please review
-                the reason below and submit again with corrected information.
+                Leider hämmer dini ID nöd chönne bestätige. Bitte lueg der de
+                Grund unde aa und probiers namal mit de korrekte Infos.
               </p>
               {user?.idVerification?.rejection_reason && (
                 <div className="bg-red-100 border border-red-300 rounded p-3">
                   <p className="text-sm font-medium text-red-900">
-                    <strong>Reason:</strong>{" "}
+                    <strong>Grund:</strong>{" "}
                     {user.idVerification.rejection_reason}
                   </p>
                 </div>
@@ -248,24 +249,27 @@ export default function VerifyPage() {
             </div>
             <div className="flex-1">
               <h3 className="text-sm font-semibold text-blue-900 mb-2">
-                Common Reasons for Rejection
+                Häufigi Gründ für d'Ablehnig
               </h3>
               <ul className="text-sm text-blue-800 space-y-1">
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 mt-0.5">•</span>
-                  <span>Image quality too low or text not readable</span>
+                  <span>
+                    D'Bildqualität isch z'schlächt oder mer cha de Tegscht nöd
+                    läse
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 mt-0.5">•</span>
-                  <span>Glare or reflections obscuring information</span>
+                  <span>Reflektione oder Liecht mached Infos unläserlich</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 mt-0.5">•</span>
-                  <span>ID card edges not fully visible in photo</span>
+                  <span>D'Egge vom Uswiis sind nöd ganz uf em Bild</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 mt-0.5">•</span>
-                  <span>Document appears to be expired or invalid</span>
+                  <span>De Uswiis isch abgloffe oder nöd gültig</span>
                 </li>
               </ul>
             </div>
@@ -279,7 +283,7 @@ export default function VerifyPage() {
               <AlertCircle className="w-5 h-5 text-red-600 mr-3 mt-0.5" />
               <div>
                 <h4 className="text-sm font-medium text-red-800">
-                  Submission Failed
+                  Fähler bi de Übermittlig
                 </h4>
                 <p className="text-sm text-red-600 mt-1">{error}</p>
               </div>
@@ -287,7 +291,6 @@ export default function VerifyPage() {
           </div>
         )}
 
-        {/* Allow resubmission */}
         <IDVerification onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       </div>
     );
@@ -301,15 +304,14 @@ export default function VerifyPage() {
           className="text-3xl font-bold text-[#3a3735] mb-2"
           style={{ fontFamily: "Playfair Display, serif" }}
         >
-          Identitätsprüfung
+          Identitätsprüfig
         </h1>
         <p className="text-[#5a524b]">
-          Verifizieren Sie Ihren Schweizer Ausweis, um vollen Zugriff auf den
-          Marktplatz zu erhalten.
+          Verifizier di mit dim Schwiizer Uswiis, zum de Marktplatz voll chönne
+          nutze.
         </p>
       </div>
 
-      {/* Info Banner */}
       <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0">
@@ -329,34 +331,29 @@ export default function VerifyPage() {
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-blue-900 mb-2">
-              Warum Identitätsprüfung?
+              Warum e Identitätsprüfig?
             </h3>
             <p className="text-sm text-blue-800 mb-3">
-              Um die Sicherheit aller NextLoop-Nutzer zu gewährleisten,
-              benötigen wir für folgende Zwecke einen Schweizer Ausweis:
+              Zum d'Sicherheit vo allne NextLoop-Nutzer garantiere, bruche mer
+              en Schwiizer Uswiis für folgendes:
             </p>
             <ul className="text-sm text-blue-800 space-y-1">
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>
-                  Erstellung und Verwaltung von Angeboten auf dem Marktplatz
-                </span>
+                <span>Agebot uf em Marktplatz erstelle und verwalte</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>Teilnahme an Auktionen und Platzierung von Geboten</span>
+                <span>Bi Auktione mitmache und Gebot abgeh</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
-                <span>
-                  Käufe tätigen und sichere Transaktionen gewährleisten
-                </span>
+                <span>Sicher ichaufe und Verchaife</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-blue-600 mt-0.5">•</span>
                 <span>
-                  Vorbeugung von Betrug und Aufrechterhaltung der
-                  Marktplatzintegrität
+                  Betrug verhindere und d'Integrität vom Marktplatz schütze
                 </span>
               </li>
             </ul>
@@ -374,22 +371,20 @@ export default function VerifyPage() {
                   d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                 />
               </svg>
-              Ihre Ausweisbilder werden sicher gespeichert, bis sie von unserem
-              Verwaltungsteam geprüft wurden, und anschließend automatisch
-              gelöscht.
+              Dini Uswiisbilder werdet sicher gspiicheret, bis üses Team
+              d'Prüfig abgschlosse hät. Danach werdet’s automatisch glöscht.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Error Message */}
       {error && (
         <div className="mb-6 p-4 rounded-lg bg-red-50 border border-red-200">
           <div className="flex items-start">
             <AlertCircle className="w-5 h-5 text-red-600 mr-3 mt-0.5" />
             <div>
               <h4 className="text-sm font-medium text-red-800">
-                Einreichung fehlgeschlagen
+                Übermittlig fählgschlage
               </h4>
               <p className="text-sm text-red-600 mt-1">{error}</p>
             </div>
@@ -397,10 +392,8 @@ export default function VerifyPage() {
         </div>
       )}
 
-      {/* ID Verification Component */}
       <IDVerification onSubmit={handleSubmit} isSubmitting={isSubmitting} />
 
-      {/* Security Notice */}
       <div className="mt-8 p-6 bg-[#f5f1ea] border border-[#d4cec4] rounded-lg">
         <div className="flex items-start gap-4">
           <svg
@@ -418,14 +411,14 @@ export default function VerifyPage() {
           </svg>
           <div className="text-sm text-[#5a524b]">
             <p className="font-semibold mb-2 text-[#3a3735]">
-              Ihre Daten sind geschützt
+              Dini Date sind sicher
             </p>
             <p className="leading-relaxed">
-              Wir schützen Ihre persönlichen Daten. Ihre Ausweisbilder werden
-              sicher gespeichert und von unserem geschulten Prüfteam innerhalb
-              von 24–48 Stunden geprüft. Nach Abschluss der Prüfung (Genehmigung
-              oder Ablehnung) werden alle Bilder gemäß den
-              Datenschutzbestimmungen automatisch von unseren Servern gelöscht.
+              Mir schützed dini private Date. Dini Uswiisbilder werdet
+              verschlüsselt gspiicheret und vo üsem Team innerhalb vo 24–48
+              Schtund prüeft. Sobald mir fertig sind (egal ob’s agnoo oder
+              abglehnt wird), werdet alli Bilder gmäss de Dateschutzregle
+              automatisch vo üsne Server glöscht.
             </p>
           </div>
         </div>
