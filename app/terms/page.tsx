@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Shield, Scale, FileText, Gavel } from "lucide-react";
+import { Footer } from "@/components/Footer";
 
 export default function AGBPage() {
   return (
@@ -207,6 +208,7 @@ export default function AGBPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Building2, Mail, Phone, User, Landmark } from "lucide-react";
+import { Footer } from "@/components/Footer";
 
 export default function ImpressumPage() {
   return (
@@ -36,10 +37,11 @@ export default function ImpressumPage() {
                     Unternehmen
                   </h3>
                   <p className="text-lg text-[#3a3735] font-medium leading-relaxed">
-                    N/A <br />
-                    (Rechtlicher Name des Unternehmens)
+                    Nextloop - Inh. Atipi
                   </p>
-                  <p className="text-[#5a524b]">Rechtsform: N/A</p>
+                  <p className="text-[#5a524b]">
+                    Rechtsform: Einzelunternehmung
+                  </p>
                 </div>
               </div>
 
@@ -52,8 +54,8 @@ export default function ImpressumPage() {
                     Sitz der Gesellschaft
                   </h3>
                   <p className="text-[#5a524b] leading-relaxed">
-                    N/A (Strasse / Hausnummer) <br />
-                    N/A (PLZ / Ort) <br />
+                    Quellenstrasse 13 <br />
+                    4310 Rheinfelden <br />
                     Schweiz
                   </p>
                 </div>
@@ -71,11 +73,9 @@ export default function ImpressumPage() {
                     Vertretungsberechtigte Person
                   </h3>
                   <p className="text-[#3a3735] font-medium">
-                    N/A (Vorname Nachname)
+                    Enis Elijas Atipi
                   </p>
-                  <p className="text-sm text-[#5a524b]">
-                    N/A (Funktion, z.B. Geschäftsführer)
-                  </p>
+                  <p className="text-sm text-[#5a524b]">Inhaber</p>
                 </div>
               </div>
 
@@ -87,8 +87,10 @@ export default function ImpressumPage() {
                   <h3 className="text-sm uppercase tracking-wider text-[#8a827c] mb-2 font-semibold">
                     Kontakt
                   </h3>
-                  <p className="text-[#3a3735]">E-Mail: N/A</p>
-                  <p className="text-[#3a3735]">Telefon: N/A</p>
+                  <p className="text-[#3a3735]">E-Mail: info@nextloop.ch</p>
+                  <p className="text-[#3a3735]">
+                    Telefon: +41 (0) 76 707 18 80
+                  </p>
                 </div>
               </div>
             </div>
@@ -102,9 +104,9 @@ export default function ImpressumPage() {
               <h3 className="text-[#3a3735] font-semibold mb-3">
                 Handelsregister & UID
               </h3>
-              <p>Handelsregister-Nummer: N/A</p>
-              <p>Unternehmens-Identifikationsnummer (UID): N/A</p>
-              <p>Mehrwertsteuer-Nummer: N/A</p>
+              <p>Handelsregister-Nummer: CH-280-1030937-6</p>
+              <p>Unternehmens-Identifikationsnummer (UID): CHE-437.708.822</p>
+              <p>Mehrwertsteuer-Nummer: CHE-437.708.822</p>
             </div>
             <div>
               <h3 className="text-[#3a3735] font-semibold mb-3">
@@ -136,6 +138,7 @@ export default function ImpressumPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }

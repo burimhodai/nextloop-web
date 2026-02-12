@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ShieldCheck, Lock, Eye, Database, Cookie, Trash2 } from "lucide-react";
+import { Footer } from "@/components/Footer";
 
 export default function PrivacyPage() {
   return (
@@ -20,7 +21,6 @@ export default function PrivacyPage() {
           </p>
         </div>
       </section>
-
       {/* Main Content */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-6">
@@ -207,7 +207,8 @@ export default function PrivacyPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section>{" "}
+      <Footer />
     </main>
   );
 }
