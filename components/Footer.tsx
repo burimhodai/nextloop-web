@@ -177,26 +177,29 @@ export function Footer() {
         <div className="h-px bg-[#d4cec4] mb-8"></div>
 
         {/* Bottom */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[#5a524b] text-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[#5a524b] text-sm text-center sm:text-left">
             ©2026 NextLoop. Sämtliche Rechte vorbehalten.
           </p>
-          <div className="flex items-center gap-6">
+
+          <div className="flex flex-wrap justify-center sm:justify-end gap-x-5 gap-y-2 text-sm">
             <a
               href="/privacy"
-              className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors"
+              className="text-[#5a524b] hover:text-[#c8a882] transition-colors"
             >
               Datenschutzerklärung
             </a>
+
             <a
               href="/terms"
-              className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors"
+              className="text-[#5a524b] hover:text-[#c8a882] transition-colors"
             >
               Allgemeine Geschäftsbedingungen (AGB)
             </a>
+
             <a
               href="/impressum"
-              className="text-[#5a524b] hover:text-[#c8a882] text-sm transition-colors"
+              className="text-[#5a524b] hover:text-[#c8a882] transition-colors"
             >
               Impressum
             </a>

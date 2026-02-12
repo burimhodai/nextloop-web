@@ -11,8 +11,8 @@ export default function LoginPageClient() {
 
   return (
     <AuthLayout
-      title="Welcome Back"
-      subtitle="Sign in to access your NextLoop account"
+      title="Willkommen zurück"
+      subtitle="Melden Sie sich an, um auf Ihr NextLoop-Konto zuzugreifen."
     >
       {verified && (
         <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">

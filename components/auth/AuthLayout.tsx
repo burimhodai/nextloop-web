@@ -43,7 +43,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
 
         {/* Footer */}
         <p className="text-center text-sm text-[var(--deep-brown)] mt-6">
-          © 2025 NextLoop. Luxury redefined.
+          © 2026 NextLoop. Luxus neu definiert.
         </p>
       </div>
     </div>
